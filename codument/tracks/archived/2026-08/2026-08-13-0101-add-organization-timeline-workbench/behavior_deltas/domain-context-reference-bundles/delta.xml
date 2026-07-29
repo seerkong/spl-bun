@@ -1,0 +1,51 @@
+<behavior-patch capability="domain-context-reference-bundles" version="1">
+  <upsert selector="behavior://domain-context-reference-bundles/requirements/bundle-authority">
+    <requirement id="bundle-authority">
+      <statement>The system SHALL provide three immutable DomainContextBundle values through a production package that depends only on public contract/runtime roots, uses the live catalog/seed/bindings/probes API, stores semantic entries in catalog resources, exports no server or execution state, and authors each relational model with prefix ORM NamedConf on Kunun declarations: flat physical metadata on scalar Fields, relation metadata only on typed navigation Properties, and provider configuration on a DataSource whose declaration name is the sole identity.</statement>
+      <suite id="authority" name="Bundle authority and boundaries">
+        <case id="load-and-freeze">
+          <given>all three reference bundles using canonical model source</given>
+          <when>the public loader validates them</when>
+          <then>all definitions, bindings, probes, typed Property relations, model sources and complete presets SHALL be valid and frozen</then>
+        </case>
+        <case id="semantic-resources">
+          <given>the three catalogs</given>
+          <when>semantic resources are inspected</when>
+          <then>business objects, association, lifecycle, constraint, process, capability and raw resources SHALL be represented without private schema types or a shadow relation graph</then>
+        </case>
+        <case id="public-boundary">
+          <given>bundle production source, built output and package metadata</given>
+          <when>the boundary, canonical-residue guard and build run</when>
+          <then>only declared public roots SHALL be imported; old ORM forms, capsule, private, generated-authority, web-server and test paths SHALL be rejected</then>
+        </case>
+        <case id="workbench-source-parity">
+          <given>canonical bundle source exposed through the server catalog</given>
+          <when>the web workbench previews and executes a preset</when>
+          <then>the displayed source SHALL remain canonical and the resulting SQLite observations SHALL come from that same loaded bundle</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://domain-context-reference-bundles/requirements/integration-isolation">
+    <requirement id="integration-isolation">
+      <statement>Every reference preset SHALL remain exact through catalog load and server exposure; sequential and concurrent executions SHALL start from deterministic seed; production server startup SHALL register all three reference bundles while createApp without registrations SHALL remain empty; focused tests, package/root builds, import guards, and protected capsule manifests SHALL pass.</statement>
+      <suite id="integration" name="Integration and isolation">
+        <case id="preset-parity">
+          <given>every preset in all three bundles</given>
+          <when>contract parsing, catalog matching, runtime load, server catalog serialization, and HTTP execution run</when>
+          <then>the complete request including optional timeline facts SHALL remain semantically identical and directly executable</then>
+        </case>
+        <case id="fresh-execution">
+          <given>the same write preset from each mutable reference domain</given>
+          <when>it runs sequentially and concurrently</when>
+          <then>each response SHALL start from equivalent seed and independent execution ids/state</then>
+        </case>
+        <case id="server-composition">
+          <given>default createApp and real import.meta.main startup composition</given>
+          <when>registries are inspected</when>
+          <then>default SHALL remain empty and production startup SHALL expose event-operations-lifecycle, commerce-operations, and organization-adjustment without importing server code from the bundle package</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

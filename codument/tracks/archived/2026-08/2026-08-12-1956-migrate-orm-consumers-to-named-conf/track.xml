@@ -1,0 +1,137 @@
+<Track id="migrate-orm-consumers-to-named-conf" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>将 spl-bun 的 depa ORM 消费者无兼容迁移到 Kunun NamedConf ORM annotation、flat Field profile、Property-only relation 和 DataSource single authority，并证明正式 package boundary 可复现。</Goal>
+    <Description>以 30 group、82 inventoried fixture、216 relation oracle 保持 property-first runtime 语义；迁移 fixtures、tests、docs、scripts、runtime、reference bundles、server/workbench 与生成物；建立分类式 canonical-only guard；使用有 hash 的临时 sibling tarball 做隔离安装验证，但提交的依赖声明只使用正式 semver。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-08-12T09:35:00Z</CreatedAt>
+    <UpdatedAt>2026-08-12T16:56:38Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/canonicalize-orm-annotation-named-conf/"/>
+    <MaterialBundle role="input" name="kunun-package-source" domain="external" path="vfs://kunun.ts/"/>
+    <MaterialBundle role="input" name="depa-orm-package-source" domain="external" path="vfs://depa-orm.ts/"/>
+    <MaterialBundle role="output" name="capsule" domain="package" path="vfs://@/packages/depa-orm-capsule/"/>
+    <MaterialBundle role="output" name="domain-runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="kon-spl-dsl" domain="package" path="vfs://@/packages/kon-spl-dsl/"/>
+    <MaterialBundle role="output" name="reference-bundles" domain="package" path="vfs://@/packages/domain-context-bundles/"/>
+    <MaterialBundle role="output" name="server" domain="package" path="vfs://@/packages/web-server/"/>
+    <MaterialBundle role="output" name="web-ide" domain="package" path="vfs://@/packages/web-ide/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_migrate-orm-consumers-to-named-conf" name="migrate-orm-consumers-to-named-conf" version="1" cdt:child-mode="dag">
+    <Description>Host consumer hard cut from legacy ORM marker transport to canonical NamedConf.</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Dependency Provenance And Migration Oracle" status="DONE" order="0">
+        <Description>先消除本地软链造成的依赖假象，冻结完整迁移分类和语义 oracle，并让迁移工具只产生 canonical output。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>提交态 manifests 只声明 kunun 1.0.4 与五个 depa ORM 0.2.0 正式 semver，不含 file、link、workspace 外绝对路径</cdt:Criterion>
+          <cdt:Criterion>临时 tarball 有 version/hash 证据且隔离 consumer 不经全局或 workspace symlink 解析</cdt:Criterion>
+          <cdt:Criterion>30 group、82 fixture、216 relation oracle 完整，迁移工具不再生成旧 marker、nested Field storage 或重复 datasource identity</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Prove package provenance" status="DONE" order="0" priority="P0">
+            <Description>更新 capsule、domain-runtime、kon-spl-dsl 的正式版本声明；从 sibling Kunun/depa ORM 生成临时 packed artifacts，记录版本与 SHA-256，在隔离临时 consumer 安装并验证 package roots；把 ignored bun.lock 明确归类为非提交 authority，registry-only lock 留给 mission G5。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">所有受影响 manifests 声明 kunun 1.0.4、depa ORM 0.2.0，且无本地路径依赖</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">隔离安装报告列出 tarball version、SHA-256、resolved path，并证明不解析到 sibling/global symlink</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Freeze classified migration inventory" status="DONE" order="1" priority="P0">
+            <Description>生成机器可读分类清单，覆盖 source、fixtures、tests、docs、scripts、generated inventories、dist、manifests、ignored lock 与 active Codument evidence；仅 immutable archives 和明确断言旧输入被拒绝的 negative literals 可豁免。ignored bun.lock 是单独的 non-authority evidence 分类：必须保持未被 Git 管理、不得用于 isolated proof，其旧版本只报告并留给 G5 registry-only lock 修复。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">清单逐文件分类 241 个初始非归档旧 marker 文件并可解释新增或减少</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">invalid、break、conflict 命名不构成自动豁免，豁免项均有 rejection assertion 证据</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.3" name="Canonicalize and retire migration generator" status="DONE" order="2" priority="P0">
+            <Description>用既有 legacy/current compiler 双投影和 30/82/216 oracle 完成一次性迁移；输出必须是 prefix NamedConf、flat Field、typed Property relation 与 declaration-owned datasource identity；完成后移除或封闭 legacy reader/emitter，使其不能再次生成旧契约。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.3-AC1" checked="true">迁移前后 oracle 的 cardinality、ordered/composite tuple、through topology、visibility、field validation/storage 与 write policy 等价</cdt:Criterion>
+              <cdt:Criterion id="T1.3-AC2" checked="true">仓库中的迁移/生成脚本无法产生旧 marker、nested storage、direct datasource Conf 或 duplicate datasource identity</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook></Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Canonical Consumer Corpus" status="DONE" order="1">
+        <Description>迁移所有 live positive consumers 和 current documentation，同时把旧输入限制到显式 negative rejection tests。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>capsule、runtime、reference bundle、server 的 live model source 只使用 canonical NamedConf contract</cdt:Criterion>
+          <cdt:Criterion>current docs 与 generated/dist output 不传播旧契约</cdt:Criterion>
+          <cdt:Criterion>分类式 guard 对每一种 forbidden authority 都有正向扫描和 negative self-test</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Migrate capsule fixtures tests and docs" status="DONE" order="0" priority="P0">
+            <Description>迁移 capsule 的 positive .kon fixtures、embedded TypeScript sources、support helpers、copied DSL docs 与 inventories；将 direct datasource Conf 用例改为 canonical positive 或明确 rejection。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">所有 positive fixture 可由 depa ORM 0.2.0 canonical compiler 编译</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">旧 literal 仅存在于明确断言 canonical compiler 拒绝它的 negative test</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="Migrate runtime bundles server and generated output" status="DONE" order="1" priority="P0">
+            <Description>迁移 domain-runtime fixtures、两个 reference bundle 的 production model source、bundle tests、web-server fixtures 和 dist；web IDE 作为验证 scope，只有真实 canonical rendering/runtime 需要时才编辑。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">两个 domain context bundle 使用 canonical NamedConf，并以 typed Property 表达关联</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">server catalog/preset 返回及 workbench model source 展示不含旧契约</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.3" name="Install canonical-only residue guard" status="DONE" order="2" priority="P0">
+            <Description>建立带 classification manifest 的 guard，扫描 source、fixtures、tests、docs、scripts、generated inventories、dist、manifests、ignored lock 与 active Codument evidence，拒绝旧 marker、nested Field storage、Field relation、direct datasource Conf、duplicate identity，以及 manifests/authoritative lock 中的旧 dependency versions；ignored bun.lock 的旧版本以 non-authority 分类报告，并验证它未被 Git 管理、未参与 isolated proof。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.3-AC1" checked="true">guard 在 clean scan 通过，并对每类人工注入的 forbidden sample 失败且报告 path/category</cdt:Criterion>
+              <cdt:Criterion id="T2.3-AC2" checked="true">immutable archive 与显式 rejection literal 的豁免精确、可审计且不会吞掉 active control evidence</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook></Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Host Integration And Convergence" status="DONE" order="2">
+        <Description>从 compiler 到 SQLite 再到 HTTP/workbench 做真实验收，并在 build 后再次扫描依赖来源和旧契约残留。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>capsule、domain-runtime、两个 bundle operation matrix、server catalog/preset execution、web IDE unit/e2e 全部通过</cdt:Criterion>
+          <cdt:Criterion>typecheck、build、isolated package proof 与 post-build residue/provenance guard 通过</cdt:Criterion>
+          <cdt:Criterion>fresh AttractorCheck 无 completion-critical gap</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Verify compiler runtime and package suites" status="DONE" order="0" priority="P0">
+            <Description>运行 focused rejection、完整 capsule、domain-runtime、domain-context 两套 operation matrix、server catalog/preset execution、package boundary、typecheck 与 builds。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">30/82/216 oracle 与所有 runtime read/write semantics 通过</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">所有 package boundary、typecheck 和 build gate 通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="Verify live workbench flow" status="DONE" order="1" priority="P0">
+            <Description>启动真实 server/web IDE，验证 catalog、preset preview、canonical model source rendering、execute、SQLite read/write 与 observation；执行 web IDE unit/e2e。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">两个 reference domain 可在 workbench 预览并执行，显示 canonical source 和真实 observation</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.3" name="Run post-build convergence audit" status="DONE" order="2" priority="P0">
+            <Description>在所有生成和 build 后重跑 classification guard、依赖版本/hash/isolated install proof、Codument strict/decision/XML/diff checks，并修复 AttractorCheck 发现的 gap。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.3-AC1" checked="true">post-build scan 无未分类 forbidden residue 或隐藏 symlink dependency</cdt:Criterion>
+              <cdt:Criterion id="T3.3-AC2" checked="true">track acceptance、phase gates、behavior cases 和 mission G4 evidence 均可追溯</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook></Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_migrate-orm-consumers-to-named-conf">
+      <Node id="P2"><After ref="P1"/></Node>
+      <Node id="P3"><After ref="P2"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+</Track>

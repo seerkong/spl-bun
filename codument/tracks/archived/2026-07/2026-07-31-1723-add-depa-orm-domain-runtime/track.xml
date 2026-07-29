@@ -1,0 +1,140 @@
+<Track id="add-depa-orm-domain-runtime" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>建立由 DomainContextBundle 驱动、每次执行隔离的 depa-orm 领域操作 runtime。</Goal>
+    <Description>以已归档的完整 preset/request contract 为硬前置；先通过 public dependency/model bridge 硬门，再实现静态 bundle loader、资源分配前 preflight、operation registry、SQLite lifecycle、transaction/capability、observations 和 diagnostics。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-30T18:58:23Z</CreatedAt>
+    <UpdatedAt>2026-07-31T14:23:32Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/depa-orm-domain-workbench/design/"/>
+    <MaterialBundle role="input" name="contracts" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="output" name="runtime-package" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-depa-orm-domain-runtime" name="add-depa-orm-domain-runtime" version="1">
+    <Description>以 P0 public bridge 为停止门，随后用 tests-first slices 实现 runtime 控制环。</Description>
+    <SubNodes>
+      <TaskGroup id="P0" name="Public dependency 与 model bridge 硬门" status="DONE" order="0">
+        <Description>从 production package 自身证明依赖、import boundary、Kon projection 和 public assemble/write/read 可行。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P0 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>runtime package cwd 按 package name 解析全部声明依赖</cdt:Criterion>
+          <cdt:Criterion>public bridge smoke compile/write/read/destroy 通过</cdt:Criterion>
+          <cdt:Criterion>forbidden import guard 通过；否则停止并 mission replan</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T0.1" name="创建 production package、依赖解析与 import guard 红测" status="DONE" order="0" priority="P0">
+            <Description>创建 ESM/strict/declaration package，声明 contracts workspace dependency 与五个 depa-orm 0.1.0 dependencies，从 root bun install；编写 public-boundary.test.ts，验证 package cwd import resolution，并通过 fixture 证明 halfcode/dist/node_modules/capsule/unallowlisted subpath 会被 guard 拒绝。不得实现 bridge。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.1-AC1" checked="true">生产依赖由 runtime package 声明且从 package cwd 可解析，不依赖 capsule路径</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC2" checked="true">import guard 覆盖全部 forbidden pattern 与精确 query allowlist</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC3" checked="true">bridge smoke 测试只因尚无实现而红，不因依赖或环境错误失败</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T0.2" name="实现 public Kon projection 与 query adapter smoke" status="DONE" order="1" priority="P0">
+            <Description>仅用允许的 package exports 实现 Kon compilation result 到 root storage-neutral schema/SQLite registration 的字段投影，以及 JSON RuntimeQuery 到 allowlisted query values 的 adapter；真实 initialize/assemble/Writer/Reader/destroy smoke 转绿。不得 cast legacy schema或导入 halfcode。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.2-AC1" checked="true">只读 Kon source 可显式投影并由 public compose/assemble 接受</cdt:Criterion>
+              <cdt:Criterion id="T0.2-AC2" checked="true">public Writer 写入与 Reader query adapter 读回真实行</cdt:Criterion>
+              <cdt:Criterion id="T0.2-AC3" checked="true">registry destroy 完成且 import guard/package build 全部通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P1" name="Bundle authoring、loader 与 execution lifecycle" status="DONE" order="1">
+        <Description>定义静态 authoring catalog、binding actual capability 与 server projection 分离的无状态 bundle/runtime contract，并实现资源分配前 preflight 和每次执行 fresh create-initialize-seed-destroy 骨架。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>bundle loader 与 lifecycle/isolation focused tests 通过</cdt:Criterion>
+          <cdt:Criterion>invalid preset/binding/request preflight 不分配 SQLite、不 seed、不运行 handler</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="编写 bundle loader 与 lifecycle 隔离红测" status="DONE" order="0" priority="P0">
+            <Description>覆盖静态 catalog 与 server projection 分离、完整 preset.request 原样冻结、definition/binding capability compatibility、bundle binding/probe 校验、invalid preflight 无资源分配、无执行状态、deterministic seed、连续/并发隔离，以及 compile/initialize/seed/handler/probe failure 后 destroy-before-return。测试 fixture 定义最小可信 bundle，不实现业务 bundle。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">loader duplicate/unknown ref、完整 preset parity、binding capability subset 和 model source invalid cases 已覆盖</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">invalid preflight 无 SQLite/seed/handler side effect，连续与并发 fresh database 证据已覆盖</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">五类 failure cleanup、preset request 不变与后续 fresh execution cases 已覆盖并按预期红测</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="实现 bundle loader 与 create-initialize-seed-destroy lifecycle" status="DONE" order="1" priority="P0">
+            <Description>实现不含 server current projection 的 trusted authoring bundle types、binding actual capability、完整 preset validation/freeze、execution preflight、execution id/local collectors、public model initialize、seed transaction 和 finally destroy；为测试提供受控 lifecycle fault hook，不把连接、server projection 或 mutable execution state 写入 bundle。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">loaded bundle 冻结完整 preset request 和 binding actual capability，且无 server current/DB/transaction/last-response state</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">exact/preset/catalog/batch/capability preflight 在资源分配前完成；每次 registry/SQLite/seed 独立</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">连续/并发隔离通过；compile/initialize/seed/handler/probe 失败均在返回前 destroy，后续执行成功</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Registry、invocation 与 transaction semantics" status="DONE" order="2">
+        <Description>用 operation.ref registry 和 public transaction 实现 single/selection/batch、atomic/best-effort，以及 definition requestable ∩ binding actual ∩ server current 的 capability gate。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P2 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>registry/capability/transaction focused tests 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="编写 registry 与 transaction semantics 红测" status="DONE" order="0" priority="P0">
+            <Description>覆盖 parse/catalog/preset mismatch、unknown ref、selection single、one-definition batch verb/subject 同构、definition/binding/server 三层 capability 逐层拒绝、same-source atomic composed rollback、cross-source preflight reject、homogeneous best-effort partial commit、row mapping required rejection和child tree。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">catalog/registry/selection、mixed batch verb/subject reject 与 homogeneous batch cases 已覆盖且无五维 dispatch switch预期</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">definition/binding/server capability 逐层失败与 cross-source reject 有 no-allocation/no-seed/no-handler evidence；same-source rollback 有实际执行、整体回滚与 cleanup 证据</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">homogeneous best-effort item isolation、mapping capability 与 child operation tree cases 已覆盖</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="实现 operation registry、normalization 与 transaction/capability gate" status="DONE" order="1" priority="P0">
+            <Description>复用 contract exact parser 与 preset/catalog match，注入 server current projection并计算 definition/binding/server capability 交集，在任何 SQLite 分配前完成 request/batch/capability preflight，再按 ref dispatch；实现 controlled handler context、single/selection/batch scheduling、same-source public outer transaction、cross-source reject、best-effort isolation和mapping diagnostics。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">unknown/exact/preset/catalog/batch/capability mismatch 在 SQLite allocation、seed 或 handler side effect 前返回结构化 diagnostics</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">same-source atomic composed rollback且请求 atomicity 不降级</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC3" checked="true">definition/binding/server 交集诚实执行，cross-source atomic handler不运行，homogeneous best-effort batch保留独立key/status</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC4" checked="true">operation tree保留child refs且源码无五维巨大switch</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Observations、response 与工程集成" status="DONE" order="3">
+        <Description>把真实 runtime 事实投影为统一 response，并完成 package/root build 与边界验证。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P3 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>bun test packages/depa-orm-domain-runtime 通过</cdt:Criterion>
+          <cdt:Criterion>bun run --filter depa-data-depa-orm-domain-runtime build 通过</cdt:Criterion>
+          <cdt:Criterion>bun run build 通过</cdt:Criterion>
+          <cdt:Criterion>public import boundary guard 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="编写 observations、effects 与 diagnostics 红测" status="DONE" order="0" priority="P0">
+            <Description>覆盖 outcome、requested/committed atomicity、mutation summaries、before/after/diff probes、plan/stages、child tree、SQL_TRACE_UNAVAILABLE、BATCH_ITEM_MAPPING_UNAVAILABLE、cleanup diagnostic和JSON roundtrip。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">真实 before/after/diff 与 mutation effects cases 已覆盖</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">plan/stages/tree 与 unavailable mapping/SQL no-fabrication cases 已覆盖</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC3" checked="true">response JSON roundtrip与cleanup diagnostics cases 已覆盖并按预期红测</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="实现 response projection、observations 与 build integration" status="DONE" order="1" priority="P0">
+            <Description>实现 probe capture/diff、public plan/stage projection、effects/batch mapping、diagnostics与完整 response；接入 root build，运行全 package tests/build、root build和boundary guard。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">response truthfully包含outcome/effects/observations/trace/diagnostics并可JSON roundtrip</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC2" checked="true">SQL/row mapping unavailable时不伪造SQL或item rows</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC3" checked="true">全focused tests、declaration build、root build和boundary guard通过</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC4" checked="true">未修改或依赖depa-orm-capsule、server、UI或业务bundle</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding" status="PASS" note="Fresh rerun found no gaps: pre-admission facts remain nullable and independently preserved; pre-commit failures claim no commit; post-commit atomic and best-effort probe failures retain real commit and mutation facts; focused 29/29 and full contract/runtime 172/172 tests, typechecks, filtered builds, root build, boundaries, and Codument evidence pass. Report: reports/attractor-check-report.md."/></Hook>
+        </Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

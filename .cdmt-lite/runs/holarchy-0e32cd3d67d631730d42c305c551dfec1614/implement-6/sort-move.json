@@ -1,0 +1,12 @@
+{
+  "from": "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-stable-expression-sort",
+  "to": "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/archived/spl-stable-expression-sort",
+  "allMovedContentPreserved": true,
+  "files": {
+    "MISSION.md": "f239914368b5377fefd667628c9b6fcff93d252b5ab996cc421a9a172f0ccc08",
+    "loop.md": "1e6cc7b7e6fdef514b92d74ef7b49c528c306adf40bd5d4fe7273c78a78c4103",
+    "evidence.md": "0bca3555d43561c83bfb739036ae8e44d924d5c1fd005c1fdf446cc9f426dd52",
+    "verification/source-oracle.ts": "787ff201f0c07d28b8fdf2373f41b71c2adbf82ae50483c3b1889773e55f809e",
+    "attractors/shared-semantics.md": "8e10cafc92c675332c18c054ab3e9f4702f3b39d1de4687fcf4eacfa536e0a54"
+  }
+}

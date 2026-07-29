@@ -1,0 +1,75 @@
+<behavior-patch capability="domain-workbench-ui" version="1">
+  <upsert selector="behavior://domain-workbench-ui/requirements/catalog-workspace">
+    <requirement id="catalog-workspace">
+      <statement>The system SHALL provide a `/domain-workbench` application surface that lists all three registered reference DomainContext bundles, shows read-only model sources, groups semantic resources, and lets users filter operations by owner, behavior, subject, invocation, and effect without editing Kon model source.</statement>
+      <suite id="catalog" name="Catalog workspace">
+        <case id="bundle-selector">
+          <given>the production server registers the event, commerce, and organization reference bundles</given>
+          <when>a user opens `/domain-workbench`</when>
+          <then>the workbench SHALL load all three bundle ids and select a stable default bundle</then>
+        </case>
+        <case id="readonly-model">
+          <given>a selected bundle catalog with Kon model sources</given>
+          <when>the model panel renders</when>
+          <then>the model text SHALL be visible as read-only content and no upload or recompile control SHALL be exposed</then>
+        </case>
+        <case id="operation-filters">
+          <given>the operation catalog contains BO, association, lifecycle, constraint, process, capability, domain-context, and raw owners</given>
+          <when>filters are applied</when>
+          <then>the visible operation list SHALL update without mutating the selected preset request</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://domain-workbench-ui/requirements/timeline-request-control">
+    <requirement id="timeline-request-control">
+      <statement>The Workbench SHALL project day-level timeline controls only from the currently valid complete request in the JSON editor, SHALL apply control edits by replacing `request.timeline` in that same JSON text, and SHALL NOT maintain separate date, timeline, payload, subject, execution, or request authority.</statement>
+      <suite id="timeline-control" name="Timeline JSON authority">
+        <case id="mode-specific-projection">
+          <given>valid as-of, effective-on, and range preset requests</given>
+          <when>each request is selected or manually edited</when>
+          <then>the Workbench SHALL show only the day inputs owned by that request mode with values derived from the editor</then>
+        </case>
+        <case id="date-edit-body-parity">
+          <given>a valid temporal request and a changed day input</given>
+          <when>the request is executed</when>
+          <then>the editor SHALL contain the edited complete request and the POST body SHALL be exactly that current JSON value</then>
+        </case>
+        <case id="invalid-editor-authority">
+          <given>invalid JSON, request schema, calendar day, range, or catalog-owned facts in the editor</given>
+          <when>timeline controls and execution state render</when>
+          <then>interactive timeline controls and execution SHALL be unavailable, diagnostics SHALL be path-aware, and the editor text SHALL remain unchanged</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://domain-workbench-ui/requirements/temporal-organization-execution">
+    <requirement id="temporal-organization-execution">
+      <statement>The Workbench SHALL execute organization snapshot, adjustment apply, constraint failure, and independent transfer batch presets through the standard execute route and SHALL render their existing tree, mutation, probe, plan, item mapping, and diagnostic response facts without a temporal-domain-specific response model.</statement>
+      <suite id="temporal-execution" name="Temporal organization execution">
+        <case id="edited-snapshot">
+          <given>an organization snapshot preset whose as-of day is changed in the timeline control</given>
+          <when>the request executes</when>
+          <then>the posted body SHALL contain the edited day and the tree outcome SHALL reflect that requested temporal slice</then>
+        </case>
+        <case id="apply-and-invalid-results">
+          <given>successful apply, atomic business failure, and best-effort partial organization presets</given>
+          <when>each executes</when>
+          <then>the standard result tabs SHALL expose truthful status, changes, before/after, trace, plan, item mapping, and diagnostics</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://domain-workbench-ui/requirements/temporal-browser-quality">
+    <requirement id="temporal-browser-quality">
+      <statement>The timeline strip and its mode-specific date controls SHALL remain bounded and usable with the existing request and response surfaces on desktop and mobile, without horizontal page overflow, incoherent overlap, unexpected console errors, or regression of the Kon IDE route.</statement>
+      <suite id="temporal-browser" name="Timeline responsive quality">
+        <case id="desktop-mobile-timeline-layout">
+          <given>desktop and mobile viewport sizes with organization as-of and range requests</given>
+          <when>timeline controls, editor, execute action, and response tabs render</when>
+          <then>all primary controls SHALL remain within the viewport and SHALL NOT overlap adjacent interactive regions</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

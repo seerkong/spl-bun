@@ -1,0 +1,124 @@
+<decision #mission.build_temporal_organization_adjustment_workbench.timeline_contract {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>时间轴如何进入统一 Operation API，且不把组织域规则泄漏到 transport？</?>
+  <answer { }
+  (
+    <raw-answer ?>时间轴是顶层概念并支持到天级，同时继续使用现有标准 API。</?>
+    <decision-text ?>在 ExecuteOperationRequest 增加可选顶层 timeline；definition 声明 required、day granularity 与 as-of/effective-on/range modes。Timeline 不是 Operation identity 的新维度，也不是 server capability。</?>
+    <rationale ?>顶层 timeline 让时间语义可发现、可校验、可被 Workbench 编辑，同时保持五维 Operation identity 与 transport-neutral contract。</?>
+    <evidence ?>用户明确要求时间轴是顶层概念；现有完整 preset request 是已归档 authority。</?>
+  )>
+)>
+
+<decision #mission.build_temporal_organization_adjustment_workbench.bitemporal_relational_model {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>如何把 Cozo validity 思想转换为传统关系数据库模型？</?>
+  <answer { }
+  (
+    <raw-answer ?>参考 Cozo 时间概念，但转换为关系型数据库建模与时间操作。</?>
+    <decision-text ?>类型化 temporal fact tables 使用半开 valid interval [validFrom,validTo) 与半开 recorded interval [recordedFrom,recordedTo)；业务轴固定 day，系统轴使用 UTC instant；历史 row 不删除，修订关闭 recordedTo 并插入 replacement。</?>
+    <rationale ?>显式双时间区间能在常规 SQL、约束和事务中表达 as-of 与系统知识历史，不依赖 Cozo storage-key/skip-scan 机制。</?>
+    <evidence ?>Cozo Validity key 与 depa-ontology as-of/history 实现的本地源码盘点。</?>
+  )>
+)>
+
+<decision #mission.build_temporal_organization_adjustment_workbench.authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>Adjustment、temporal facts、audit event 与 snapshot 谁拥有哪类事实？</?>
+  <answer { }
+  (
+    <raw-answer ?>需要成熟完善且不能形成多重事实源。</?>
+    <decision-text ?>Adjustment/Item 是未应用命令 authority；temporal fact rows 是已应用组织事实的查询/历史 authority；OrganizationChangeEvent 只作 append-only audit，不作 replay authority；snapshot/history/diff/preview 均为无持久化派生投影。</?>
+    <rationale ?>明确事实等级和禁止反写可避免 command、event、projection 同时冒充 live state。</?>
+    <evidence ?>plan-mission coding AttractorCheck 对 DEPA I5 authority conflict 的两轮 GAP 反馈。</?>
+  )>
+)>
+
+<decision #mission.build_temporal_organization_adjustment_workbench.adjustment_state_machine {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>组织调整如何避免跳步、陈旧校验和部分提交？</?>
+  <answer { }
+  (
+    <raw-answer ?>组织管理和调整的大量逻辑与时间轴相关，需要成熟的关系库实现。</?>
+    <decision-text ?>状态只允许 DRAFT->VALIDATED->APPROVED->APPLIED，前三态可进入 CANCELLED；Apply 在 outer transaction 内重验，通过私有 OrganizationAdjustmentWriter 一次提交 replacement facts、audit event 与状态，失败全回滚。</?>
+    <rationale ?>工作流状态不等于业务有效时间；apply-time revalidation 和唯一 writer 才能保证事实一致性。</?>
+    <evidence ?>现有 runtime 已提供单 datasource outer transaction，用户要求组织调整与时间轴成为核心业务逻辑。</?>
+  )>
+)>
+
+<decision #mission.build_temporal_organization_adjustment_workbench.property_first {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>时间期间表中的组织关系由 Field、独立 relation primitive 还是 Property 拥有？</?>
+  <answer { }
+  (
+    <raw-answer ?>继续遵循已完成的 depa ORM Property-first hard cut。</?>
+    <decision-text ?>OrganizationUnit、Person、Adjustment 与期间/明细表之间的关系只由 typed Property 上的 orm:relation NamedConf 拥有；外键 Field 只含平坦 column metadata。</?>
+    <rationale ?>保持关系 identity 与物理 join tuple 解耦，避免再次把多字段关系锁死在单一 foreign-key Field。</?>
+    <evidence ?>已归档 restore-property-first-orm-modeling 与 canonicalize-orm-annotation-named-conf mission decisions。</?>
+  )>
+)>
+
+<decision #mission.build_temporal_organization_adjustment_workbench.execution_state {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>组织调整是否改变 Workbench 已接受的运行数据生命周期？</?>
+  <answer { }
+  (
+    <raw-answer ?>用相同的 app bundle 封装并基于既有标准化前后端 API。</?>
+    <decision-text ?>保持每个 execute request 从 deterministic seed 建立 fresh SQLite、执行后 observe/destroy；不在本 mission 引入共享持久 session。跨步骤场景由 seeded workflow states 或 composed Operation 演示。</?>
+    <rationale ?>这与既有 workbench 的可复现和请求隔离 authority 一致，避免新 bundle 偷带 module-global 数据状态。</?>
+    <evidence ?>depa-orm-domain-workbench 已归档 decision：Kon 只读且每次执行 fresh seeded SQLite。</?>
+  )>
+)>
+
+<decision #mission.build_temporal_organization_adjustment_workbench.track_slicing {
+  priority = "P1"
+  status = "accepted"
+  confidence = "high"
+  reversibility = "high"
+}
+(
+  <question ?>跨 contract/runtime/domain/server/UI 的变更如何切分并保证连续收敛？</?>
+  <answer { }
+  (
+    <raw-answer ?>创建新的 Codument mission 来 plan 和 impl。</?>
+    <decision-text ?>串行执行 add-day-timeline-operation-contracts、add-temporal-organization-context-bundle、add-organization-timeline-workbench 三条 host tracks；每条独立验证并归档后进入下一条，最后执行 mission gap loop。</?>
+    <rationale ?>公共契约先于领域消费，领域真实 operation matrix 先于 UI 集成，可降低影子 DTO 和特例路由风险。</?>
+    <evidence ?>Codument mission/track 控制面规则与当前 package dependency graph。</?>
+  )>
+)>

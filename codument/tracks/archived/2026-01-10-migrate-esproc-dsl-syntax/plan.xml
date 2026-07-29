@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>migrate-esproc-dsl-syntax</track_id>
+    <track_name>Migrate esProc Java DSL Syntax to spl-flow</track_name>
+    <goal>迁移 esProc Java DSL 语法到 TypeScript，支持 db.query 和 connect</goal>
+    <created_at>2026-01-10</created_at>
+    <status>archived</status>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="扩展 spl-flow 解析器">
+      <goal>添加成员函数和全局函数调用语法支持</goal>
+      <tasks>
+        <task id="T1.1" name="扩展解析器支持成员函数调用">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.1.1" name="添加 memberCall 节点类型" status="DONE"/>
+            <subtask id="T1.1.2" name="添加 MemberCallNode 接口" status="DONE"/>
+            <subtask id="T1.1.3" name="实现 <identifier>.<method>(<args>) 模式匹配" status="DONE"/>
+            <subtask id="T1.1.4" name="处理参数解析（字符串、变量、数字）" status="DONE"/>
+            <subtask id="T1.1.5" name="支持多个逗号分隔的参数" status="DONE"/>
+            <subtask id="T1.1.6" name="添加单元测试" status="DONE"/>
+          </subtasks>
+        </task>
+        <task id="T1.2" name="扩展解析器支持全局函数调用">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.2.1" name="添加 globalCall 节点类型" status="DONE"/>
+            <subtask id="T1.2.2" name="添加 GlobalCallNode 接口" status="DONE"/>
+            <subtask id="T1.2.3" name="实现 <identifier>(<args>) 模式匹配" status="DONE"/>
+            <subtask id="T1.2.4" name="添加 connect 语法单元测试" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="实现求值逻辑">
+      <goal>实现成员函数和全局函数的求值</goal>
+      <tasks>
+        <task id="T2.1" name="实现成员函数求值">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.1.1" name="扩展 DSLExecutionContext 添加 connections map" status="DONE"/>
+            <subtask id="T2.1.2" name="创建成员函数注册表（初始仅 query）" status="DONE"/>
+            <subtask id="T2.1.3" name="实现 memberCall case 在 compileDSL" status="DONE"/>
+            <subtask id="T2.1.4" name="实现 query 处理器" status="DONE"/>
+            <subtask id="T2.1.5" name="添加单元测试" status="DONE"/>
+          </subtasks>
+        </task>
+        <task id="T2.2" name="实现全局函数求值">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.2.1" name="创建全局函数注册表（初始仅 connect）" status="DONE"/>
+            <subtask id="T2.2.2" name="实现 globalCall case 在 compileDSL" status="DONE"/>
+            <subtask id="T2.2.3" name="connect 返回连接引用对象" status="DONE"/>
+            <subtask id="T2.2.4" name="添加单元测试" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="集成到 web-server">
+      <goal>更新 web-server 使用 spl-flow</goal>
+      <tasks>
+        <task id="T3.1" name="更新 web-server">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T3.1.1" name="添加 depa-data-spl-flow 依赖" status="DONE"/>
+            <subtask id="T3.1.2" name="移除临时 parseDemoQuery 函数" status="DONE"/>
+            <subtask id="T3.1.3" name="创建长期连接注册表" status="DONE"/>
+            <subtask id="T3.1.4" name="更新 execute 端点使用 compileDSL" status="DONE"/>
+            <subtask id="T3.1.5" name="实现 sqliteQuery adapter" status="DONE"/>
+            <subtask id="T3.1.6" name="处理求值错误" status="DONE"/>
+            <subtask id="T3.1.7" name="端到端测试" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P4" name="类型定义和文档">
+      <goal>更新共享类型和文档</goal>
+      <tasks>
+        <task id="T4.1" name="更新 web-shared 类型">
+          <priority>P1</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T4.1.1" name="添加 DBConnection 类型定义" status="DONE"/>
+            <subtask id="T4.1.2" name="从 web-shared 导出" status="DONE"/>
+          </subtasks>
+        </task>
+        <task id="T4.2" name="文档和清理">
+          <priority>P1</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T4.2.1" name="更新 CLAUDE.md 添加新 DSL 语法示例" status="DONE"/>
+            <subtask id="T4.2.2" name="移除临时 workaround 的 TODO 注释" status="DONE"/>
+            <subtask id="T4.2.3" name="添加 JSDoc 注释" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+  </phases>
+</plan>

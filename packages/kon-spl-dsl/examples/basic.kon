@@ -1,0 +1,41 @@
+// Kon × SPL DSL 示例：连接 sqlite → 查询 → 选项/控制流 → 原生派生/过滤/分组 → 命名结果
+//
+// 约定（见 README 与 behavior kon-spl-dsl）：
+// - 普通配置一律放 `:{}`（Conf）；`#name` 省值命名结果，同时绑定为 Kon 变量；
+// - SPL 函数选项（func@sub）用系统级元数据表达：`#opt = y` 为权威形态，
+//   省值 `@y` 为单选项糖形态（两者等价，可叠加多个 @x）——仅透传 spl_eval 接受；
+// - 原生数据运算 word（spl_derive/spl_select/spl_groups/...）不接受 #opt/@ 糖，
+//   模式经 Conf 键表达（如 desc = true）。
+//
+// 运行前置：SplContext.workspaceRoot 下存在 orders.db，
+//           表 orders(id, region, amount)。见 __tests__/e2e.test.ts。
+
+// 1. 连接 sqlite 数据源：#db 既是注册名（供 conn = db 引用），也绑定为 Kon 变量（句柄）
+(spl_connect #db :{ type = "sqlite" path = "orders.db" })
+
+// 2. 查询 → DataSet：#orders 绑定后可被后续原生 word 的 in 与 spl_eval 表达式直接引用
+(spl_query #orders :{ conn = db sql = "select id, region, amount from orders order by id" })
+
+// 3. 透传示范（spl_eval + 选项糖）：`@y` 等价于 `#opt = y`，把 age(...) 改写为
+//    age@y(...)（整年差）——需要 SPL func@选项 或任意表达式形态时走透传
+(spl_eval #years @y :{ expr = "age(founded, today)" with = { founded = "2020-06-15" today = "2026-03-01" } })
+
+// 4. Kon 控制流：合作满 5 整年的老客户上浮费率
+(var rate (if (:gt years 5) :[ 1.1 ] else :[ 1.0 ]))
+
+// 5. 原生 derive 派生 gross 列：cols 表达式直接引用 Kon 变量 rate（经 env scope 可见），
+//    无需字符串拼接。两种写法对照——
+//    透传写法：(spl_eval #priced :{ expr = "orders.derive({gross: concat('amount*', rate)})" })
+//    原生写法（推荐，消除内层 scope 限制与拼接）：
+(spl_derive #priced :{ in = orders cols = {gross = "amount*rate"} })
+
+// 6. 原生 select 过滤（where 谓词直接见行字段与 env 变量）
+//    透传写法对照：(spl_eval #big :{ expr = "priced.select('gross > 150')" })
+(spl_select #big :{ in = priced where = "gross > 150" })
+
+// 7. 原生 groups 分组聚合展示：按 region 汇总 gross 与行数
+//    （分组键值经引擎 String() 归一为字符串；count 为非空计数——见 README 已知限制）
+(spl_groups #byRegion :{ in = priced keys = [region] agg = {total = "sum(gross)" cnt = "count(id)"} })
+
+// 8. 末尾输出命名结果（脚本值即 big；byRegion 由 e2e 单独断言其值）
+big

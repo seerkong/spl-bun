@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>add-web-ide</track_id>
+    <track_name>Add web IDE package for spreadsheet-style SPL editing</track_name>
+    <goal>创建 web IDE 包和 SPL DSL 包，支持类电子表格的 SPL 编辑</goal>
+    <created_at>2026-01-10</created_at>
+    <status>archived</status>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="重构 web-ide UI">
+      <goal>重构 UI 为双表格布局</goal>
+      <tasks>
+        <task id="T1.1" name="重构 packages/web-ide UI">
+          <priority>P0</priority>
+          <status>TODO</status>
+          <subtasks>
+            <subtask id="T1.1.1" name="实现可编辑 HTML/CSS 网格（A/B/C 列）" status="TODO"/>
+            <subtask id="T1.1.2" name="实现独立的结果表格（允许使用 AG Grid）" status="TODO"/>
+            <subtask id="T1.1.3" name="确保单元格可点击/可编辑" status="TODO"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="实现 SPL DSL 包">
+      <goal>移植 esProc SPL DSL 解析器</goal>
+      <tasks>
+        <task id="T2.1" name="创建 packages/spl-flow">
+          <priority>P0</priority>
+          <status>TODO</status>
+          <subtasks>
+            <subtask id="T2.1.1" name="移植 Command/ParamParser/KeyWord/CellRef" status="TODO"/>
+            <subtask id="T2.1.2" name="编写单元测试" status="TODO"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="集成运行时">
+      <goal>连接 web-ide 到 DSL 和表达式引擎</goal>
+      <tasks>
+        <task id="T3.1" name="连接 web-ide 运行时">
+          <priority>P0</priority>
+          <status>TODO</status>
+          <subtasks>
+            <subtask id="T3.1.1" name="连接到 depa-data-spl-flow" status="TODO"/>
+            <subtask id="T3.1.2" name="连接到 expression/DataSet 引擎" status="TODO"/>
+            <subtask id="T3.1.3" name="使用 runtime 设计模式（显式 adapters/logger）" status="TODO"/>
+            <subtask id="T3.1.4" name="确保前端仅使用 DSL/expression，不隐式使用 sqlite adapter" status="TODO"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P4" name="文档与测试">
+      <goal>更新文档并添加集成测试</goal>
+      <tasks>
+        <task id="T4.1" name="更新文档和测试">
+          <priority>P0</priority>
+          <status>TODO</status>
+          <subtasks>
+            <subtask id="T4.1.1" name="更新 spl-bun/doc 文档" status="TODO"/>
+            <subtask id="T4.1.2" name="添加集成测试（垂直布局 + DSL 执行）" status="TODO"/>
+            <subtask id="T4.1.3" name="调整根 web-ide:dev 脚本" status="TODO"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+  </phases>
+</plan>

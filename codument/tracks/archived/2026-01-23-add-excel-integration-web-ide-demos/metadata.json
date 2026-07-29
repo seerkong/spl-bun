@@ -1,0 +1,9 @@
+{
+  "track_id": "add-excel-integration-web-ide-demos",
+  "type": "feature",
+  "status": "new",
+  "commit_mode": "auto",
+  "created_at": "2026-01-22T07:28:52Z",
+  "updated_at": "2026-01-22T09:38:38Z",
+  "description": "Add Excel (.xls/.xlsx) read/write support usable from Web IDE expressions (T() + optional file helpers) and ship example demos and fixtures."
+}

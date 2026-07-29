@@ -1,0 +1,543 @@
+{
+  "registeredAt": "2026-10-24T05:26:48.110684+00:00",
+  "registrationAuthority": "Direct human request to register the already-admitted independent review, verify completion and archive. No workflow dispatch/resume or substitute review.",
+  "runId": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+  "graphRevision": 8,
+  "implementationGeneration": 6,
+  "verificationGeneration": 7,
+  "reviewGeneration": 7,
+  "verifyInvocationId": "6e8ee200-7d3a-4beb-ab52-eb1119e80630",
+  "reviewInvocationId": "8d430f95-59c8-4b7f-8509-beb19e8af091",
+  "verification": {
+    "summary": "技术验证 passed。实际基线匹配，本节点必需检查及证据全部通过；当前基线收据经独立核验后复用，关键检查已重跑。C8记录not-run，由下游gap-review负责最终接纳；未修改旧报告或业务源码。",
+    "round": 4,
+    "changeRef": "未提交；HEAD=1e37adb6a8eccb5087348f2abd2cc2ccbba251fb；worktreeContentSHA256=917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f；businessSHA256=e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5；摘要范围与移动映射见 implement-6/final-worktree.json、preservation.json、sort-move.json。",
+    "status": "passed",
+    "checks": [
+      {
+        "name": "授权、实际基线与证据审计",
+        "status": "passed",
+        "evidence": "授权四条件及原input.json核对通过。验证前后全部指纹匹配，2843个文件无变化；此前隔离副本逐文件一致，11条原始命令/日志及19项证据哈希无不符。未继承旧报告status。"
+      },
+      {
+        "name": "C1：共享语义及parse整改",
+        "status": "passed",
+        "evidence": "本轮原样重跑152项真实Java反例，零差异；四入口20项探针全部通过，确认number类型、NaN/正负Infinity及输入不变。选项、精度、溢出和非法协议回归保持。"
+      },
+      {
+        "name": "C2：相关切片",
+        "status": "passed",
+        "evidence": "本轮运行规定五包命令，exit 0；432 pass、1791 expects、74 files。"
+      },
+      {
+        "name": "C3：全量及构建",
+        "status": "passed",
+        "evidence": "独立核对实际基线、隔离副本、原始命令和日志SHA256后复用：bun test为479 pass、2099 expects、89 files；bun run build为13包通过，均exit 0。本轮未重跑这两项。"
+      },
+      {
+        "name": "C4：纯核心及负向验证",
+        "status": "passed",
+        "evidence": "本轮report-logic IO/eval扫描无命中；当前回归及核验后的证据覆盖精度、懒分支、字段遮蔽、输入不变、只读视图和非法patch。"
+      },
+      {
+        "name": "C5：Codument保护",
+        "status": "passed",
+        "evidence": "本轮实算diff SHA256=7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049；未跟踪列表SHA256=1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e，均保持冻结值。"
+      },
+      {
+        "name": "C6及sort/parse来源oracle",
+        "status": "passed",
+        "evidence": "本轮重新执行：Formatter112项、排序80项、parse592项实际Java来源对照全部exit 0；临时编译目录已清理，窄适配限制保留。"
+      },
+      {
+        "name": "C7：产品验收",
+        "status": "passed",
+        "evidence": "核对当前基线、原命令、隔离副本及日志哈希后复用4394/4396端口E2E收据：exit 0，17 passed，12.3s，含format、非有限parse、排序及动态sheet。本轮未重新启动服务。"
+      },
+      {
+        "name": "C8：最终Review关闭差距",
+        "status": "not-run",
+        "evidence": "owner=gap-review。最终接纳及gap关闭属于下游职责；本节点不自批关闭。依本轮verificationDecisionScope，此项待下游不改变已通过的技术验证结论。"
+      },
+      {
+        "name": "C9：授权与lineage",
+        "status": "passed",
+        "evidence": "实际implement generation6、代码graph revision7及当前checkpoint revision8分别核实；目录授权限制、原baselineRef、反馈和前代收据保持。逐文件允许集从未冻结，不要求该制品。"
+      },
+      {
+        "name": "C10/G2：现状对账与范围保护",
+        "status": "passed",
+        "evidence": "本轮重读S12，当前字段诊断与已核验专项一致，旧反例明确在历史区；parse来源整改成立。保留其余兼容边界及下游核销职责，未声明全面兼容、扩企业平台或回写来源。"
+      }
+    ],
+    "evidenceRefs": [
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/verification.md",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/checks.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/final-baseline.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/static.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/preservation.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/evidence-hashes.json"
+    ]
+  },
+  "independentReview": {
+    "summary": "独立复核维持 complete。当前业务基线未变，新增Verify重跑及当前基线收据复用均有可核验证据。CANDIDATE-parse与G2具体整改通过，既有关闭结论保持，C1–C10满足当前合同，无未关闭的已接纳差距。结论覆盖已列能力及显式适配，不代表Java全库或任意来源工作簿全面兼容。本轮仅只读评审，未运行测试、修改文件或任务状态。",
+    "round": 4,
+    "changeRef": "未提交；HEAD=1e37adb6a8eccb5087348f2abd2cc2ccbba251fb；worktreeContentSHA256=917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f；businessSHA256=e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5；摘要范围与移动映射见 implement-6/final-worktree.json、preservation.json、sort-move.json。",
+    "verdict": "complete",
+    "criteriaCoverage": [
+      {
+        "criterion": "C1：MISSION/AT1、共享语义、精确值、诊断、输入不变及报表规则。",
+        "status": "met",
+        "evidence": [
+          "已重读parse-conversion.ts的非有限词法及q/e/n分支、来源Variant/FloatingDecimal和回归断言。修复保持在共享parse路径，未放宽通用scalar或JSON协议。",
+          "新增Verify原样重跑152项来源反例及四入口20项探针，均exit 0、零差异；确认number类型、NaN/正负Infinity及输入不变。当前parse592项、排序80项对照通过。"
+        ]
+      },
+      {
+        "criterion": "C2：最终业务基线规定五包相关切片通过。",
+        "status": "met",
+        "evidence": [
+          "本次Verify重新运行规定命令，exit 0，432 pass、1791 expects、74 files；命令及日志哈希已独立核对。"
+        ]
+      },
+      {
+        "criterion": "C3：最终业务基线全量回归及13包构建通过。",
+        "status": "met",
+        "evidence": [
+          "复用同一业务基线原始收据：479 pass、2099 expects、89 files，13包构建exit 0。已核对原日志哈希及reuse-audit中的完整文件、隔离副本一致性证据；本次Verify未重跑这两项。"
+        ]
+      },
+      {
+        "criterion": "C4：纯报表核心无隐藏IO/eval，AT1排除集有负向验证。",
+        "status": "met",
+        "evidence": [
+          "本轮按规定模式扫描report-logic/src无命中；当前回归及已核验收据覆盖精度、懒分支、字段遮蔽、输入不变、只读视图和非法patch。"
+        ]
+      },
+      {
+        "criterion": "C5：Codument保护哈希保持冻结值。",
+        "status": "met",
+        "evidence": [
+          "本轮实算diff SHA256=7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049；未跟踪列表SHA256=1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e。"
+        ]
+      },
+      {
+        "criterion": "C6：当前Formatter来源实值通过，临时资源清理。",
+        "status": "met",
+        "evidence": [
+          "新增Verify重新执行归档后Formatter oracle，exit 0，112项实际Java/ICU对照通过；日志哈希一致，无编译临时目录残留。"
+        ]
+      },
+      {
+        "criterion": "C7：规定端口17项产品验收，包含精确值format及当前parse整改。",
+        "status": "met",
+        "evidence": [
+          "已核验复用的4394/4396端口原始E2E收据：exit 0、17 passed，覆盖format、非有限parse显示、排序和动态sheet。本次Verify未重新启动服务；四入口内存探针另行确认数值类型。"
+        ]
+      },
+      {
+        "criterion": "C8：独立review无未关闭的已接纳gap。",
+        "status": "met",
+        "evidence": [
+          "本报告核销CANDIDATE-parse非有限词法差异及G2的S12现状漂移；formatting、排序及其他已关闭整改保持，无新增已确认阻断项。",
+          "Verify的C8 not-run属于职责分工，本次独立Review已提供最终关闭裁决。"
+        ]
+      },
+      {
+        "criterion": "C9：目录授权、接纳状态、基线及同run generation/feedback lineage可追溯。",
+        "status": "met",
+        "evidence": [
+          "原启动授权同值，目录级授权及限制保持；不存在逐文件冻结允许集要求。",
+          "实际command确认implement generation6、代码graph revision7；当前checkpoint revision8为编排状态，未混同代码代际。原baselineRef、反馈及前代收据保留。",
+          "当前22项实现收据、已列新旧Verify证据及排序/formatting移动内容哈希均无不符。"
+        ]
+      },
+      {
+        "criterion": "C10：来源与旧承诺兼容重评，保留dirty、准确边界及范围限制。",
+        "status": "met",
+        "evidence": [
+          "已重读当前对账：S12准确记录排序字段诊断，旧反例留在历史区；parse来源差异已有实际修复及复测，原SPL和RP/F重评结论保持。",
+          "完整Java运行、任意来源工作簿、完整locale及其他未验证能力继续保留准确限制，不由本次验收推导全面兼容。",
+          "完整工作树匹配冻结manifest，既有dirty及删除保持；未发现扩大企业平台、恢复domain/ORM或回写受保护来源的变更。"
+        ]
+      }
+    ],
+    "gaps": [],
+    "progress": "unchanged",
+    "evidenceRefs": [
+      "baselineRef.run_id=holarchy-0e32cd3d67d631730d42c305c551dfec1614; node_id=baseline-review; node_revision=3-output-contract; generation=3",
+      "baselineRef.output_ref=ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3; output_hash=483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae",
+      "本轮实算status-z SHA256=a3691c60665513b94a1b1655aa933b4f73216d3f5e1c9806a91a9d1cb2d41f56；tracked HEAD binary diff SHA256=258099b4ec526c4a586406dc4ffc1b2e36319dd9f474d039a66c53c6c010d4fe；工作树及业务摘要匹配changeRef。",
+      "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/parse-conversion.ts:43",
+      "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion/MISSION.md",
+      "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/run-context.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/checks.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/final-baseline.json",
+      "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/evidence-hashes.json",
+      "/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md:35"
+    ],
+    "loopState": {
+      "consecutiveNoProgress": 1
+    }
+  },
+  "lineage": {
+    "baseline-review": {
+      "node_id": "baseline-review",
+      "generation": 3,
+      "node_revision": "3-output-contract",
+      "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3",
+      "lineage": {
+        "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|15:baseline-review|17:3-output-contract|3",
+        "graph_revision": 3,
+        "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|15:baseline-review|17:3-output-contract|3",
+        "output_hash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae",
+        "receipt_error": null,
+        "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+      }
+    },
+    "implement": {
+      "node_id": "implement",
+      "generation": 6,
+      "node_revision": "6-user-continuation-20261024:hook:1fa0d370f570",
+      "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|9:implement|6",
+      "lineage": {
+        "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|7|9:implement|46:6-user-continuation-20261024:hook:1fa0d370f570|6",
+        "graph_revision": 7,
+        "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|7|9:implement|46:6-user-continuation-20261024:hook:1fa0d370f570|6",
+        "output_hash": "b59e7549dc1125a23be7080978e38f52a3534777963dec046cad0a6f4a86f14b",
+        "receipt_error": null,
+        "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+      }
+    },
+    "verify": {
+      "node_id": "verify",
+      "generation": 7,
+      "node_revision": "8-verification-role-scope",
+      "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6:verify|7",
+      "lineage": {
+        "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|6:verify|25:8-verification-role-scope|7",
+        "graph_revision": 8,
+        "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|6:verify|25:8-verification-role-scope|7",
+        "output_hash": "bf366b8d46fe9a6d1f6b69392a850c09d5782cdb89069a0b1ec3a4890aaaa820",
+        "receipt_error": null,
+        "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+      }
+    },
+    "gap-review": {
+      "node_id": "gap-review",
+      "generation": 7,
+      "node_revision": "6-user-continuation-20261024",
+      "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|10:gap-review|7",
+      "lineage": {
+        "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|10:gap-review|28:6-user-continuation-20261024|7",
+        "graph_revision": 8,
+        "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|10:gap-review|28:6-user-continuation-20261024|7",
+        "output_hash": "fca289d4ebbe1a31c35c86e8177328d294b1b87eff8f56ba8e7237881fd2be5d",
+        "receipt_error": null,
+        "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+      }
+    },
+    "result": {
+      "node_id": "result",
+      "generation": 7,
+      "node_revision": "1",
+      "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6:result|7",
+      "lineage": {
+        "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|6:result|1:1|7",
+        "graph_revision": 8,
+        "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|6:result|1:1|7",
+        "output_hash": "fca289d4ebbe1a31c35c86e8177328d294b1b87eff8f56ba8e7237881fd2be5d",
+        "receipt_error": null,
+        "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+      }
+    }
+  },
+  "finalAfterDecision": {
+    "decisionId": "9000a94dbe73db875f9b1ae6f220a7ff0ee86c3a63306b2c5afc3e5980f06cda",
+    "choice": "none",
+    "service": {
+      "decision_id": "9000a94dbe73db875f9b1ae6f220a7ff0ee86c3a63306b2c5afc3e5980f06cda",
+      "provider": "codex-cli",
+      "model": "gpt-6-luna",
+      "reasoningEffort": "high",
+      "threadId": "01a16c4d-f9ed-7811-81ba-ec37ef128281",
+      "elapsed_ms": 7867,
+      "diagnostics": [
+        {
+          "id": "item_0",
+          "type": "error",
+          "message": "Exceeded skills context budget. All skill descriptions were removed and 67 additional skills were not included in the model-visible skills list."
+        }
+      ]
+    }
+  },
+  "workflowOriginalHashes": {
+    "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/manifest.json": "2b23e954d4461388a125fc8a38114a2c2e3b20837c8a16ce7b8f4eb5d18db00a",
+    "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/checkpoint.json": "17f08bf1824212a1022669421496aba7f6fe1e9063870c301f11514378769007",
+    "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/outputs.json": "f2714310aa3e2718d225bbbc29928962ee12f0a1c48dec7ad0c699b8fa24133a",
+    "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/result.json": "4004623e9ee9b432d3df65121f31d5f7f0157859b7901b7016d0c94bd7603316"
+  },
+  "originalMissionFiles": {
+    "MISSION.md": "d591b1413a5d9adba0580929e93f16ab311380a1d44988672fe018d9de6a7086",
+    "loop.md": "1d82d94f3ca28c564b83e50c660e437f65e1256a3552fbd8fc08c26fc9a42f82",
+    "evidence.md": "47885ecb7a579e153a8a69529e84b430066203ae8bbc9d49f7a09bb476b53e46",
+    "verification/source-parse-oracle.ts": "8ca059b5908f9070f6914f1910adf5273a992b09dcb0ca8acd385cf8322d19bf",
+    "attractors/shared-semantics.md": "8e10cafc92c675332c18c054ab3e9f4702f3b39d1de4687fcf4eacfa536e0a54"
+  },
+  "businessSha256": "e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5",
+  "priorContentSha256": "917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f",
+  "tests": [
+    {
+      "name": "parse-focused",
+      "command": [
+        "bun",
+        "test",
+        "packages/expression/__tests__/parse-conversion.test.ts",
+        "packages/kon-spl-dsl",
+        "packages/spl-flow"
+      ],
+      "env": {},
+      "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+      "startedAt": "2026-10-24T05:24:20.927753+00:00",
+      "elapsedSeconds": 0.451,
+      "exitCode": 0,
+      "expectedSignal": "232 pass",
+      "signalPresent": true,
+      "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/parse-focused.log",
+      "sha256": "b9250ef95662027369fc8cac31cb0be93bd19a4f46e996451df76f79827726ab"
+    },
+    {
+      "name": "parse-oracle",
+      "command": [
+        "bun",
+        ".cdmt-lite/missions/active/spl-parse-conversion/verification/source-parse-oracle.ts"
+      ],
+      "env": {},
+      "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+      "startedAt": "2026-10-24T05:24:21.379610+00:00",
+      "elapsedSeconds": 3.701,
+      "exitCode": 0,
+      "expectedSignal": "592 actual Java",
+      "signalPresent": true,
+      "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/parse-oracle.log",
+      "sha256": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044"
+    },
+    {
+      "name": "full",
+      "command": [
+        "bun",
+        "test"
+      ],
+      "env": {},
+      "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+      "startedAt": "2026-10-24T05:24:25.080965+00:00",
+      "elapsedSeconds": 9.912,
+      "exitCode": 0,
+      "expectedSignal": "479 pass",
+      "signalPresent": true,
+      "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/full.log",
+      "sha256": "c5ea4a51ae5ab82b0652f48fb4b9f3cd4aa156f2f3c295aca2f3f3a61cae0374"
+    },
+    {
+      "name": "build",
+      "command": [
+        "bun",
+        "run",
+        "build"
+      ],
+      "env": {},
+      "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+      "startedAt": "2026-10-24T05:24:34.995681+00:00",
+      "elapsedSeconds": 12.497,
+      "exitCode": 0,
+      "expectedSignal": "depa-data-web-server build: Exited with code 0",
+      "signalPresent": true,
+      "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/build.log",
+      "sha256": "12fbe75096a545bfb257d4f22e90b1210181f876b1444ca0dce01eb34018bfa1"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "bun",
+        "run",
+        "test:e2e"
+      ],
+      "env": {
+        "SPL_E2E_FRONTEND_PORT": "4394",
+        "SPL_E2E_BACKEND_PORT": "4396"
+      },
+      "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+      "startedAt": "2026-10-24T05:24:47.493658+00:00",
+      "elapsedSeconds": 16.726,
+      "exitCode": 0,
+      "expectedSignal": "17 passed",
+      "signalPresent": true,
+      "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/e2e.log",
+      "sha256": "7f74bad1398ac316e2b3b778ea7592ae471a9c169e8832421cc9cb2092351d9c"
+    }
+  ],
+  "staticChecks": {
+    "codumentDiffSha256": "7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049",
+    "codumentUntrackedSha256": "1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e",
+    "reportCoreIoEvalScan": {
+      "exitCode": 1,
+      "matches": 0
+    }
+  },
+  "preservedEvidenceCopies": [
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/baseline-reference.json",
+      "copy": "verification/closeout-20261024/independent-verifier/baseline-reference.json",
+      "sha256": "1315e25229c44cf976a0a480625caabadacf544c00d74a8bc4f5f8d92689e952"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/checks.json",
+      "copy": "verification/closeout-20261024/independent-verifier/checks.json",
+      "sha256": "f1c194a0630902055bff3b6d283bd3e190c17058d933de0242e28eb049ee0a5d"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/evidence-hashes.json",
+      "copy": "verification/closeout-20261024/independent-verifier/evidence-hashes.json",
+      "sha256": "bd95a92e2a8b234bd180c6762e1dc7ec2d3d010c47cb192c9d5c61972ba2972f"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/extended-parse-oracle.log",
+      "copy": "verification/closeout-20261024/independent-verifier/extended-parse-oracle.log",
+      "sha256": "244287a5cd5aa372e8aa16d8d48ccb79a161e8e7de57cccae10ed3bf6c3fba35"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/final-baseline.json",
+      "copy": "verification/closeout-20261024/independent-verifier/final-baseline.json",
+      "sha256": "35c8991157788fcee5abce086be1bac487582dffd4bdb29f82f1a50dca3007eb"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/formatter-oracle.log",
+      "copy": "verification/closeout-20261024/independent-verifier/formatter-oracle.log",
+      "sha256": "9e3ab43d522f7d4ebd9050c5caf30d1ae4b22e0a51f8685faf82a41bea8d28d9"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/parse-entry-probes.log",
+      "copy": "verification/closeout-20261024/independent-verifier/parse-entry-probes.log",
+      "sha256": "85f5bc7e540c97b5df10573bc4ac6824393fa654e513a945a60572827213195d"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/parse-oracle.log",
+      "copy": "verification/closeout-20261024/independent-verifier/parse-oracle.log",
+      "sha256": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/preservation.json",
+      "copy": "verification/closeout-20261024/independent-verifier/preservation.json",
+      "sha256": "1927ff6958c38963bde4e26d0d90804d4bb3331e4eaae2269c17b023ef20d489"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/related.json",
+      "copy": "verification/closeout-20261024/independent-verifier/related.json",
+      "sha256": "42a822402743fd8c9da4e8231b3a619bacfacdf4c620bdcd858d787b817bf96d"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/related.log",
+      "copy": "verification/closeout-20261024/independent-verifier/related.log",
+      "sha256": "25231b73ad11035b109b59fb03114d8408afbe701f77f436c9ef6ca169ee3aa3"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json",
+      "copy": "verification/closeout-20261024/independent-verifier/reuse-audit.json",
+      "sha256": "97d311647d2fa1b0a63a470a1062d11af6e4431a71b9d6258990cc375dbce9a8"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/run_checks.py",
+      "copy": "verification/closeout-20261024/independent-verifier/run_checks.py",
+      "sha256": "49348776c593b50a8b93d9e9faddc743f323f11ccb5a24998a40c75610bc52f8"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/sort-oracle.log",
+      "copy": "verification/closeout-20261024/independent-verifier/sort-oracle.log",
+      "sha256": "bda1a059225bb0a1730e514677b207f6035acc2ab7193489b916945b7b83c192"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/source-oracles.json",
+      "copy": "verification/closeout-20261024/independent-verifier/source-oracles.json",
+      "sha256": "563b314893823cb5c2c5a4b3c44191d2c5837e7d25c3654d83bd214922e94de4"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/static.json",
+      "copy": "verification/closeout-20261024/independent-verifier/static.json",
+      "sha256": "1dae0245b538fd296c0814288af426c801595713b1aa6238e0580e7739930379"
+    },
+    {
+      "original": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/verification.md",
+      "copy": "verification/closeout-20261024/independent-verifier/verification.md",
+      "sha256": "7c75bb0beddfcaf9034eae2974e4dc356f011dda495a598506fbb38db11c7867"
+    },
+    {
+      "original": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/manifest.json",
+      "copy": "verification/closeout-20261024/accepted-workflow/manifest.json",
+      "sha256": "2b23e954d4461388a125fc8a38114a2c2e3b20837c8a16ce7b8f4eb5d18db00a"
+    },
+    {
+      "original": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/checkpoint.json",
+      "copy": "verification/closeout-20261024/accepted-workflow/checkpoint.json",
+      "sha256": "17f08bf1824212a1022669421496aba7f6fe1e9063870c301f11514378769007"
+    },
+    {
+      "original": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/outputs.json",
+      "copy": "verification/closeout-20261024/accepted-workflow/outputs.json",
+      "sha256": "f2714310aa3e2718d225bbbc29928962ee12f0a1c48dec7ad0c699b8fa24133a"
+    },
+    {
+      "original": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/result.json",
+      "copy": "verification/closeout-20261024/accepted-workflow/result.json",
+      "sha256": "4004623e9ee9b432d3df65121f31d5f7f0157859b7901b7016d0c94bd7603316"
+    },
+    {
+      "original": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/reopen-hooks/9000a94dbe73db875f9b1ae6f220a7ff0ee86c3a63306b2c5afc3e5980f06cda.json",
+      "copy": "verification/closeout-20261024/accepted-workflow/9000a94dbe73db875f9b1ae6f220a7ff0ee86c3a63306b2c5afc3e5980f06cda.json",
+      "sha256": "e32acc5204d3916267449ab9400600b5adf19d2858c3b6e0eb0e78a0cd5aeada"
+    },
+    {
+      "original": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/build.log",
+      "copy": "verification/closeout-20261024/fresh-checks/build.log",
+      "sha256": "12fbe75096a545bfb257d4f22e90b1210181f876b1444ca0dce01eb34018bfa1"
+    },
+    {
+      "original": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/checks.json",
+      "copy": "verification/closeout-20261024/fresh-checks/checks.json",
+      "sha256": "6eab8b5524aaa5b4f7f05ac10d69e0119c51e7e7119eeb5bb75e5e917b513222"
+    },
+    {
+      "original": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/e2e.log",
+      "copy": "verification/closeout-20261024/fresh-checks/e2e.log",
+      "sha256": "7f74bad1398ac316e2b3b778ea7592ae471a9c169e8832421cc9cb2092351d9c"
+    },
+    {
+      "original": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/full.log",
+      "copy": "verification/closeout-20261024/fresh-checks/full.log",
+      "sha256": "c5ea4a51ae5ab82b0652f48fb4b9f3cd4aa156f2f3c295aca2f3f3a61cae0374"
+    },
+    {
+      "original": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/parse-focused.log",
+      "copy": "verification/closeout-20261024/fresh-checks/parse-focused.log",
+      "sha256": "b9250ef95662027369fc8cac31cb0be93bd19a4f46e996451df76f79827726ab"
+    },
+    {
+      "original": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/parse-oracle.log",
+      "copy": "verification/closeout-20261024/fresh-checks/parse-oracle.log",
+      "sha256": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044"
+    },
+    {
+      "original": "/private/tmp/spl-parse-closeout-20261024/snapshot.json",
+      "copy": "verification/closeout-20261024/snapshot.json",
+      "sha256": "01a09c329a8b71cadccaafe71960f513cf614b5bfcbc1dad70faad40aab196eb"
+    },
+    {
+      "original": "/private/tmp/spl-parse-closure-checks.py",
+      "copy": "verification/closeout-20261024/spl-parse-closure-checks.py",
+      "sha256": "12d09ed8cc7085a0210625e7217cb2bcc2afe59e1ed23e55a3475e8bc64671f8"
+    }
+  ],
+  "scope": "Already-admitted CANDIDATE-parse and G2/S12 remediation in the existing migration contract. Not Java whole-library or arbitrary workbook compatibility.",
+  "historyPolicy": "Copied evidence retains original bytes and historical paths; archive path mappings are separate. Original run/provider receipts/checkpoints and prior implementation evidence remain unchanged."
+}

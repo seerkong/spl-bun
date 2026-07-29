@@ -1,0 +1,84 @@
+<Track id="retire-legacy-grid-flow-surfaces" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>清退旧 FlowCell 网格产品使用面，保留 Kon 主路径与 spl-flow 引擎层</Goal>
+    <Description>删除 web-server 旧 /api/execute、web-ide 旧网格页面/路由/旧 E2E；保留 /api/execute-kon 与引擎层。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-09T13:54:36Z</CreatedAt>
+    <UpdatedAt>2026-07-10T08:45:20Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input"  name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_retire-legacy-grid-flow-surfaces" name="retire-legacy-grid-flow-surfaces" version="1">
+    <Description>旧 FlowCell 网格产品使用面清退</Description>
+    <SubNodes>
+
+      <TaskGroup id="P1" name="前端旧网格清退" status="DONE" order="0">
+        <Description>删除 /grid-legacy、旧 grid demos、旧 grid E2E；Kon 默认路由保持。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>web-ide build 通过；Kon E2E 通过；旧 grid E2E 不再存在。</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="移除旧 grid route 与页面引用" status="DONE" order="0" priority="P0">
+            <Description>router 删除 /grid-legacy、/univer-test、/no-formula-engine 旧演示 route；删除旧 grid 页面/组件引用；保留 KonIde 默认路由。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">默认 / 仍渲染 KonIde；代码中无 /grid-legacy route。</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="移除旧 grid E2E" status="DONE" order="1" priority="P0">
+            <Description>删除旧 demo-loading/error-handling/expression-execution/flow-control-demos/multi-datasource grid E2E，必要时调整 kon-basic legacy-route case。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">Playwright 套件仅覆盖 Kon 路径且通过。</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="服务端旧端点清退" status="DONE" order="1">
+        <Description>删除旧 /api/execute 产品端点与 shared contract，保留 /api/execute-kon。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>web-server tests 与全仓 bun test 通过；/api/execute-kon 测试保留。</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="移除旧 execute contract 与 endpoint" status="DONE" order="0" priority="P0">
+            <Description>web-shared 删除 apiRoutes.execute 与旧 Execute* 类型；web-server 删除 /api/execute handler 与仅旧端点使用的 imports/helpers/tests。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">代码中无 product-facing /api/execute contract；/api/execute-kon 测试通过。</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="总验证与 mission evidence" status="DONE" order="2">
+        <Description>运行 build/e2e/test，写 findings 供 mission G5-T2 使用。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>web-ide build、Playwright E2E、全仓 bun test 全部通过。</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="总验证" status="DONE" order="0" priority="P0">
+            <Description>运行 `bun run --filter depa-data-web-ide build`、`bun run cleanup &amp;&amp; bun run test:e2e`、`bun test`；把结果写入 analysis/findings.md。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">三项验证全部通过且 findings 记录证据。</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+    </SubNodes>
+  </TaskSpace>
+</Track>

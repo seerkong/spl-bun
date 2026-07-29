@@ -1,0 +1,79 @@
+<decision #track.add_temporal_organization_context_bundle.validate_transition_split {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Read-only Validate 如何与 DRAFT->VALIDATED 状态机同时成立？</?>
+  <answer { }
+  (
+    <raw-answer ?>Read-only Validate 不应拥有状态写能力。</?>
+    <decision-text ?>Validate 只返回纯 validation facts；新增 lifecycle transition MarkValidated，在同一 atomic execution 内先运行共享 validator，通过后才由私有 Writer 执行 DRAFT->VALIDATED。</?>
+    <rationale ?>保持 operation effect 可执行且不让 read-only validator 获得 Writer authority，同时禁止未经验证进入 VALIDATED。</?>
+    <evidence ?>Mission operation matrix、state machine 与 archived runtime effect guard。</?>
+  )>
+)>
+
+<decision #track.add_temporal_organization_context_bundle.distinct_temporal_invariants {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Temporal interval overlap 与 Person 主任职唯一性是否可合并成一条 overlap 检查？</?>
+  <answer { }
+  (
+    <raw-answer ?>两者拥有不同 identity 和业务语义，必须分别验证。</?>
+    <decision-text ?>Validator 分别返回 TEMPORAL_INTERVAL_OVERLAP 与 MULTIPLE_PRIMARY_ASSIGNMENTS；MarkValidated 与 transaction 内的 Apply revalidation 都执行两条规则。</?>
+    <rationale ?>区间一致性约束每类 temporal fact identity，主任职唯一性跨 assignment rows 约束 Person，不应互相替代。</?>
+    <evidence ?>Mission constraints 2/3 与 plan-track AttractorCheck 001。</?>
+  )>
+)>
+
+<decision #track.add_temporal_organization_context_bundle.production_registration_boundary {
+  priority = "P1"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>G3 是否立即把组织 bundle 加入 production server registrations？</?>
+  <answer { }
+  (
+    <raw-answer ?>本 track 只实现 domain bundle，server/workbench 由后续 track 拥有。</?>
+    <decision-text ?>G3 只从 package root 导出 bundle 与 plain registration；reference production composition 保持不变，G4 再接入。</?>
+    <rationale ?>区分 domain capability 和 deployment composition，并保持 mission track DAG 的 ownership。</?>
+    <evidence ?>Mission G3/G4 scope 与 existing server composition boundary。</?>
+  )>
+)>
+
+<decision #track.add_temporal_organization_context_bundle.batch_adjustment_authority {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>批量人员调动能否直接更新 assignment period？</?>
+  <answer { }
+  (
+    <raw-answer ?>批量操作也必须保留 adjustment command 与 audit authority。</?>
+    <decision-text ?>每个 batch item 建立真实 DRAFT adjustment/item，由同一私有 writer 逐边推进 VALIDATED、APPROVED、APPLIED，应用 assignment replacement 并追加 audit；atomic/best-effort 不改变 item 业务有效性，仅改变事务调度。</?>
+    <rationale ?>批量入口不能绕过 adjustment command 与 audit authority。</?>
+    <evidence ?>Mission unique-writer 和 batch verification requirements。</?>
+  )>
+)>
+
+<decision #track.add_temporal_organization_context_bundle.trusted_domain_diagnostics {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Write Operation 的业务约束失败如何在回滚的同时保留 stable code/path？</?>
+  <answer { }
+  (
+    <raw-answer ?>不应把 HIERARCHY_CYCLE 等业务事实压平成只有 message 的 OPERATION_EXECUTION_FAILED。</?>
+    <decision-text ?>Runtime 公开 transport-neutral DomainOperationExecutionError，可信 handler 用它携带 OperationDiagnostic；runtime 保留 code/category/severity/path 并继续拥有 transaction rollback 与 best-effort item path remapping。</?>
+    <rationale ?>Bundle 拥有业务约束事实，runtime 拥有事务和 response envelope；显式错误边界避免两个 authority 互相代理或丢失事实。</?>
+    <evidence ?>Coding AttractorCheck 001 issue 5、runtime atomic rollback test 与 organization workflow/batch diagnostics tests。</?>
+  )>
+)>

@@ -1,0 +1,37 @@
+<decision #track.migrate_orm_consumers.migration_oracle {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "high"
+}
+(
+  <question ?>How is semantic preservation judged while source syntax and edge identity change?</?>
+  <answer { }
+  (
+    <raw-answer ?>Compare normalized runtime catalogs and retain existing scenario assertions.</?>
+    <decision-text ?>Build an inventory from legacy fixtures before migration, compare property-first output after removing volatile legacy edge ids, and use the full runtime suite as the final oracle.</?>
+    <rationale ?>Textual equivalence cannot prove ordered tuples, write policy or runtime behavior.</?>
+    <evidence ?>Mission G3 contract and the 82-fixture host baseline.</?>
+  )
+  >
+)>
+
+<decision #track.migrate_orm_consumers.inverse_members {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>When is a reverse relation represented by an inverse Property?</?>
+  <answer { }
+  (
+    <raw-answer ?>Only when the reverse is a visible domain navigation member.</?>
+    <decision-text ?>Visible reverse relations receive a typed inverse Property referring to the fully-qualified owner; invisible reciprocals use the compiler's hidden reverse edge.</?>
+    <rationale ?>This preserves public navigation without inventing domain Properties for internal topology.</?>
+    <evidence ?>depa ORM owner/inverse projection contract.</?>
+  )
+  >
+)>

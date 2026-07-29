@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>add-web-ide-flow-control-demos</track_id>
+    <track_name>Add Web-IDE flow-control demos</track_name>
+    <goal>Add runnable Web-IDE demos for the flow-control statements implemented in spl-flow, including multi-column (indented block) execution and E2E smoke coverage.</goal>
+    <created_at>2026-01-23T19:29:52Z</created_at>
+    <updated_at>2026-01-24T01:20:32Z</updated_at>
+    <status>completed</status>
+    <commit_mode>auto</commit_mode>
+    <execution_mode>sequential</execution_mode>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="Spec & Design Lock" status="DONE">
+      <description>Lock the demo scope, multi-column execution approach, and test strategy.</description>
+      <tasks>
+        <task id="T1.1" name="Draft spec/proposal/design" priority="high" status="DONE" commit="7eeda8505">
+            <description>Draft and confirm the track docs.</description>
+<changed-key-files>
+            <file>codument/tracks/add-web-ide-flow-control-demos/spec.md</file>
+            <file>codument/tracks/add-web-ide-flow-control-demos/proposal.md</file>
+            <file>codument/tracks/add-web-ide-flow-control-demos/design.md</file>
+          </changed-key-files>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="Web-IDE Multi-Column Execution" status="DONE">
+      <description>Make Run Sheet collect multi-column cells so indentation blocks can run.</description>
+      <tasks>
+        <task id="T2.1" name="Collect multi-column flowDef" priority="high" status="DONE" commit="f432f7e20">
+            <description>Upgrade the Web-IDE Run Sheet logic from A-only to collecting a bounded grid region (e.g. 20x8 A..H) of non-empty cells.</description>
+<changed-key-files>
+            <file>packages/web-ide/src/pages/SplIde.vue</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T2.1-AC1" checked="true">Run Sheet sends non-empty cells from multiple columns (A..H) as {row,col,expr}[] to backend.</criterion>
+            <criterion id="T2.1-AC2" checked="true">Existing A-only demos still run unchanged.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T2.1.1" name="Add failing test coverage" status="DONE" />
+            <subtask id="T2.1.2" name="Implement multi-column collection" status="DONE" />
+            <subtask id="T2.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="Flow-Control Demos" status="DONE">
+      <description>Add separate runnable demos for each flow-control statement/scenario, each producing a visible summary table output.</description>
+      <confirm protocol="yield-human-confirm" when="after" status="DONE" />
+      <tasks>
+        <task id="T3.1" name="Add if/elseif/else demo" priority="high" status="DONE" commit="ac60f269d">
+          <acceptance_criteria>
+            <criterion id="T3.1-AC1" checked="true">Demo runs and output table indicates the taken branch.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T3.1.1" name="Write demo grid (one cell per row)" status="DONE" />
+            <subtask id="T3.1.2" name="Manual run in Web-IDE" status="DONE" />
+          </subtasks>
+        </task>
+
+        <task id="T3.2" name="Add for variants demos" priority="high" status="DONE" commit="ac60f269d">
+            <description>Demos: infinite / count / range(step) / sequence / while + #&amp;lt;cellRef&amp;gt;.</description>
+<acceptance_criteria>
+            <criterion id="T3.2-AC1" checked="true">Each demo runs and outputs the expected aggregate (sum/count/iteration info).</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T3.2.1" name="Write demos" status="DONE" />
+            <subtask id="T3.2.2" name="Manual run in Web-IDE" status="DONE" />
+          </subtasks>
+        </task>
+
+        <task id="T3.3" name="Add break/continue targeting demos" priority="high" status="DONE" commit="ac60f269d">
+          <acceptance_criteria>
+            <criterion id="T3.3-AC1" checked="true">Nested loop demos validate break/continue (with target) behavior via output table.</criterion>
+          </acceptance_criteria>
+        </task>
+
+        <task id="T3.4" name="Add goto demo" priority="medium" status="DONE" commit="ac60f269d">
+          <acceptance_criteria>
+            <criterion id="T3.4-AC1" checked="true">Demo shows skipped cells do not affect output.</criterion>
+          </acceptance_criteria>
+        </task>
+
+        <task id="T3.5" name="Add func/return demo" priority="high" status="DONE" commit="34d0512ec">
+          <acceptance_criteria>
+            <criterion id="T3.5-AC1" checked="true">Demo shows subroutine call result in output table.</criterion>
+          </acceptance_criteria>
+        </task>
+
+        <task id="T3.6" name="Add try demo" priority="high" status="DONE" commit="d7a4b07de">
+          <acceptance_criteria>
+            <criterion id="T3.6-AC1" checked="true">Demo captures an error string and continues; output table includes the message.</criterion>
+          </acceptance_criteria>
+        </task>
+
+        <task id="T3.7" name="Add result/end demos" priority="medium" status="DONE" commit="d7a4b07de">
+          <acceptance_criteria>
+            <criterion id="T3.7-AC1" checked="true">result demo terminates early and preserves pre-result output.</criterion>
+            <criterion id="T3.7-AC2" checked="true">end demo shows an error status in the UI.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P4" name="E2E Coverage" status="DONE">
+      <description>Add Playwright smoke coverage for the new demos.</description>
+      <tasks>
+        <task id="T4.1" name="Add Playwright e2e for flow-control demos" priority="high" status="DONE" commit="34d0512ec">
+          <changed-key-files>
+            <file>packages/web-ide/__tests__/e2e</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T4.1-AC1" checked="true">E2E loads each new demo, runs sheet, checks Done and expected row labels.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T4.1.1" name="Write failing e2e assertions" status="DONE" />
+            <subtask id="T4.1.2" name="Make demos pass e2e" status="DONE" />
+            <subtask id="T4.1.3" name="Run e2e and fix" status="DONE" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P5" name="Validation" status="DONE">
+      <description>Run tests, coverage, and codument validation.</description>
+      <tasks>
+        <task id="T5.1" name="Run bun unit tests" priority="high" status="DONE" />
+        <task id="T5.2" name="Run Playwright E2E" priority="high" status="DONE" />
+        <task id="T5.3" name="Run bun test --coverage" priority="medium" status="DONE" />
+        <task id="T5.4" name="Run codument validate --strict" priority="high" status="DONE" />
+      </tasks>
+    </phase>
+  </phases>
+</plan>

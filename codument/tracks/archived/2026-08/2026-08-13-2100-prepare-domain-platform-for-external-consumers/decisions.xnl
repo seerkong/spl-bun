@@ -1,0 +1,47 @@
+<decision #track.prepare_domain_platform_for_external_consumers.server_capsule {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>应直接公开现有 web-server，还是新增通用 server capsule？</?>
+  <answer { }
+  (
+    <raw-answer ?>现有 web-server 同时拥有 demo SQLite、Kon、环境变量和 reference bundle production composition。</?>
+    <decision-text ?>新增 depa-data-domain-operation-server，只提取 catalog/execute transport adapter；现有 web-server 保持 private application composition root。</?>
+    <rationale ?>避免把应用特例扩散到平台，维持 capsule 单入口与 outer 到 inner 的单向依赖。</?>
+    <evidence ?>plan-track:before coding AttractorCheck GAP and packages/web-server/src/server.ts。</?>
+  )>
+)>
+
+<decision #track.prepare_domain_platform_for_external_consumers.package_artifact {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>独立消费证据应依赖源码目录、workspace protocol 还是打包产物？</?>
+  <answer { }
+  (
+    <raw-answer ?>Mission 要求 stable package identity 且不允许 source copy、deep import 或机器绝对路径。</?>
+    <decision-text ?>三个公共包以 dist root exports 和最小 files 打包；consumer 通过相对 file tarball identities 安装，内部依赖使用稳定 semver。</?>
+    <rationale ?>tarball 最接近真实发布边界，又不需要本 track 获得 registry 发布权限。</?>
+    <evidence ?>G2 mission acceptance and package manifest inspection。</?>
+  )>
+)>
+
+<decision #track.prepare_domain_platform_for_external_consumers.scope {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>公共平台 track 是否包含 Holon 业务或运行态工作分发？</?>
+  <answer { }
+  (
+    <raw-answer ?>Holon Workbench 只维护组织信息编辑态，G2 owner 是 spl-bun 通用平台。</?>
+    <decision-text ?>G2 不包含任何 Holon/organization bundle，不包含 Holon.Assign、Member.Assign、endpoint、lease、mailbox、delivery 或 assign/status runtime。</?>
+    <rationale ?>保持平台机制通用，并维持用户已确认的 Workbench 信息编辑职责。</?>
+    <evidence ?>Mission G1 authority freeze and user instruction。</?>
+  )>
+)>

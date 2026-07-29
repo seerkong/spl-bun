@@ -1,0 +1,36 @@
+<behavior-patch capability="domain-operation-server-api" version="1">
+  <upsert selector="behavior://domain-operation-server-api/requirements/catalog-registration">
+    <requirement id="catalog-registration">
+      <statement>The web server SHALL accept injected trusted DomainContext registrations, load each bundle once, derive id and version only from its catalog context, reject duplicate context ids, freeze server-current capabilities separately from authoring facts, and expose explicit contract-owned context, catalog, operation, and preset projections without leaking seed, bindings, handlers, probes, functions, database resources, or mutable execution state.</statement>
+      <suite id="catalog" name="Registration and catalog projection">
+        <case id="empty-and-registered-catalogs"><given>an app with zero or multiple unique registrations</given><when>catalog routes are requested</when><then>stable direct DTOs list and resolve only registered public catalog facts</then></case>
+        <case id="duplicate-id"><given>two registrations whose bundle catalogs share one context id</given><when>the app is created</when><then>creation rejects the duplicate even when versions differ</then></case>
+        <case id="projection-leak-guard"><given>a bundle containing seed, bindings, handlers, and probes</given><when>every catalog response is serialized</when><then>only enumerated contract DTO fields plus current capabilities are present and no function or runtime state leaks</then></case>
+        <case id="catalog-not-found"><given>an unknown context id</given><when>a context-scoped GET route is requested</when><then>HTTP 404 returns the stable DOMAIN_CONTEXT_NOT_FOUND transport shape</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-operation-server-api/requirements/execute-routing">
+    <requirement id="execute-routing">
+      <statement>The execute route SHALL resolve context through projected request facts, pass the original parsed body object unchanged to the matching runtime bundle with its frozen server-current capabilities, return every runtime success, partial, or failure envelope as HTTP 200, and produce truthful contract failure envelopes with no fallback bundle or invented facts for missing, invalid, unknown, or version-mismatched contexts.</statement>
+      <suite id="execute" name="Execute routing and errors">
+        <case id="preset-body-parity"><given>a complete preset request fetched from the catalog</given><when>that JSON object is posted without edits</when><then>the runtime receives the same request values and execution returns a contract response</then></case>
+        <case id="invalid-context"><given>a request with missing or structurally invalid context</given><when>execution is posted</when><then>HTTP 200 returns REQUEST_VALIDATION_FAILED with independently projected nullable facts, no commit, no mutations, and null tree</then></case>
+        <case id="catalog-mismatch"><given>a well-formed unknown context id or non-active version</given><when>execution is posted</when><then>HTTP 200 returns OPERATION_CATALOG_MISMATCH without selecting or allocating another bundle</then></case>
+        <case id="domain-status"><given>a runtime success, partial, or business/execution failure</given><when>the resolved request executes</when><then>the unchanged response envelope is returned with HTTP 200</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-operation-server-api/requirements/isolation-compatibility">
+    <requirement id="isolation-compatibility">
+      <statement>The server SHALL preserve runtime per-execution lifecycle ownership for sequential and concurrent requests, SHALL preserve existing health and execute-kon routes, SHALL declare direct contract/runtime dependencies and a real build, and SHALL reject production imports from capsule, private/internal, generated distribution, node_modules, unallowlisted depa-orm subpaths, or test fixtures.</statement>
+      <suite id="integration" name="Isolation, compatibility, and boundaries">
+        <case id="request-isolation"><given>the same registered seeded bundle</given><when>mutating requests run sequentially and concurrently</when><then>each response observes a fresh deterministic state and no request shares live database state</then></case>
+        <case id="legacy-routes"><given>the server after Domain Operation integration</given><when>health and execute-kon regression cases run</when><then>their existing response contracts remain valid</then></case>
+        <case id="build-boundary"><given>web-server source, package metadata, and root scripts</given><when>focused tests, typecheck/build, root build, and import guards run</when><then>all pass using declared public package dependencies and the protected capsule hashes remain unchanged</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

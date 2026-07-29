@@ -1,0 +1,59 @@
+<behavior-patch capability="domain-context-reference-bundles" version="1">
+  <upsert selector="behavior://domain-context-reference-bundles/requirements/temporal-organization-adjustment">
+    <requirement id="temporal-organization-adjustment">
+      <statement>The organization-adjustment bundle SHALL model stable organization/person identities, typed valid/recorded temporal facts, ordered adjustment commands and append-only audit evidence through Property-first Kon declarations; expose exact timeline-aware presets and registered operations for snapshot, history, compare, preview, validate, workflow transitions, atomic apply and independent transfer batch; and permit relational writes only through one private OrganizationAdjustmentWriter while every execute request remains fresh and deterministic.</statement>
+      <suite id="temporal-organization" name="Temporal organization management and adjustment">
+        <case id="property-first-temporal-model">
+          <given>the canonical Kon model source</given>
+          <when>the public runtime compiler projects it</when>
+          <then>all eight entities and typed navigation relations SHALL compile; foreign-key Fields SHALL contain only physical metadata and every temporal fact SHALL expose valid/recorded half-open bounds</then>
+        </case>
+        <case id="snapshot-history-compare">
+          <given>deterministic facts around the 2025-07-01 boundary</given>
+          <when>snapshot, history and compare operations execute with day timelines</when>
+          <then>the returned tree/table/composite outcomes SHALL derive deterministic unit, hierarchy and primary-assignment changes from temporal rows without projection writes</then>
+        </case>
+        <case id="preview-and-validation">
+          <given>a draft adjustment and its effective day</given>
+          <when>Preview and Validate run</when>
+          <then>both SHALL load facts outside and use the same context-free candidate-state validator over the complete current-recorded timeline, reject malformed valid/recorded bounds and dangling temporal identity references, return structured projected changes or constraint facts including future overlaps, and perform zero Writer calls</then>
+        </case>
+        <case id="workflow-and-atomic-apply">
+          <given>DRAFT, VALIDATED and APPROVED seeded adjustments</given>
+          <when>MarkValidated, Approve and Apply run through their registered refs</when>
+          <then>MarkValidated SHALL run the shared validator before its atomic transition; only legal transitions SHALL occur; Apply SHALL revalidate after its transaction starts and atomically commit temporal replacements, one audit event and APPLIED status through the private writer</then>
+        </case>
+        <case id="temporal-interval-overlap">
+          <given>replacement facts whose current-recorded valid intervals overlap for the same temporal identity</given>
+          <when>Validate, MarkValidated or transaction-time Apply validation runs</when>
+          <then>the result SHALL identify TEMPORAL_INTERVAL_OVERLAP and every write-capable execution SHALL leave status, facts and audit unchanged</then>
+        </case>
+        <case id="primary-assignment-uniqueness">
+          <given>a Person would have more than one active primary assignment on the same business day</given>
+          <when>Validate, MarkValidated or transaction-time Apply validation runs</when>
+          <then>the result SHALL identify MULTIPLE_PRIMARY_ASSIGNMENTS independently of temporal interval overlap and every write-capable execution SHALL leave status, facts and audit unchanged</then>
+        </case>
+        <case id="constraint-and-rollback">
+          <given>cycle, missing-target, illegal-state and injected post-replacement failure scenarios</given>
+          <when>validation or Apply executes</when>
+          <then>stable failures SHALL preserve the violated invariant code and request path through the runtime response, and no failed atomic execution SHALL leave temporal, audit or status changes</then>
+        </case>
+        <case id="create-and-close-unit-integrity">
+          <given>create-unit and close-unit adjustment commands at an effective day</given>
+          <when>Preview, Validate or Apply projects or commits the commands</when>
+          <then>create-unit SHALL require a stable parent identity with exactly one visible ACTIVE version, close-unit SHALL reject unresolved active children or primary assignments, and successful close SHALL end every owned unit-version and hierarchy period without deleting recorded history</then>
+        </case>
+        <case id="independent-transfer-batch">
+          <given>independently keyed Person transfer items including invalid targets or repeated subjects</given>
+          <when>atomic and best-effort requests execute</when>
+          <then>every item SHALL pass the same complete current-recorded candidate-state validator before Writer access; every successful item SHALL materialize one adjustment through DRAFT, VALIDATED, APPROVED and APPLIED; atomic SHALL roll back all items after a failure while best-effort SHALL retain valid siblings and remap structured diagnostics; and the atomicity choice SHALL NOT change business validity or final facts when every item succeeds</then>
+        </case>
+        <case id="fresh-organization-execution">
+          <given>the same write preset invoked sequentially or concurrently</given>
+          <when>the public runtime executes it</when>
+          <then>each call SHALL start from equivalent seed, produce deterministic facts, use an independent execution id and destroy its SQLite state</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

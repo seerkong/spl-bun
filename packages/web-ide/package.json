@@ -1,0 +1,25 @@
+{
+  "name": "depa-data-web-ide",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "depa-data-web-shared": "workspace:*",
+    "@tanstack/vue-table": "^8.21.3",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "^5.4.5",
+    "vite": "^6.0.0",
+    "vue-tsc": "2.2.12",
+    "xlsx": "0.18.5"
+  }
+}

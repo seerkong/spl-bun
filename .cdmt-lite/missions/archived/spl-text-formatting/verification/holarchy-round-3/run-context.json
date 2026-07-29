@@ -1,0 +1,55 @@
+{
+  "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+  "stage": "implement",
+  "round": 3,
+  "authorization": {
+    "mode": "run",
+    "userStarted": true,
+    "receiptRef": "holarchy:082d4c9b3d20d7fdede36e6b563ff48ca84c",
+    "authorizedWorkspaces": [
+      "/Users/kongweixian/infra-dev/spl-bun"
+    ]
+  },
+  "baselineReview": {
+    "node_id": "baseline-review",
+    "node_revision": "3-output-contract",
+    "generation": 3,
+    "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3",
+    "output_hash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae"
+  },
+  "feedbackAssociation": {
+    "sourceNode": "gap-review",
+    "sourceGeneration": 3,
+    "outputHash": "bd8521f450c40da6b0b56f028df4abbe1874f8e4f91b718ea6c987d0f0162515",
+    "nextRound": 3,
+    "consecutiveNoProgress": 0
+  },
+  "predecessor": {
+    "round": 2,
+    "worktreeContentSha256": "a64b1f286eff83719c36e43a9b3468e484614fb30a274296a0735bae32028b6a",
+    "businessSha256": "60f19579ae793131568fbd4a51b5e36ca43d81d957ae9dd1b8481ecae6fbf154",
+    "runContext": "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/verification/holarchy-round-2/run-context.json"
+  },
+  "reviewTechnicalRemediationPassed": [
+    "G6-null-character-format",
+    "G7-null-floating-format"
+  ],
+  "implementedBusinessGapsThisRound": [],
+  "notAdmittedCandidates": [
+    "CANDIDATE-sort",
+    "CANDIDATE-parse"
+  ],
+  "implementGeneration": null,
+  "hostFrozenAllowedPaths": null,
+  "hostGapAdmissionDecisions": null,
+  "scopeClarification": {
+    "requested": true,
+    "answered": false,
+    "reason": "Report actions recommend Host admission; current user constraint permits only admitted gaps. No reply is not admission."
+  },
+  "businessStatus": "blocked",
+  "missingInput": "Explicit candidate admission for next implementation; authoritative gap set/allowlist/Implement generation for C8/C9 closeout.",
+  "independentReviewMissing": false,
+  "runAuthorizationValid": true,
+  "note": "Record supplied independent technical verdict; do not self-approve candidates or claim platform failure. No business changes or product test reruns."
+}

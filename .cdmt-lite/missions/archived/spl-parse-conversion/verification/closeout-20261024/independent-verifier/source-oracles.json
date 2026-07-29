@@ -1,0 +1,41 @@
+[
+  {
+    "name": "sort-oracle",
+    "command": [
+      "bun",
+      ".cdmt-lite/missions/archived/spl-stable-expression-sort/verification/source-oracle.ts"
+    ],
+    "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+    "start": "2026-10-24T04:57:01.534758+00:00",
+    "end": "2026-10-24T04:57:04.790916+00:00",
+    "exitCode": 0,
+    "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/sort-oracle.log",
+    "logSha256": "bda1a059225bb0a1730e514677b207f6035acc2ab7193489b916945b7b83c192"
+  },
+  {
+    "name": "parse-oracle",
+    "command": [
+      "bun",
+      ".cdmt-lite/missions/active/spl-parse-conversion/verification/source-parse-oracle.ts"
+    ],
+    "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+    "start": "2026-10-24T04:57:04.792637+00:00",
+    "end": "2026-10-24T04:57:07.901058+00:00",
+    "exitCode": 0,
+    "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/parse-oracle.log",
+    "logSha256": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044"
+  },
+  {
+    "name": "formatter-oracle",
+    "command": [
+      "bun",
+      ".cdmt-lite/missions/archived/spl-text-formatting/verification/formatter-oracle.ts"
+    ],
+    "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+    "start": "2026-10-24T04:57:07.903762+00:00",
+    "end": "2026-10-24T04:57:09.956108+00:00",
+    "exitCode": 0,
+    "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/formatter-oracle.log",
+    "logSha256": "9e3ab43d522f7d4ebd9050c5caf30d1ae4b22e0a51f8685faf82a41bea8d28d9"
+  }
+]

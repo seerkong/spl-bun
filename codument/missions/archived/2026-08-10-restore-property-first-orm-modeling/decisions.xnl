@@ -1,0 +1,56 @@
+<decision #mission.restore_property_first_orm_modeling.authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low; restoring detached relation authoring would recreate competing schema authorities"
+}
+(
+  <question ?>关联关系的建模 authority 应位于 field、独立 relation 原语，还是 class navigation property？</?>
+  <answer { }
+  (
+    <raw-answer ?>必须位于 Order.shop、Shop.orders、Department.employees 这类 property，不能位于 shopId 等 field，也不能由独立 relation 原语拥有。</?>
+    <decision-text ?>Kunun typed navigation property 及其 ORM metadata 是关系声明的唯一 authoring authority；field 只参与存储映射，compiled relation graph 只是派生投影。</?>
+    <rationale ?>property-first 符合 class/code-first 语义，并使多字段关联不受单一外键 field 限制；独立 relation 原语会与对象属性形成双真源。</?>
+    <evidence ?>用户明确重申历史约束；当前 depa ORM 文档、compiler 和 composer 反向使用 relationships/relation 节点，构成已证实的实现漂移。</?>
+  )
+  >
+)>
+
+<decision #mission.restore_property_first_orm_modeling.code_first_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>depa ORM code-first API 应拥有独立的 entity/relation builder，还是复用 Kunun 类型系统？</?>
+  <answer { }
+  (
+    <raw-answer ?>强烈要求引用 Kunun 类型系统进行 code-first API 的 DSL 建模。</?>
+    <decision-text ?>Kunun public type-system model owns code-first class/field/property construction；depa ORM 仅提供 metadata/profile adapter 和编译投影，不维护 shadow RelationModel authority。</?>
+    <rationale ?>source-first 与 code-first 必须在同一类型系统模型上收敛，才能避免 parser、builder 和 runtime 各自演化出不同 schema。</?>
+    <evidence ?>用户明确约束；当前 depa ORM CodeFirstOrmSourceComposer 自有 EntityModel/RelationModel 并输出 relationships section。</?>
+  )
+  >
+)>
+
+<decision #mission.restore_property_first_orm_modeling.composite_and_inverse {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium; metadata vocabulary may evolve while single ownership remains fixed"
+}
+(
+  <question ?>复合字段关联和双向 navigation property 如何避免重复 authority？</?>
+  <answer { }
+  (
+    <raw-answer ?>relation 不能建立在 field 上，因为后续多字段关联会受限并形成技术债。</?>
+    <decision-text ?>owning navigation property 持有有序 local/target field tuples 和物理关系 metadata；inverse navigation property 仅以稳定 property identity 引用 owner，不重复 storage mapping。</?>
+    <rationale ?>有序 tuple 支持多字段关联；owner/inverse 分工让两个真实业务 property 共存而不产生两份可写 join 真值。</?>
+    <evidence ?>用户对多字段技术债的明确说明；现有 OrmRelationSchema 已能表达 endpoint key arrays，可作为派生 runtime contract。</?>
+  )
+  >
+)>

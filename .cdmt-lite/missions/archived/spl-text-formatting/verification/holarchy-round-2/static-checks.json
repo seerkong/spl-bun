@@ -1,0 +1,18 @@
+{
+  "coreNoHiddenIOEval": {
+    "rgExitCode": 1,
+    "pass": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  "codumentDiff": {
+    "actual": "7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049",
+    "expected": "7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049",
+    "pass": true
+  },
+  "codumentUntrackedList": {
+    "actual": "1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e",
+    "expected": "1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e",
+    "pass": true
+  }
+}

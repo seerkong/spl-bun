@@ -1,0 +1,49 @@
+{
+  "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+  "stage": "implement",
+  "round": 2,
+  "authorization": {
+    "mode": "run",
+    "userStarted": true,
+    "receiptRef": "holarchy:082d4c9b3d20d7fdede36e6b563ff48ca84c",
+    "authorizedWorkspaces": [
+      "/Users/kongweixian/infra-dev/spl-bun"
+    ]
+  },
+  "baselineReview": {
+    "node_id": "baseline-review",
+    "node_revision": "3-output-contract",
+    "generation": 3,
+    "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3",
+    "output_hash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae"
+  },
+  "feedbackAssociation": {
+    "sourceNode": "gap-review",
+    "sourceGeneration": 2,
+    "outputHash": "d4a527ec0e0b1ee761beff5597bf69f65a2af9910559a43de0b42e6f2ceebed5",
+    "nextRound": 2,
+    "consecutiveNoProgress": 0
+  },
+  "predecessor": {
+    "round": 1,
+    "worktreeContentSha256": "fe874328ea0cb4f66bd33ed01d76b50bfa19f2f03ef195886bae7177af80cedb",
+    "businessSha256": "6ffd162779bb220b9cb81c7eae6e1b186509f576f40a8b80148db3649d2d3577",
+    "finalManifest": "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/verification/holarchy-round-1/final-worktree.json"
+  },
+  "implementedFeedbackGaps": [
+    "G6-null-character-format",
+    "G7-null-floating-format"
+  ],
+  "documentationCorrectionOnly": [
+    "CANDIDATE-sort"
+  ],
+  "notImplementedCandidates": [
+    "CANDIDATE-sort",
+    "CANDIDATE-parse"
+  ],
+  "implementGeneration": null,
+  "hostFrozenAllowedPaths": null,
+  "hostGapAdmissionDecisions": null,
+  "independentReviewVerdictForRound2": null,
+  "note": "Known feedback association preserved; missing Host fields stay unknown. Reviewer generation2 is not Implement generation. Return to existing workflow without reviewer/session/workflow dispatch."
+}

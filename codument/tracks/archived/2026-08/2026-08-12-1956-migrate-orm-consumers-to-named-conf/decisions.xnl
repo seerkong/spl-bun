@@ -1,0 +1,75 @@
+<decision #track.migrate_orm_consumers_to_named_conf.dependency_provenance {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>未发布的 Kunun 1.0.4 与 depa ORM 0.2.0 如何证明正式 package boundary，而不把本地路径写入仓库？</?>
+  <answer { }
+  (
+    <raw-answer ?>提交态只使用正式 semver；验证态使用带版本和 SHA-256 的临时 sibling tarball，并在隔离目录安装。</?>
+    <decision-text ?>capsule、domain-runtime 和 kon-spl-dsl manifests 声明正式版本；临时 tarball 不进入提交依赖或 lock authority；isolated consumer 必须证明 resolution 不经过 sibling/global/workspace symlink。ignored bun.lock 保持未被 Git 管理、只报告 stale versions 且不得参与 proof；registry-only authoritative lock 延后至 mission G5。</?>
+    <rationale ?>同时保留未来 npm consumption 的真实声明和当前未发布条件下可复现的 package-boundary 证据。</?>
+    <evidence ?>plan-track fresh observer 发现 manifests/ignored lock 为旧版本而 installed modules 是全局软链，目标 registry versions 当前不可用。</?>
+  )
+  >
+)>
+
+<decision #track.migrate_orm_consumers_to_named_conf.generator_retirement {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>既有 property migration generator 在此次 hard cut 后应如何处理？</?>
+  <answer { }
+  (
+    <raw-answer ?>先用完整 oracle 做一次性 canonical migration，再物理删除或封闭 legacy reader/emitter。</?>
+    <decision-text ?>迁移工具必须先改为输出 NamedConf、flat Field 和 declaration-owned datasource identity；完成 30/82/216 semantic comparison 后，不保留可重新生成旧契约的兼容入口。</?>
+    <rationale ?>长期保留 legacy reader 会让旧契约继续成为事实上的输入语言，与用户要求的无兼容改造冲突。</?>
+    <evidence ?>fresh observer 定位 migrate-property-relation-fixtures.ts 仍输出旧 marker 并重建 nested storage。</?>
+  )
+  >
+)>
+
+<decision #track.migrate_orm_consumers_to_named_conf.negative_classification {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>哪些旧语法 literal 可以在 hard cut 后保留？</?>
+  <answer { }
+  (
+    <raw-answer ?>仅 immutable archive 与直接断言旧输入被拒绝的最小 negative literal。</?>
+    <decision-text ?>文件名含 invalid、break 或 conflict 不自动豁免；正向 runtime 场景中的模型必须 canonical。active Codument evidence 必须分类并报告，不能通过排除 codument/** 隐藏。</?>
+    <rationale ?>豁免由行为目的决定，而不是由目录或命名猜测，才能防止兼容输入悄悄回流。</?>
+    <evidence ?>fresh observer 发现 direct datasource 用例实际断言无关 network environment error，而不是旧输入 rejection。</?>
+  )
+  >
+)>
+
+<decision #track.migrate_orm_consumers_to_named_conf.web_ide_scope {
+  priority = "P1"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "high"
+}
+(
+  <question ?>web IDE 是否预设为直接改造目标？</?>
+  <answer { }
+  (
+    <raw-answer ?>先作为完整 end-to-end 验证范围，只在真实 canonical rendering 或 execution 需要时修改。</?>
+    <decision-text ?>通过 server catalog、bundle source、compiler、SQLite 和 workbench UI 的真实链路验证；不为了形式上的范围而制造无必要 UI 改动。</?>
+    <rationale ?>模型真源在 reference bundle，UI 应消费而非重建；是否需要编辑应由运行证据决定。</?>
+    <evidence ?>当前 web IDE 通过 server/runtime 消费 bundle，没有独立 ORM DSL authority 的证据。</?>
+  )
+  >
+)>

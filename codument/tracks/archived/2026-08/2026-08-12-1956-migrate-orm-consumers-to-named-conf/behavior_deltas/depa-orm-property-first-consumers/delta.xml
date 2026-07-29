@@ -1,0 +1,78 @@
+<behavior-patch capability="depa-orm-property-first-consumers" version="1">
+  <upsert selector="behavior://depa-orm-property-first-consumers/requirements/property-authority">
+    <requirement id="property-authority">
+      <statement>All spl-bun depa ORM model fixtures and code-first consumers SHALL use Kunun public declarations as the only structure authority and external prefix NamedConf as ORM annotation transport: Entity metadata attaches to Class, flat physical Field metadata attaches to Field, relation metadata attaches only to a typed navigation Property, and provider configuration attaches to DataSource while its declaration name remains the sole identity; scalar Fields, nested Field storage, Field relations, direct datasource Conf, duplicate datasource identity, old marker Conf, detached relation nodes, entity relationship sections and shadow code-first relation models SHALL NOT be accepted as canonical sources.</statement>
+      <suite id="source-and-code-first" name="Source and code-first authority">
+        <case id="source-property-projection">
+          <given>a source bundle using prefix NamedConf on Class, scalar Fields, typed owner or inverse Properties, and DataSource declarations</given>
+          <when>the public depa ORM 0.2.0 compiler builds the model</when>
+          <then>every runtime entity, column, relation and datasource SHALL trace to its declaration attachment and preserve storage/runtime options without a second authoring graph</then>
+        </case>
+        <case id="programmatic-property-projection">
+          <given>a programmatic Kunun ClassDefinition built with equivalent NamedConf annotations, Field and Property members</given>
+          <when>the public definition compiler builds the model</when>
+          <then>the catalog SHALL be equivalent to the corresponding source model without rendering Kon or creating a detached relation graph</then>
+        </case>
+        <case id="strict-attachment-rejection">
+          <given>old marker transport, nested Field storage, a relation on Field, direct datasource Conf, or duplicated datasource key/name</given>
+          <when>the canonical compiler admits the model</when>
+          <then>it SHALL fail with a stable path and attachment-specific diagnostic before runtime schema construction</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://depa-orm-property-first-consumers/requirements/migration-preserves-runtime">
+    <requirement id="migration-preserves-runtime">
+      <statement>The NamedConf hard-cut migration SHALL preserve the existing 30-group, 82-inventoried-fixture, 216-relation property-first oracle, including direct, inverse, one/many, ordered/composite tuple, through, nested read/write, cascade, visibility, validation/storage, write-policy, ordering and load-strategy behavior covered by the capsule suite.</statement>
+      <suite id="runtime-regression" name="Runtime regression">
+        <case id="full-capsule-suite">
+          <given>all positive fixtures have been migrated and dependencies resolve through public package exports</given>
+          <when>the complete capsule and host workspace gates run</when>
+          <then>the oracle and runtime suites SHALL pass without compatibility readers, package deep imports or absolute workspace aliases</then>
+        </case>
+        <case id="generator-equivalence">
+          <given>legacy projection evidence and canonical migrated source for every inventoried fixture</given>
+          <when>the migration comparison runs before legacy tooling is retired</when>
+          <then>all 216 relation projections and retained Field/Entity policies SHALL be structurally equivalent</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://depa-orm-property-first-consumers/requirements/anti-drift-guard">
+    <requirement id="anti-drift-guard">
+      <statement>Repository guards SHALL classify and scan source, fixtures, tests, docs, scripts, generated inventories, dist, manifests, ignored lock state and active Codument evidence; they SHALL reject old ORM marker Conf, nested Field storage, relation-on-Field, direct datasource Conf, duplicate datasource identity, `:relationships=`, detached `(relation ...)`, `property_key`, `reverse_property_key`, retired `CodeFirstOrm*` authoring, legacy dependency versions in manifests or authoritative locks, and unexported depa ORM subpaths; the ignored root bun.lock SHALL be reported as non-authority and SHALL fail only if it becomes Git-managed or participates in isolated proof; only immutable archived history and minimal literals directly asserted as rejected may otherwise be exempt.</statement>
+      <suite id="architecture-guard" name="Architecture guard">
+        <case id="legacy-authority-is-rejected">
+          <given>a live source, fixture, helper, current document, script, generated output, manifest or lock reintroduces a retired authority marker</given>
+          <when>the classification and package-boundary guards run</when>
+          <then>the build SHALL fail with the path, matched category and expected disposition</then>
+        </case>
+        <case id="negative-exemption-is-behavioral">
+          <given>an old-form literal retained as a negative case</given>
+          <when>the guard validates its classification</when>
+          <then>a linked test SHALL directly assert canonical rejection; invalid, break or conflict naming alone SHALL NOT grant exemption</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://depa-orm-property-first-consumers/requirements/package-provenance">
+    <requirement id="package-provenance">
+      <statement>Committed host manifests SHALL consume Kunun 1.0.4 and depa ORM 0.2.0 by formal package name and semver without file, link or absolute sibling paths; before registry publication, package-boundary verification SHALL use version-checked, SHA-256-recorded ephemeral tarballs in an isolated consumer and prove public imports and canonical compilation resolve without global, sibling-repository or workspace symlinks.</statement>
+      <suite id="isolated-consumption" name="Isolated package consumption">
+        <case id="packed-artifact-install">
+          <given>fresh tarballs packed from the sibling Kunun and depa ORM repositories</given>
+          <when>an external temporary consumer installs and imports the declared roots</when>
+          <then>package name/version/hash SHALL match the manifest contract and all resolved module paths SHALL remain under the isolated consumer</then>
+        </case>
+        <case id="committed-dependency-intent">
+          <given>host package manifests and ignored root lock state</given>
+          <when>the provenance guard runs</when>
+          <then>manifests SHALL use only target semver; the ignored stale lock SHALL remain untracked, SHALL NOT participate in isolated proof, and SHALL be reported as non-authoritative until mission G5 registry lock verification</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

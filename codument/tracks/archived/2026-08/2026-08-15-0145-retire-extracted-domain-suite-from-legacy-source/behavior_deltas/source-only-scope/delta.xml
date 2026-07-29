@@ -1,0 +1,20 @@
+<behavior-patch capability="source-only-scope" version="1">
+  <upsert selector="behavior://source-only-scope/requirements/retained-capabilities">
+    <requirement id="retained-capabilities">
+      <statement>The repository SHALL own source-language and data-processing capabilities only: core expression/SPL flow, SQLite adapter, Kon SPL DSL, depa-orm capsule integration, composer, web-shared, and the Kon-only private server/IDE.</statement>
+      <suite id="retention" name="Source capability retention">
+        <case id="package-graph"><given>the post-retirement workspace</given><when>manifests and production imports are inspected</when><then>every retained package SHALL remain present and wired without a dependency on retired Domain package identities</then></case>
+        <case id="full-regression"><given>the retained workspace and demo data</given><when>tests, builds, typechecks, Kon server smoke, and Kon Playwright E2E run</when><then>source/data behavior and the Kon product SHALL remain green</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://source-only-scope/requirements/domain-owner-retired">
+    <requirement id="domain-owner-retired">
+      <statement>The repository SHALL NOT own or expose the extracted Domain protocol, Domain runtime, Domain server adapter, reference Domain contexts, canonical Domain HTTP routes, or Domain Workbench UI.</statement>
+      <suite id="retirement" name="Domain owner retirement">
+        <case id="physical-removal"><given>source packages, tests, fixtures, root lifecycle, and current Codument authority</given><when>the retirement residue scan runs</when><then>retired package directories, identities, registrations, routes, UI surfaces, and current owner claims SHALL be absent</then></case>
+        <case id="kon-only-web"><given>the remaining private Web server and IDE</given><when>their production routes and views are inspected</when><then>only Kon execution and Kon IDE surfaces SHALL remain, with no Domain catalog or execute surface</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

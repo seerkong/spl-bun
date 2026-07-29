@@ -1,0 +1,11 @@
+{
+  "head": "1e37adb6a8eccb5087348f2abd2cc2ccbba251fb",
+  "contentSha256": "917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f",
+  "businessSha256": "e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5",
+  "statusZSha256": "a3691c60665513b94a1b1655aa933b4f73216d3f5e1c9806a91a9d1cb2d41f56",
+  "trackedHeadBinaryDiffSha256": "258099b4ec526c4a586406dc4ffc1b2e36319dd9f474d039a66c53c6c010d4fe",
+  "changedSourcePaths": [],
+  "observedExistingFiles": 2843,
+  "remainingOracleTemporaryDirectories": [],
+  "matchesImplementationAndPriorEvidence": true
+}

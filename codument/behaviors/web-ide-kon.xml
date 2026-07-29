@@ -1,0 +1,73 @@
+<behaviors capability="web-ide-kon" version="1">
+  <requirement id="kon-ide-page">
+    <statement>web-ide SHALL expose a Kon script editor at the default route / with a script text editor, demo selector and loader, Run Script action, status area, and result table. It SHALL POST to /api/execute-kon, render response data as columns and rows, and show an Error: prefixed readable message when execution fails. The product SHALL NOT expose the legacy FlowCell grid route.</statement>
+    <suite id="page" name="Kon IDE page">
+      <case id="run-script">
+        <given>the editor contains a valid Kon query script against demo data</given>
+        <when>the user runs the script</when>
+        <then>status SHALL become Done and the result table SHALL show non-empty rows</then>
+      </case>
+      <case id="error-status">
+        <given>the script references an unknown data source</given>
+        <when>the user runs it</when>
+        <then>the status SHALL show Error: with actionable detail</then>
+      </case>
+      <case id="legacy-route-removed">
+        <given>the web product routes</given>
+        <when>a user navigates to /grid-legacy</when>
+        <then>the application SHALL NOT expose the legacy grid IDE</then>
+      </case>
+    </suite>
+  </requirement>
+  <requirement id="kon-demos">
+    <statement>web-ide SHALL 内置 Kon 版 demos 集合，覆盖既有 33 个网格 demo 的能力面（数据库查询链、序列运算、文件/多数据源、表达式、控制流）；网格特有语义（goto、execute-only、result/end 提前终止等）无 Kon 对应者 SHALL 改写为等价 Kon 结构或合并，并在 demo 注释与 track findings 中记录清单差异；每个 demo SHALL 可加载到编辑区并运行出与其断言一致的结果。</statement>
+    <suite id="demos" name="Kon demos">
+      <case id="demo-load-run">
+        <given>demos 下拉任选一项</given>
+        <when>Load 后 Run</when>
+        <then>SHALL 得到该 demo 预期的结果（E2E 数值断言）</then>
+      </case>
+      <case id="coverage-mapping">
+        <given>既有 33 个网格 demo 清单</given>
+        <when>对照 Kon demos 集合</when>
+        <then>每个旧 demo SHALL 有映射（一对一/合并/裁减）且差异有记录</then>
+      </case>
+    </suite>
+  </requirement>
+  <requirement id="kon-e2e">
+    <statement>web-ide SHALL provide a Kon-only Playwright E2E suite covering demo loading, query/file/multi-source execution, flow-control assertions, and error handling. The retired grid E2E suite SHALL NOT remain in the product test surface.</statement>
+    <suite id="e2e" name="Kon E2E">
+      <case id="full-suite-green">
+        <given>bun run test:e2e</given>
+        <when>the Kon E2E suite runs</when>
+        <then>all Kon E2E cases SHALL pass</then>
+      </case>
+    </suite>
+  </requirement>
+  <requirement id="kon-only-product-surface">
+    <statement>系统 SHALL expose the web product surface as Kon script execution only, with legacy FlowCell grid routes, demos, and endpoint contracts removed from the product-facing web packages.</statement>
+    <suite id="legacy-retirement" name="legacy grid surface retirement">
+      <case id="default-route-remains-kon">
+        <given>用户打开 web-ide 默认路由</given>
+        <when>页面加载完成</when>
+        <then>系统 SHALL show the Kon script editor and Kon demo list</then>
+        <and>系统 SHALL NOT expose a /grid-legacy route</and>
+      </case>
+      <case id="execute-kon-remains">
+        <given>前端提交 Kon 脚本</given>
+        <when>请求 web-server execution API</when>
+        <then>系统 SHALL call POST /api/execute-kon and render returned table data</then>
+      </case>
+      <case id="legacy-execute-removed">
+        <given>调用方请求旧 POST /api/execute endpoint</given>
+        <when>web-server 接收请求</when>
+        <then>系统 SHALL NOT provide the legacy FlowCell endpoint as a product API</then>
+      </case>
+      <case id="engine-layer-preserved">
+        <given>仓库运行引擎层测试</given>
+        <when>执行 depa-data-spl-flow tests</when>
+        <then>系统 SHALL preserve spl-flow / FlowCell engine behavior</then>
+      </case>
+    </suite>
+  </requirement>
+</behaviors>

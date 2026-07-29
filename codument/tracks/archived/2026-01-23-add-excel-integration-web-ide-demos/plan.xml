@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>add-excel-integration-web-ide-demos</track_id>
+    <track_name>Add Excel integration and Web-IDE demos</track_name>
+    <goal>Add minimal Excel (.xls/.xlsx) import/export support usable from Web-IDE expressions and ship demos + tests.</goal>
+    <created_at>2026-01-22T07:28:52Z</created_at>
+    <updated_at>2026-01-22T09:38:38Z</updated_at>
+    <status>new</status>
+    <commit_mode>auto</commit_mode>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="Scope & Dependency" status="TODO">
+      <description>Finalize API surface and choose Excel library</description>
+      <tasks>
+        <task id="T1.1" name="Confirm Excel scope and API surface" priority="high" status="TODO">
+          <acceptance_criteria>
+            <criterion checked="false">Review Java reference sources in ../src/main/java/com/scudata (T.java + XlsImport/XlsExport)</criterion>
+            <criterion checked="false">Decide .xlsx-only vs .xls+.xlsx (Java T supports both)</criterion>
+            <criterion checked="false">Decide T() only vs file().xlsimport/xlsexport (Java composes T() to xlsimport/xlsexport)</criterion>
+            <criterion checked="false">Decide options representation (object vs flags string), since TS has no @opt syntax</criterion>
+          </acceptance_criteria>
+        </task>
+        <task id="T1.2" name="Add Excel (.xls/.xlsx) dependency" priority="high" status="TODO">
+          <acceptance_criteria>
+            <criterion checked="false">Workspace installs an Excel reader/writer library supporting .xls/.xlsx</criterion>
+            <criterion checked="false">Dependency is scoped to runtime package where feasible</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="Excel Import" status="TODO">
+      <description>Implement T() read for .xls/.xlsx and add tests</description>
+      <tasks>
+        <task id="T2.1" name="Implement Excel read in T()" priority="high" status="TODO">
+          <acceptance_criteria>
+            <criterion checked="false">T("*.xls") and T("*.xlsx") load first sheet with header row by default</criterion>
+            <criterion checked="false">Optional sheet selection supported (index or name)</criterion>
+            <criterion checked="false">Path traversal outside workspace root is rejected</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T2.1.1" name="Write failing tests for Excel import (.xls/.xlsx)" status="TODO" />
+            <subtask id="T2.1.2" name="Implement Excel import (.xls/.xlsx)" status="TODO" />
+            <subtask id="T2.1.3" name="Run tests and fix" status="TODO" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="Excel Export" status="TODO">
+      <description>Implement T() write for .xls/.xlsx and add tests</description>
+      <tasks>
+        <task id="T3.1" name="Implement Excel write in T()" priority="high" status="TODO">
+          <acceptance_criteria>
+            <criterion checked="false">T("out.xls", data) and T("out.xlsx", data) write a row-wise sheet</criterion>
+            <criterion checked="false">Export supports array-of-records and {rows: [...]} inputs</criterion>
+            <criterion checked="false">Export returns the output path string</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T3.1.1" name="Write failing tests for Excel export (.xls/.xlsx)" status="TODO" />
+            <subtask id="T3.1.2" name="Implement Excel export (.xls/.xlsx)" status="TODO" />
+            <subtask id="T3.1.3" name="Run tests and fix" status="TODO" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P4" name="Web Server & Demo Data" status="TODO">
+      <description>Stabilize workspaceRoot and add demo .xls/.xlsx fixtures</description>
+      <tasks>
+        <task id="T4.1" name="Set workspaceRoot in web-server" priority="high" status="TODO" />
+        <task id="T4.2" name="Add demo .xls/.xlsx file(s) under web-server/data" priority="high" status="TODO" />
+        <task id="T4.3" name="Ensure export output directory exists (./data/out)" priority="high" status="TODO" />
+      </tasks>
+    </phase>
+
+    <phase id="P5" name="Web-IDE Demos" status="TODO">
+      <description>Add Excel import/export demos and update e2e if needed</description>
+      <tasks>
+        <task id="T5.1" name="Add Excel import demo" priority="high" status="TODO" />
+        <task id="T5.2" name="Add Excel export + re-import demo" priority="high" status="TODO" />
+        <task id="T5.3" name="Update Web-IDE e2e demo-loading coverage" priority="medium" status="TODO" />
+      </tasks>
+    </phase>
+
+    <phase id="P6" name="Validation" status="TODO">
+      <description>Run tests, coverage, and codument validation</description>
+      <tasks>
+        <task id="T6.1" name="Run bun test" priority="high" status="TODO" />
+        <task id="T6.2" name="Run bun test --coverage" priority="high" status="TODO" />
+        <task id="T6.3" name="Run codument validate --strict" priority="high" status="TODO" />
+      </tasks>
+    </phase>
+  </phases>
+</plan>

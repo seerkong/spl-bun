@@ -1,0 +1,28 @@
+{
+  "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+  "stage": "implement",
+  "round": 1,
+  "authorization": {
+    "mode": "run",
+    "userStarted": true,
+    "receiptRef": "holarchy:082d4c9b3d20d7fdede36e6b563ff48ca84c",
+    "authorizedWorkspaces": [
+      "/Users/kongweixian/infra-dev/spl-bun"
+    ]
+  },
+  "baselineReview": {
+    "node_id": "baseline-review",
+    "node_revision": "3-output-contract",
+    "generation": 3,
+    "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3",
+    "output_hash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae"
+  },
+  "loopFeedback": null,
+  "implementGeneration": null,
+  "feedbackAssociation": null,
+  "hostFrozenAllowedPaths": null,
+  "hostGapAdmissionDecisions": null,
+  "contextGap": "G5: missing values stay unknown. BaselineReview generation is not Implement generation. Local intended paths in preservation.json are not Host approval.",
+  "independentReviewVerdict": null,
+  "nodeStopReason": "Current user requests bounded Implement round and return to existing workflow; no reviewer invocation, new session/workflow or next mission dispatched."
+}

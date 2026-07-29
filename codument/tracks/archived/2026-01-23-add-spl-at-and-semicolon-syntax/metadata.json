@@ -1,0 +1,9 @@
+{
+  "track_id": "add-spl-at-and-semicolon-syntax",
+  "type": "feature",
+  "status": "completed",
+  "commit_mode": "auto",
+  "created_at": "2026-01-22T16:43:39Z",
+  "updated_at": "2026-01-22T19:58:31Z",
+  "description": "Add SPL-compatible function variants using @ and allow semicolon-separated argument groups, then migrate new Excel T() usages to Java-style semicolon syntax."
+}

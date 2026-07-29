@@ -1,0 +1,9 @@
+{
+  "track_id": "update-expression-engine-port",
+  "type": "feature",
+  "status": "new",
+  "commit_mode": "auto",
+  "created_at": "2026-01-17T08:56:10Z",
+  "updated_at": "2026-01-17T08:58:45Z",
+  "description": "Continue migrating the expression engine from Java to Bun/TypeScript, prioritizing aggregation lifecycle gaps, then IO/table functions, with required tests and gap scans."
+}

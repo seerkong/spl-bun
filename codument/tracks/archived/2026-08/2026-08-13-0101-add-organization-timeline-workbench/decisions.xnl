@@ -1,0 +1,63 @@
+<decision #track.add_organization_timeline_workbench.explicit_timeline_projection {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>How should the server preserve newly added timeline facts at its public projection boundary?</?>
+  <answer { }
+  (
+    <raw-answer ?>Keep the existing explicit DTO projection and extend it with closed timeline helpers.</?>
+    <decision-text ?>Project OperationDefinition.timeline and ExecuteOperationRequest.timeline field by field, switching on the closed timeline mode and cloning arrays; do not replace the boundary with object spread.</?>
+    <rationale ?>The server owns leak-free public projection while the contract owns the closed timeline schema. Explicit helpers preserve both authorities.</?>
+    <evidence ?>Plan-track AttractorCheck GAP at server.ts projectOperation/projectExecuteRequest and mission operation-api authority.</?>
+  )>
+)>
+
+<decision #track.add_organization_timeline_workbench.editor_timeline_authority {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Should timeline controls own separate reactive date state?</?>
+  <answer { }
+  (
+    <raw-answer ?>No. The complete JSON editor request remains the sole request authority.</?>
+    <decision-text ?>Timeline values are derived only from a valid parsed editor request; a control edit immutably updates request.timeline and replaces the editor text. Invalid edits never repair or replace the text.</?>
+    <rationale ?>This prevents preset, editor, controls, and POST body from drifting into competing request models.</?>
+    <evidence ?>Mission design Workbench Authority and canonical exact-request-preview behavior.</?>
+  )>
+)>
+
+<decision #track.add_organization_timeline_workbench.timeline_mode_control {
+  priority = "P1"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Should the Workbench let a date control switch timeline mode independently?</?>
+  <answer { }
+  (
+    <raw-answer ?>No. Mode is part of the operation/preset request shape; the UI edits only fields owned by the current mode.</?>
+    <decision-text ?>Render mode-specific as-of, effective-on, or range inputs and switch mode only by selecting a complete compatible preset.</?>
+    <rationale ?>Avoids hidden default days and preserves catalog compatibility without inventing a request completion policy.</?>
+    <evidence ?>Operation timeline capabilities, exact request parser, and no-hidden-request mission constraint.</?>
+  )>
+)>
+
+<decision #track.add_organization_timeline_workbench.production_composition {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Where should the organization bundle join the running application?</?>
+  <answer { }
+  (
+    <raw-answer ?>Add it to the bundle package's immutable reference composition consumed by production startup.</?>
+    <decision-text ?>The three reference ids, bundle map, and registrations are updated together; createApp remains empty by default and accepts injected registrations.</?>
+    <rationale ?>Deployment composition remains explicit without making the bundle depend on the server or turning tests into hidden production registration.</?>
+    <evidence ?>G3 production-registration boundary decision and current server import.meta.main composition.</?>
+  )>
+)>

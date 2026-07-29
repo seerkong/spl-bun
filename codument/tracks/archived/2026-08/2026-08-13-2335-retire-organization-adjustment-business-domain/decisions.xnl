@@ -1,0 +1,9 @@
+<decision #track.retire_organization_adjustment_business_domain.history { priority = "P0" status = "accepted" confidence = "high" } (
+  <question ?>旧业务退出时是否删除其 Codument 历史？</?>
+  <answer { } (
+    <raw-answer ?>Mission 明确要求保留通用平台、Domain Workbench 和 Codument 历史。</?>
+    <decision-text ?>删除 live business ownership，不删除 archived mission/track 与 durable decision evidence。</?>
+    <rationale ?>历史解释演进原因，不构成生产业务 registration。</?>
+    <evidence ?>Host mission G8。</?>
+  )>
+)>

@@ -1,0 +1,26 @@
+<behavior-patch capability="web-flow-api" version="1">
+
+  <upsert selector="behavior://web-flow-api/requirements/execute-kon-endpoint">
+    <requirement id="execute-kon-endpoint">
+      <statement>web-server SHALL 提供 POST /api/execute-kon：请求 {source: string, scope?: object}；成功响应 {status:"ok", data?: QueryResultData, result?: unknown}（data 为最终值可归一为表格时的归一结果，非表格最终值放 result）；失败响应 {status:"error", error: string}（含脚本执行错误与源码超限）；端点 SHALL 复用既有 demo 数据源清单（demo sqlite、sales/products csv、config/users json），每请求独立执行；既有 POST /api/execute SHALL 行为不变（并存）。</statement>
+      <suite id="endpoint" name="Kon 执行端点">
+        <case id="kon-query-roundtrip">
+          <given>服务端已初始化 demo 数据</given>
+          <when>POST /api/execute-kon 执行 spl_connect+spl_query 的 Kon 脚本</when>
+          <then>响应 status=ok 且 data.columns/rows 与旧 /api/execute 执行等价网格脚本一致</then>
+        </case>
+        <case id="kon-error-shape">
+          <given>source 引用未知数据源或语法错误</given>
+          <when>POST /api/execute-kon</when>
+          <then>响应 SHALL 为 {status:"error", error} 且 error 含可定位信息</then>
+        </case>
+        <case id="legacy-endpoint-intact">
+          <given>既有 /api/execute 的请求样例</given>
+          <when>新端点上线后调用旧端点</when>
+          <then>响应 SHALL 与迁移前一致</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+</behavior-patch>

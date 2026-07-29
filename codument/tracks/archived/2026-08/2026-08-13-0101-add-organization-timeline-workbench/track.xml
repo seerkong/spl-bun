@@ -1,0 +1,116 @@
+<Track id="add-organization-timeline-workbench" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>把 organization-adjustment 接入生产 DomainContext API，并在现有 Workbench 中以唯一 JSON request authority 提供天级时间轴查看、编辑和执行闭环。</Goal>
+    <Description>先修复 server timeline DTO projection，再注册第三个 reference bundle，随后实现 as-of/effective-on/range JSON-derived controls，并以 HTTP 和 desktop/mobile Playwright 收敛。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-08-12T21:30:20Z</CreatedAt>
+    <UpdatedAt>2026-08-12T22:01:31Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/build-temporal-organization-adjustment-workbench/"/>
+    <MaterialBundle role="input" name="organization-bundle" domain="package" path="vfs://@/packages/domain-context-bundles/"/>
+    <MaterialBundle role="output" name="server" domain="package" path="vfs://@/packages/web-server/"/>
+    <MaterialBundle role="output" name="workbench" domain="package" path="vfs://@/packages/web-ide/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-organization-timeline-workbench" name="add-organization-timeline-workbench" version="1" cdt:child-mode="dag">
+    <Description>以 server timeline projection 为前置，串行推进 production registration、JSON-derived controls 和真实浏览器闭环。</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Timeline Projection And Production Registration" status="DONE" order="0">
+        <Description>先以 RED tests 证明 server 丢失 timeline，再补齐显式 projection、第三个 reference bundle 和完整 HTTP preset/freshness 证据。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>operation timeline capabilities 与 preset request timeline 经 GET projection 后保持 exact parse/catalog parity</cdt:Criterion>
+          <cdt:Criterion>production composition 稳定列出三个 reference contexts，createApp 默认仍为空</cdt:Criterion>
+          <cdt:Criterion>所有 organization presets 通过 HTTP 与 direct runtime 返回等价 stable facts</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Write timeline projection registration and HTTP RED tests" status="DONE" order="0" priority="P0">
+            <Description>扩展 bundle catalog 与 server integration tests，先验红 timeline capability/request 丢失、第三 bundle 未注册、组织 preset HTTP parity 和 fresh isolation。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">RED test 证明现有 GET catalog 丢失 definition.timeline 与 preset.request.timeline</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">RED test 要求 reference ids/map/registrations 三者按同序包含 organization-adjustment</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">RED test 覆盖每个组织 preset 的 parse/catalog/POST parity 与代表性 fresh calls</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Implement explicit timeline projection and production composition" status="DONE" order="1" priority="P0">
+            <Description>新增 closed timeline projection helpers，显式 clone definition/request facts；将组织 bundle 加入三份 reference authority，并保持 startup/injection/import boundaries。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">as-of/effective-on/range 与 optional recordedAt 均通过 server projection 精确保留</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">三个 reference exports、production startup 和 empty createApp 行为一致</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">server/bundle tests、typecheck/build、import guards 与旧 routes 全绿</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="JSON-Derived Timeline Controls" status="DONE" order="1">
+        <Description>以 pure request edit API 实现三种 day mode 控件，确保无第二 request state 且 invalid editor 不被修复。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>控件值只从 current valid editor request 派生，编辑只替换同一 JSON text</cdt:Criterion>
+          <cdt:Criterion>as-of/effective-on/range mode-specific fields 与日历/range validation 均可判定</cdt:Criterion>
+          <cdt:Criterion>invalid JSON/schema/catalog 保持原文且 timeline controls/execute unavailable</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Write timeline request editor RED tests" status="DONE" order="0" priority="P0">
+            <Description>为 pure update API 和页面派生行为覆盖三种 mode、字段错配、invalid date/range、catalog mismatch、immutable source 与 exact editor serialization。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">unit tests 覆盖四个 day fields 与三种 timeline mode</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">invalid editor/field edit 返回 diagnostics 且原 text/preset/catalog 不变</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">success edit 仅改变 request.timeline 目标字段并保持完整 request</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="Implement pure editor update and responsive timeline strip" status="DONE" order="1" priority="P0">
+            <Description>在 domainWorkbenchRequest 实现 immutable timeline edit；DomainWorkbench 以 computed projection 渲染 mode-specific date inputs 和 recordedAt fact，不引入 date refs。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">页面无 timeline/date mutable ref，controls 由 parsedRequest.timeline computed 派生</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">date input edit 更新 requestJsonEditor 后立即复用 existing validator</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC3" checked="true">timeline strip 在 desktop/mobile 稳定布局且 invalid state 无交互控件</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Browser Workflow And Convergence" status="DONE" order="2">
+        <Description>通过真实 production servers 捕获 exact body，执行组织 snapshot/apply/failure/partial，检查响应视图、响应式布局和全量边界。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>Playwright 证明 date control 编辑值等于 editor JSON 且 POST body 完全相同</cdt:Criterion>
+          <cdt:Criterion>snapshot/apply/failure/partial 的 standard response views 均可检查</cdt:Criterion>
+          <cdt:Criterion>desktop/mobile、console/network、existing Kon IDE、build/boundary、fresh AttractorCheck 与 independent verify 全 PASS</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Implement temporal organization browser scenarios" status="DONE" order="0" priority="P0">
+            <Description>扩展 E2E：第三 context、三种 mode controls、edited snapshot body/outcome、apply success、atomic failure、partial mapping、invalid editor preservation 和 viewport geometry。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">network capture 对 edited editor text 做 JSON 深相等且 response 使用编辑后日期</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">标准 tabs 展示组织 tree、changes/probes/plan、failure diagnostics 与 partial item keys</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC3" checked="true">desktop/mobile 控件在 viewport 内无 overlap/overflow，console errors 为零</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="Run full integration boundary and track convergence" status="DONE" order="1" priority="P0">
+            <Description>运行 server/UI/bundle tests、Playwright、workspace build、import/capsule guards、Codument/XNL/XML/diff、final fresh AttractorCheck 和 independent verify，修复 completion-critical gaps。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">受影响 package tests、Playwright 与 full build 零失败</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC2" checked="true">无 hidden request model、private import、server-to-bundle inversion 或 checked-in runtime DB</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC3" checked="true">fresh AttractorCheck 和 independent verify 均 PASS，track evidence 可归档</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook></Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_add-organization-timeline-workbench">
+      <Node id="P2"><After ref="P1"/></Node>
+      <Node id="P3"><After ref="P2"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+</Track>

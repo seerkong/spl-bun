@@ -1,0 +1,204 @@
+{
+  "round": 4,
+  "status": "passed",
+  "technicalAcceptanceOwner": "verify",
+  "finalGapClosureOwner": "gap-review",
+  "baselineRef": {
+    "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+    "node_id": "baseline-review",
+    "node_revision": "3-output-contract",
+    "generation": 3,
+    "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3",
+    "output_hash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae"
+  },
+  "worktreeContentSHA256": "917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f",
+  "businessSHA256": "e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5",
+  "freshChecks": [
+    {
+      "name": "related",
+      "command": [
+        "bun",
+        "test",
+        "packages/expression",
+        "packages/core",
+        "packages/kon-spl-dsl",
+        "packages/spl-flow",
+        "packages/report-logic"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "start": "2026-10-24T04:57:01.542980+00:00",
+      "end": "2026-10-24T04:57:02.186297+00:00",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/related.log",
+      "logSha256": "25231b73ad11035b109b59fb03114d8408afbe701f77f436c9ef6ca169ee3aa3",
+      "evidenceMode": "fresh_execution"
+    },
+    {
+      "name": "sort-oracle",
+      "command": [
+        "bun",
+        ".cdmt-lite/missions/archived/spl-stable-expression-sort/verification/source-oracle.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "start": "2026-10-24T04:57:01.534758+00:00",
+      "end": "2026-10-24T04:57:04.790916+00:00",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/sort-oracle.log",
+      "logSha256": "bda1a059225bb0a1730e514677b207f6035acc2ab7193489b916945b7b83c192",
+      "evidenceMode": "fresh_execution"
+    },
+    {
+      "name": "parse-oracle",
+      "command": [
+        "bun",
+        ".cdmt-lite/missions/active/spl-parse-conversion/verification/source-parse-oracle.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "start": "2026-10-24T04:57:04.792637+00:00",
+      "end": "2026-10-24T04:57:07.901058+00:00",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/parse-oracle.log",
+      "logSha256": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044",
+      "evidenceMode": "fresh_execution"
+    },
+    {
+      "name": "formatter-oracle",
+      "command": [
+        "bun",
+        ".cdmt-lite/missions/archived/spl-text-formatting/verification/formatter-oracle.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "start": "2026-10-24T04:57:07.903762+00:00",
+      "end": "2026-10-24T04:57:09.956108+00:00",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/formatter-oracle.log",
+      "logSha256": "9e3ab43d522f7d4ebd9050c5caf30d1ae4b22e0a51f8685faf82a41bea8d28d9",
+      "evidenceMode": "fresh_execution"
+    },
+    {
+      "name": "extended-parse-oracle",
+      "command": [
+        "bun",
+        "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/extended-parse-oracle.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "exitCode": 0,
+      "evidenceMode": "fresh_execution",
+      "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/extended-parse-oracle.log",
+      "logSha256": "244287a5cd5aa372e8aa16d8d48ccb79a161e8e7de57cccae10ed3bf6c3fba35",
+      "scriptSha256": "aa6f717b7faae102a191b690266c9327b93d8c4e5607bb276e5107b837da8d92"
+    },
+    {
+      "name": "parse-entry-probes",
+      "command": [
+        "bun",
+        "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/parse-entry-probes.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "exitCode": 0,
+      "evidenceMode": "fresh_execution",
+      "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/parse-entry-probes.log",
+      "logSha256": "85f5bc7e540c97b5df10573bc4ac6824393fa654e513a945a60572827213195d",
+      "scriptSha256": "1d98b055859325a02ca9d46bf120ef0e61bf0851d07e6689b90bf1d3fd1d88e2"
+    }
+  ],
+  "reusedChecks": [
+    {
+      "name": "sort-focused",
+      "command": [
+        "bun",
+        "test",
+        "packages/expression/__tests__/sort-semantics.test.ts",
+        "packages/kon-spl-dsl",
+        "packages/spl-flow"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "start": "2026-10-24T04:34:40.914431+00:00",
+      "end": "2026-10-24T04:34:41.504605+00:00",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/sort-focused.log",
+      "logSha256": "7fdd7d3611336d8b7d70ff9a11531fff829d0e3be8020dadc3bfb49d1346058a",
+      "evidenceMode": "verified_current_baseline_receipt_reuse",
+      "reuseAudit": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json"
+    },
+    {
+      "name": "parse-focused",
+      "command": [
+        "bun",
+        "test",
+        "packages/expression/__tests__/parse-conversion.test.ts",
+        "packages/kon-spl-dsl",
+        "packages/spl-flow"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "start": "2026-10-24T04:34:41.506358+00:00",
+      "end": "2026-10-24T04:34:42.069632+00:00",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/parse-focused.log",
+      "logSha256": "47ea30d39d1e859555abd42c53aacce9d916779e8a6428b128415f9787119394",
+      "evidenceMode": "verified_current_baseline_receipt_reuse",
+      "reuseAudit": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json"
+    },
+    {
+      "name": "full",
+      "command": [
+        "bun",
+        "test"
+      ],
+      "cwd": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/workspace",
+      "start": "2026-10-24T04:35:38.279615+00:00",
+      "end": "2026-10-24T04:35:47.362849+00:00",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/full.log",
+      "logSha256": "afb3ee5c0cb8e00440175859c642f5e93a647ce40b7af2ad91341df84913446a",
+      "evidenceMode": "verified_current_baseline_receipt_reuse",
+      "reuseAudit": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json"
+    },
+    {
+      "name": "build",
+      "command": [
+        "bun",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/workspace",
+      "start": "2026-10-24T04:35:47.364317+00:00",
+      "end": "2026-10-24T04:35:59.215910+00:00",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/build.log",
+      "logSha256": "677023093bdeed07ed653e1e1440d4f5e8e6551583d5b8851f6e5d412d138a51",
+      "evidenceMode": "verified_current_baseline_receipt_reuse",
+      "reuseAudit": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json"
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "bun",
+        "run",
+        "test:e2e"
+      ],
+      "cwd": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/workspace",
+      "exitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/e2e.log",
+      "logSha256": "6b1f6d68cc018c19a042104fe2182b052a2bc8646e6d348e2ab22e380098295f",
+      "environment": {
+        "SPL_E2E_FRONTEND_PORT": "4394",
+        "SPL_E2E_BACKEND_PORT": "4396"
+      },
+      "scriptSha256": null,
+      "evidenceMode": "verified_current_baseline_receipt_reuse",
+      "reuseAudit": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json"
+    }
+  ],
+  "reuseBasis": "Actual entire tracked/nonignored worktree and prior test snapshot match, all11 original command/log hashes and19 evidence hashes verified; current Bun and lock unchanged. No prior verdict inherited.",
+  "C8": {
+    "status": "not-run",
+    "owner": "gap-review",
+    "reason": "Downstream final gap closure; excluded from own technical verdict by current verificationDecisionScope"
+  },
+  "ownRequiredChecks": "all passed",
+  "static": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/static.json",
+  "preservation": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/preservation.json",
+  "sourceChanged": false,
+  "oldReportsEdited": false
+}

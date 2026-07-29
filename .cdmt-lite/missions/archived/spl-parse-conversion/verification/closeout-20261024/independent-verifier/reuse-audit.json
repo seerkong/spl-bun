@@ -1,0 +1,266 @@
+{
+  "sourceBaselineRef": {
+    "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+    "node_id": "baseline-review",
+    "node_revision": "3-output-contract",
+    "generation": 3,
+    "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3",
+    "output_hash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae"
+  },
+  "expectedSourceFiles": 2843,
+  "sourceDifferencesFromPrevious": [],
+  "previousSnapshotCurrentDifferences": [],
+  "previousSnapshotCapture": {
+    "source": "/Users/kongweixian/infra-dev/spl-bun",
+    "snapshot": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/workspace",
+    "copyFileCount": 2843,
+    "copyMismatches": [],
+    "method": "byte-identical tracked/nonignored files; preserve deleted files as absent; copy-on-write dependencies with relative workspace symlinks"
+  },
+  "verifiedCommandReceipts": [
+    {
+      "name": "related",
+      "command": [
+        "bun",
+        "test",
+        "packages/expression",
+        "packages/core",
+        "packages/kon-spl-dsl",
+        "packages/spl-flow",
+        "packages/report-logic"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/related.log",
+      "recordedSha256": "da200e354a4a2546870c3d74d4ad3bdc2af4fb15faebcb4a43332d9c50ee08a2",
+      "actualSha256": "da200e354a4a2546870c3d74d4ad3bdc2af4fb15faebcb4a43332d9c50ee08a2",
+      "tail": [
+        "",
+        " 432 pass",
+        " 0 fail",
+        " 1791 expect() calls",
+        "Ran 432 tests across 74 files. [854.00ms]"
+      ]
+    },
+    {
+      "name": "sort-focused",
+      "command": [
+        "bun",
+        "test",
+        "packages/expression/__tests__/sort-semantics.test.ts",
+        "packages/kon-spl-dsl",
+        "packages/spl-flow"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/sort-focused.log",
+      "recordedSha256": "7fdd7d3611336d8b7d70ff9a11531fff829d0e3be8020dadc3bfb49d1346058a",
+      "actualSha256": "7fdd7d3611336d8b7d70ff9a11531fff829d0e3be8020dadc3bfb49d1346058a",
+      "tail": [
+        "",
+        " 231 pass",
+        " 0 fail",
+        " 776 expect() calls",
+        "Ran 231 tests across 39 files. [574.00ms]"
+      ]
+    },
+    {
+      "name": "parse-focused",
+      "command": [
+        "bun",
+        "test",
+        "packages/expression/__tests__/parse-conversion.test.ts",
+        "packages/kon-spl-dsl",
+        "packages/spl-flow"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/parse-focused.log",
+      "recordedSha256": "47ea30d39d1e859555abd42c53aacce9d916779e8a6428b128415f9787119394",
+      "actualSha256": "47ea30d39d1e859555abd42c53aacce9d916779e8a6428b128415f9787119394",
+      "tail": [
+        "",
+        " 232 pass",
+        " 0 fail",
+        " 909 expect() calls",
+        "Ran 232 tests across 39 files. [549.00ms]"
+      ]
+    },
+    {
+      "name": "sort-oracle",
+      "command": [
+        "bun",
+        ".cdmt-lite/missions/archived/spl-stable-expression-sort/verification/source-oracle.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/sort-oracle.log",
+      "recordedSha256": "bda1a059225bb0a1730e514677b207f6035acc2ab7193489b916945b7b83c192",
+      "actualSha256": "bda1a059225bb0a1730e514677b207f6035acc2ab7193489b916945b7b83c192",
+      "tail": [
+        "80 actual Java source sort cases matched (multi-key directions, null/0, exact numeric, date, locale, stable prefix grouping; scalar/storage adapters above)",
+        "[{\"file\":\"com/scudata/dm/Sequence.java\",\"sha256\":\"4f4c6298cb44c3131c20df5facde63dc344f3e2f708945bec70eb18bb2eb2d68\"},{\"file\":\"com/scudata/dm/comparator/CommonComparator.java\",\"sha256\":\"911ac63b3dc06dc410425fa08e54be487c541cb2143a4b6796e98677a0e28e7a\"},{\"file\":\"com/scudata/dm/comparator/ArrayComparator2.java\",\"sha256\":\"0f5ce28ba2098dc27350c6f07d5a7c65888e1436ee7a2ee8f2b8f6765234598d\"}]"
+      ]
+    },
+    {
+      "name": "parse-oracle",
+      "command": [
+        "bun",
+        ".cdmt-lite/missions/active/spl-parse-conversion/verification/source-parse-oracle.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/parse-oracle.log",
+      "recordedSha256": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044",
+      "actualSha256": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044",
+      "tail": [
+        "592 actual Java Parse/Variant/JSONUtil/Sentence/StringUtils cases matched; source FloatingDecimal and default DateFormatX unchanged; leaf/container adapters above, source JSON unsafe integers separately adapted as text",
+        "[{\"file\":\"com/scudata/expression/fn/convert/Parse.java\",\"sha256\":\"65d062282018600176206f1557e267ae17a4438cb497626398c5e228e31d824f\"},{\"file\":\"com/scudata/util/Variant.java\",\"sha256\":\"8935727113d85876d4cbb1a45924ce31523c29047e2a14038139d642e8eda327\"},{\"file\":\"com/scudata/common/Sentence.java\",\"sha256\":\"2ca4f884d22a14f8c7108a187a5196489670c259601e514d47f90a4ccd046b14\"},{\"file\":\"com/scudata/common/StringUtils.java\",\"sha256\":\"3675e93c51532ea23eac3083b9de0522211271c937f078afe630c968d7af1cb8\"},{\"file\":\"com/scudata/common/Escape.java\",\"sha256\":\"1ae32e1204ec9d9f137304a0c49585f23768d2b6052a9e6d13b9aff6f5703d1e\"},{\"file\":\"com/scudata/util/JSONUtil.java\",\"sha256\":\"3f0eaaaa532fdf55fe6d04c1ef507fdfeb3798ae3c731e39ff8adbe2de1d3e66\"},{\"file\":\"com/scudata/util/FloatingDecimal.java\",\"sha256\":\"5be14dfd352dfea720a66f45d0c891f2be9133200ad20aa99f6d73707ac2a2a5\"},{\"file\":\"com/scudata/common/DateFormatFactory.java\",\"sha256\":\"41a6e05c32b8f22ee918ff44af3f98b65bf99dd26366e1bae03f73616b7b0945\"},{\"file\":\"com/scudata/common/DateFormatX.java\",\"sha256\":\"562770343f830822e87a9a66c753a7efa5b4aff990697e491c8f92838ff93439\"}]"
+      ]
+    },
+    {
+      "name": "formatter-oracle",
+      "command": [
+        "bun",
+        ".cdmt-lite/missions/archived/spl-text-formatting/verification/formatter-oracle.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/formatter-oracle.log",
+      "recordedSha256": "9e3ab43d522f7d4ebd9050c5caf30d1ae4b22e0a51f8685faf82a41bea8d28d9",
+      "actualSha256": "9e3ab43d522f7d4ebd9050c5caf30d1ae4b22e0a51f8685faf82a41bea8d28d9",
+      "tail": [
+        "112 actual Java Formatter / ICU DecimalFormat / SimpleDateFormat cases passed (52 null results and 14 null protocol rejections)"
+      ]
+    },
+    {
+      "name": "full",
+      "command": [
+        "bun",
+        "test"
+      ],
+      "cwd": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/workspace",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/full.log",
+      "recordedSha256": "afb3ee5c0cb8e00440175859c642f5e93a647ce40b7af2ad91341df84913446a",
+      "actualSha256": "afb3ee5c0cb8e00440175859c642f5e93a647ce40b7af2ad91341df84913446a",
+      "tail": [
+        "",
+        " 479 pass",
+        " 0 fail",
+        " 2099 expect() calls",
+        "Ran 479 tests across 89 files. [9.06s]"
+      ]
+    },
+    {
+      "name": "build",
+      "command": [
+        "bun",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/workspace",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/build.log",
+      "recordedSha256": "677023093bdeed07ed653e1e1440d4f5e8e6551583d5b8851f6e5d412d138a51",
+      "actualSha256": "677023093bdeed07ed653e1e1440d4f5e8e6551583d5b8851f6e5d412d138a51",
+      "tail": [
+        "depa-data-web-ide build: dist/assets/index-BMh3CUJs.css    6.20 kB │ gzip:  1.75 kB",
+        "depa-data-web-ide build: dist/assets/index-p7XzW-DT.js   170.36 kB │ gzip: 58.83 kB",
+        "depa-data-web-ide build: ✓ built in 365ms",
+        "depa-data-web-ide build: Exited with code 0",
+        "depa-data-web-server build: Exited with code 0"
+      ]
+    },
+    {
+      "name": "extended-parse-oracle",
+      "command": [
+        "bun",
+        "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/extended-parse-oracle.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/extended-parse-oracle.log",
+      "recordedSha256": "244287a5cd5aa372e8aa16d8d48ccb79a161e8e7de57cccae10ed3bf6c3fba35",
+      "actualSha256": "244287a5cd5aa372e8aa16d8d48ccb79a161e8e7de57cccae10ed3bf6c3fba35",
+      "tail": [
+        "152 actual Java Parse/Variant/JSONUtil/Sentence/StringUtils cases matched; source FloatingDecimal and default DateFormatX unchanged; leaf/container adapters above, source JSON unsafe integers separately adapted as text",
+        "[{\"file\":\"com/scudata/expression/fn/convert/Parse.java\",\"sha256\":\"65d062282018600176206f1557e267ae17a4438cb497626398c5e228e31d824f\"},{\"file\":\"com/scudata/util/Variant.java\",\"sha256\":\"8935727113d85876d4cbb1a45924ce31523c29047e2a14038139d642e8eda327\"},{\"file\":\"com/scudata/common/Sentence.java\",\"sha256\":\"2ca4f884d22a14f8c7108a187a5196489670c259601e514d47f90a4ccd046b14\"},{\"file\":\"com/scudata/common/StringUtils.java\",\"sha256\":\"3675e93c51532ea23eac3083b9de0522211271c937f078afe630c968d7af1cb8\"},{\"file\":\"com/scudata/common/Escape.java\",\"sha256\":\"1ae32e1204ec9d9f137304a0c49585f23768d2b6052a9e6d13b9aff6f5703d1e\"},{\"file\":\"com/scudata/util/JSONUtil.java\",\"sha256\":\"3f0eaaaa532fdf55fe6d04c1ef507fdfeb3798ae3c731e39ff8adbe2de1d3e66\"},{\"file\":\"com/scudata/util/FloatingDecimal.java\",\"sha256\":\"5be14dfd352dfea720a66f45d0c891f2be9133200ad20aa99f6d73707ac2a2a5\"},{\"file\":\"com/scudata/common/DateFormatFactory.java\",\"sha256\":\"41a6e05c32b8f22ee918ff44af3f98b65bf99dd26366e1bae03f73616b7b0945\"},{\"file\":\"com/scudata/common/DateFormatX.java\",\"sha256\":\"562770343f830822e87a9a66c753a7efa5b4aff990697e491c8f92838ff93439\"}]"
+      ]
+    },
+    {
+      "name": "parse-entry-probes",
+      "command": [
+        "bun",
+        "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/parse-entry-probes.ts"
+      ],
+      "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/parse-entry-probes.log",
+      "recordedSha256": "85f5bc7e540c97b5df10573bc4ac6824393fa654e513a945a60572827213195d",
+      "actualSha256": "85f5bc7e540c97b5df10573bc4ac6824393fa654e513a945a60572827213195d",
+      "tail": [
+        "{\"entry\":\"Expression\",\"text\":\"-Infinity%\",\"expected\":{\"type\":\"number\",\"value\":\"-Infinity\"},\"actual\":{\"type\":\"number\",\"value\":\"-Infinity\"},\"passed\":true}",
+        "{\"entry\":\"Kon\",\"text\":\"-Infinity%\",\"expected\":{\"type\":\"number\",\"value\":\"-Infinity\"},\"actual\":{\"type\":\"number\",\"value\":\"-Infinity\"},\"passed\":true}",
+        "{\"entry\":\"Flow\",\"text\":\"-Infinity%\",\"expected\":{\"type\":\"number\",\"value\":\"-Infinity\"},\"actual\":{\"type\":\"number\",\"value\":\"-Infinity\"},\"passed\":true}",
+        "{\"entry\":\"regex@p\",\"text\":\"-Infinity%\",\"expected\":{\"type\":\"number\",\"value\":\"-Infinity\"},\"actual\":{\"type\":\"number\",\"value\":\"-Infinity\"},\"passed\":true}",
+        "{\"cases\":20,\"failures\":0,\"inputUnchanged\":true}"
+      ]
+    },
+    {
+      "name": "e2e",
+      "command": [
+        "bun",
+        "run",
+        "test:e2e"
+      ],
+      "cwd": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/workspace",
+      "recordedExitCode": 0,
+      "log": "/private/tmp/spl-verify-4e4051b5-92b0-439f-9f0c-d1200473690c/e2e.log",
+      "recordedSha256": "6b1f6d68cc018c19a042104fe2182b052a2bc8646e6d348e2ab22e380098295f",
+      "actualSha256": "6b1f6d68cc018c19a042104fe2182b052a2bc8646e6d348e2ab22e380098295f",
+      "tail": [
+        "  ✓  15 [chromium] › packages/web-ide/__tests__/e2e/report-workbench.e2e.ts:34:1 › literal dotted columns survive preview and a narrow viewport does not overflow (277ms)",
+        "  ✓  16 [chromium] › packages/web-ide/__tests__/e2e/report-workbench.e2e.ts:43:1 › editing while a request is pending prevents stale results from becoming current (246ms)",
+        "  ✓  17 [chromium] › packages/web-ide/__tests__/e2e/report-workbench.e2e.ts:61:1 › dynamic sheets combine deletion, formula caches, display/export roles and decoded QR images (654ms)",
+        "",
+        "  17 passed (12.3s)"
+      ]
+    }
+  ],
+  "previousEvidenceHashMismatches": [],
+  "identity": {
+    "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|7|9:implement|46:6-user-continuation-20261024:hook:1fa0d370f570|6",
+    "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+    "node_id": "implement",
+    "node_revision": "6-user-continuation-20261024:hook:1fa0d370f570",
+    "generation": 6,
+    "graph_revision": 7
+  },
+  "currentCheckpoint": {
+    "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+    "graph_revision": 8
+  },
+  "directoryAuthorization": {
+    "kind": "existing-directory-authorization",
+    "workspace": "/Users/kongweixian/infra-dev/spl-bun",
+    "perFileAllowlistWasNotFrozen": true,
+    "restrictions": [
+      "Preserve existing dirty changes and historical receipts",
+      "Do not modify source Java, old Codument, external libraries or restore enterprise/domain/ORM scope",
+      "Do not reset/clean/commit/push/publish",
+      "Never approve native Agent tool or human approvals"
+    ]
+  },
+  "feedback": {
+    "sourceNode": "gap-review",
+    "sourceGeneration": 5,
+    "outputHash": "3704820b20202e14ccc16e1f5adca2f5dfb45664b50693dc5e808dc540517de3"
+  },
+  "oldCommandHash": "016be3a2324c2d0edd6d0f849759a20d309b9524b61c9bebde61dbd3bd08879a",
+  "oldProbeHashes": {
+    "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/extended-parse-oracle.ts": "aa6f717b7faae102a191b690266c9327b93d8c4e5607bb276e5107b837da8d92",
+    "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/parse-entry-probes.ts": "1d98b055859325a02ca9d46bf120ef0e61bf0851d07e6689b90bf1d3fd1d88e2"
+  },
+  "decisionScope": "Technical acceptance owner verify; C8 downstream owner gap-review. Prior status is not evidence and is not inherited."
+}

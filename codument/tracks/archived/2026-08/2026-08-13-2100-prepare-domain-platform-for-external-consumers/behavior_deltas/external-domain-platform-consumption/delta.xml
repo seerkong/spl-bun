@@ -1,0 +1,41 @@
+<behavior-patch capability="external-domain-platform-consumption" version="1">
+  <upsert selector="behavior://external-domain-platform-consumption/requirements/package-consumption">
+    <requirement id="package-consumption">
+      <statement>The Domain Operation contracts, depa ORM domain runtime, and Domain Operation server SHALL be independently consumable through stable package-root identities with generated JavaScript and type declarations, minimal pack artifacts, non-workspace production dependencies, and no source copy, deep import, or machine-absolute dependency.</statement>
+      <suite id="packages" name="External package consumption">
+        <case id="pack-artifacts">
+          <given>clean builds of the three public packages</given>
+          <when>each package is packed</when>
+          <then>the tarball SHALL expose only the package root runtime/types and required metadata, with no tests, demo data, workspace protocol, or private application files</then>
+        </case>
+        <case id="clean-consumer">
+          <given>an independent Bun workspace and the three package tarballs</given>
+          <when>dependencies are installed by relative file package identity and the fixture is typechecked</when>
+          <then>all imports SHALL resolve from package roots without source copy, deep imports, or absolute paths</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://external-domain-platform-consumption/requirements/generic-server-composition">
+    <requirement id="generic-server-composition">
+      <statement>The public Domain Operation server SHALL accept trusted bundle registrations explicitly, expose catalog, operation, preset, and execute HTTP behavior, preserve per-execution runtime ownership, and remain independent of demo databases, Kon, reference bundles, and all concrete business domains.</statement>
+      <suite id="server" name="Generic server composition">
+        <case id="injected-catalog-and-execute">
+          <given>an external consumer-owned neutral bundle registration</given>
+          <when>the consumer fetches its catalog and complete preset then posts that preset</when>
+          <then>the server SHALL route to exactly that bundle and return the public runtime response without business-specific fallback</then>
+        </case>
+        <case id="application-boundary">
+          <given>the public server package source and artifact</given>
+          <when>imports and packed files are inspected</when>
+          <then>they SHALL contain no web-server, web-shared, domain-context-bundle, demo/Kon, Holon, organization, or work-dispatch dependency</then>
+        </case>
+        <case id="reproducible-install">
+          <given>a successful external fixture install and lockfile</given>
+          <when>node_modules is removed and a frozen reinstall is run</when>
+          <then>the same typecheck and runtime smoke SHALL pass</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

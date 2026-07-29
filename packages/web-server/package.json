@@ -1,0 +1,28 @@
+{
+  "name": "depa-data-web-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/server.ts",
+    "start": "bun run src/server.ts",
+    "convert-demo": "bun run scripts/convert-demo.ts",
+    "typecheck": "bun x tsc -p tsconfig.json --noEmit",
+    "build": "bun x tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "depa-data-kon-spl-dsl": "workspace:*",
+    "depa-data-web-shared": "workspace:*",
+    "@elysiajs/cors": "^1.0.0",
+    "elysia": "^1.0.0",
+    "depa-data-spl-flow": "workspace:*",
+    "depa-data-expression": "workspace:*",
+    "depa-data-report-contract": "workspace:*",
+    "depa-data-report-logic": "workspace:*",
+    "depa-data-report-xlsx-support": "workspace:*"
+  },
+  "devDependencies": {
+    "xlsx": "^0.18.5",
+    "typescript": "^5.4.5"
+  }
+}

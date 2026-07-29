@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>add-join-window-ops</track_id>
+    <track_name>Add join and window operations to SPL Bun core</track_name>
+    <goal>扩展核心引擎支持 join 和 window 操作</goal>
+    <created_at>2026-01-10</created_at>
+    <status>archived</status>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="设计与规划">
+      <goal>定义 join/window 范围和 API 设计</goal>
+      <tasks>
+        <task id="T1.1" name="定义 join/window 范围和 API">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.1.1" name="定义 inner/left join API" status="DONE"/>
+            <subtask id="T1.1.2" name="定义 window partition/order API（row_number/rank/running-sum/avg）" status="DONE"/>
+            <subtask id="T1.1.3" name="映射到 esProc 命名" status="DONE"/>
+          </subtasks>
+        </task>
+        <task id="T1.2" name="设计数据模型影响">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.2.1" name="设计 schema 合并策略" status="DONE"/>
+            <subtask id="T1.2.2" name="设计 null 处理策略" status="DONE"/>
+            <subtask id="T1.2.3" name="设计类型推断策略" status="DONE"/>
+            <subtask id="T1.2.4" name="定义 join/window 步骤执行语义" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="核心实现">
+      <goal>实现 join 和 window 操作符</goal>
+      <tasks>
+        <task id="T2.1" name="实现核心 dataset join 操作符">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.1.1" name="实现 inner join" status="DONE"/>
+            <subtask id="T2.1.2" name="实现 left join" status="DONE"/>
+            <subtask id="T2.1.3" name="集成到步骤执行" status="DONE"/>
+          </subtasks>
+        </task>
+        <task id="T2.2" name="实现核心 dataset window 操作符">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.2.1" name="实现 partition/order 框架" status="DONE"/>
+            <subtask id="T2.2.2" name="实现 row_number/rank/dense_rank" status="DONE"/>
+            <subtask id="T2.2.3" name="实现 running_sum/running_avg" status="DONE"/>
+            <subtask id="T2.2.4" name="集成到步骤执行" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="测试与文档">
+      <goal>扩展测试覆盖和更新文档</goal>
+      <tasks>
+        <task id="T3.1" name="扩展 packages/core 测试">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T3.1.1" name="添加 join 单元测试" status="DONE"/>
+            <subtask id="T3.1.2" name="添加 window 单元测试" status="DONE"/>
+            <subtask id="T3.1.3" name="添加 SQLite 集成测试" status="DONE"/>
+          </subtasks>
+        </task>
+        <task id="T3.2" name="更新文档">
+          <priority>P1</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T3.2.1" name="更新 README 示例（如需要）" status="DONE"/>
+            <subtask id="T3.2.2" name="确保脚本通过 bun test 和 bun run build" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P4" name="验证">
+      <goal>验证实现通过测试</goal>
+      <tasks>
+        <task id="T4.1" name="运行验证">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T4.1.1" name="运行 bun test" status="DONE"/>
+            <subtask id="T4.1.2" name="运行 bun run build（如需要）" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+  </phases>
+</plan>

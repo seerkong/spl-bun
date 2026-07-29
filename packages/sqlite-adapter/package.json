@@ -1,0 +1,19 @@
+﻿{
+    "name":  "depa-data-sqlite-adapter",
+    "version":  "0.0.0",
+    "type":  "module",
+    "main":  "./dist/index.js",
+    "types":  "./dist/index.d.ts",
+    "exports":  {
+                    ".":  "./src/index.ts"
+                },
+    "scripts":  {
+                    "build":  "bun x tsc -p tsconfig.json"
+                },
+    "dependencies":  {
+                         "depa-data-core":  "workspace:*"
+                     },
+    "devDependencies":  {
+                            "depa-data-test-utils":  "workspace:*"
+                        }
+}

@@ -1,0 +1,359 @@
+<Mission id="restore-property-first-orm-modeling" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>恢复以 Kunun typed navigation property 为唯一关系建模 authority 的 depa ORM DSL 与 code-first 模型，并迁移 spl-bun 消费面。</Goal>
+    <Description>先校准 Kunun field/property 类型系统和跨项目控制面，再依次落地 Kunun typed property、depa ORM property metadata compiler/code-first、spl-bun fixtures/consumers，最后从 source 与 code-first 两条路径独立验证复合关联和运行时行为。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <Revision>42</Revision>
+    <CreatedAt>2026-08-09T13:34:30Z</CreatedAt>
+    <UpdatedAt>2026-08-10T02:21:59Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="mission">
+    <MaterialBundle role="state" name="analysis" domain="mission" path="vfs://./analysis/"/>
+    <MaterialBundle role="state" name="reports" domain="mission" path="vfs://./reports/"/>
+    <MaterialBundle role="output" name="tracks" domain="codument" path="vfs://@/codument/tracks/"/>
+  </Ports>
+
+  <cdt:ProjectRefs>
+    <cdt:ProjectRef id="spl-bun" kind="host"/>
+    <cdt:ProjectRef id="kunun-language" kind="external"/>
+    <cdt:ProjectRef id="depa-orm" kind="external"/>
+  </cdt:ProjectRefs>
+
+  <cdt:ActorSets default="host-integration-loop">
+    <cdt:ActorSet id="host-integration-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="spl-bun"><Description>维护 property-first desired DAG、跨项目 track 顺序和最终 source-to-runtime 验收，只有 evidence 证明边界失效时才重规划。</Description></cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="spl-bun"><Description>观察 mission/track 状态、capsule fixtures、consumer tests、依赖版本和跨项目验证结果，识别 detached relation authority 是否仍然存活。</Description></cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="spl-bun"><Description>比较 field/property 分离、single authority、复合 tuple、source/code-first 等价和 consumer migration 的目标与实际态，选择 ready action、replan 或 block。</Description></cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="spl-bun"><Description>连续执行控制面准备、真实 track 生命周期与总体验证；每个动作完成范围内验证，无 drift 时直接推进下一 ready 节点。</Description></cdt:Actor>
+    </cdt:ActorSet>
+
+    <cdt:ActorSet id="kunun-type-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="kunun-language"><Description>把 navigation property 纳入 Kunun public type-system 与 code-first class model，同时保持 ORM-specific metadata 的扩展边界。</Description></cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="kunun-language"><Description>读取 class binder/checker/runtime、row member contracts、annotations、tests 和真实 track 状态，观测 field/property 类型语义。</Description></cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="kunun-language"><Description>判断 source 与 programmatic class models 是否共享同一 typed property contract，并拒绝用 accessor-only 或 ORM 特例代替语言模型。</Description></cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="kunun-language"><Description>创建、执行、验证并归档 Kunun typed navigation property track，把可消费的 public contract 证据回传 mission。</Description></cdt:Actor>
+    </cdt:ActorSet>
+
+    <cdt:ActorSet id="depa-orm-model-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="depa-orm"><Description>围绕 Kunun typed property 设计 ORM metadata profile、compiler projection、code-first adapter 与 legacy removal 的最小完整 track。</Description></cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="depa-orm"><Description>读取 DSL docs、compiler admission、composer、runtime relation catalog、composite relation suites 和真实 track 状态，投影关系 authority。</Description></cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="depa-orm"><Description>确认每个 runtime relation 都可追溯到 navigation property metadata，且 field 或 detached relation node 不再成为 canonical source。</Description></cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="depa-orm"><Description>创建、执行、验证并归档 depa ORM property-first track，保持运行时行为并向 host 回传 compiler/package evidence。</Description></cdt:Actor>
+    </cdt:ActorSet>
+  </cdt:ActorSets>
+
+  <TaskSpace id="space_restore-property-first-orm-modeling" name="restore-property-first-orm-modeling" version="1" cdt:child-mode="dag">
+    <Description>以 Kunun 类型系统为上游 authority，按语言基座、ORM 投影、consumer migration、fresh verification 的顺序收敛关系建模。</Description>
+    <SubNodes>
+      <TaskGroup id="G1" name="Authority And Control Baseline" status="DONE" order="0">
+        <Description>冻结 field/property/relation projection 术语、可执行事实与三个项目的 track control surface。</Description>
+        <SubNodes>
+          <Task id="G1-T1" name="Freeze authority and acceptance map" status="DONE" order="0">
+            <Description>把 Kunun typed property、depa ORM projection、spl-bun consumer 的唯一 authority、禁止项和成功判据映射写入 analysis evidence。</Description>
+          </Task>
+          <Task id="G1-T2" name="Characterize source and code-first drift" status="DONE" order="1">
+            <Description>建立当前 Kunun class binding、depa ORM relationships compiler/composer、runtime propertyKey 和 82 个 host fixtures 的可运行/静态基线。</Description>
+          </Task>
+          <Task id="G1-T3" name="Establish external track control surfaces" status="DONE" order="2">
+            <Description>确认 Kunun 与 depa ORM 项目可由当前 session 绑定并拥有可解析的 Codument track control surface；缺失时只初始化或升级控制面，不改业务源码，并记录证据。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G2" name="Kunun Typed Navigation Property" status="DONE" order="1" cdt:actor-set="kunun-type-loop">
+        <Description>让 Kunun source-first 与 code-first class model 共享 typed navigation property contract。</Description>
+        <SubNodes>
+          <Task id="G2-T1" name="Execute Kunun typed navigation property track" status="DONE" order="0">
+            <Description>创建并执行 typed property public model、binder/checker、metadata retention、programmatic API 和 structural-equivalence tests。</Description>
+            <cdt:TrackLink state="archived" id="add-typed-navigation-property-model" project-ref="kunun-language"/>
+          </Task>
+          <Task id="G2-T2" name="Verify Kunun property authority" status="DONE" order="1">
+            <Description>独立验证 field/property 类型区分、symbolic target references、collection typing、source/code-first equivalence 和 ORM-neutral package boundary。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3" name="depa ORM Property Metadata Projection" status="DONE" order="2" cdt:actor-set="depa-orm-model-loop">
+        <Description>以 Kunun navigation property metadata 替换 relationships/relation authoring，并保持 runtime relation semantics。</Description>
+        <SubNodes>
+          <Task id="G3-T1" name="Execute depa ORM property-first relation track" status="DONE" order="0">
+            <Description>创建并执行 ORM property profile、composite tuple validation、owner/inverse projection、compiler/code-first adoption、legacy rejection、docs 和 runtime regression tests。</Description>
+            <cdt:TrackLink state="archived" id="replace-orm-relation-dsl-with-property-metadata" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3-T2" name="Verify depa ORM source-to-runtime projection" status="DONE" order="1">
+            <Description>独立验证 direct、inverse、one/many、composite、through、read/write cases 均由 property metadata 单向产生 runtime schemas，且 detached sources 被拒绝。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3C" name="depa ORM Entity Policy Correction" status="DONE" order="3" cdt:actor-set="depa-orm-model-loop">
+        <Description>恢复 Property-first 重构中丢失的 entity-policy Field-reference validation，防止 host migration 固化行为回归。</Description>
+        <SubNodes>
+          <Task id="G3C-T1" name="Execute entity policy validation correction" status="DONE" order="0">
+            <Description>创建并执行 common compiler correction track，覆盖 primary key、audit、soft-delete、default-order 的 Field 引用完整性以及 source/code-first 等价。</Description>
+            <cdt:TrackLink state="archived" id="restore-entity-policy-field-reference-validation" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3C-T2" name="Verify corrected depa artifact" status="DONE" order="1">
+            <Description>独立验证 host reproducer、depa property-first suite 和 package gates，确认修复不改变 Property relation authority。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3D" name="depa ORM Through Diagnostic Correction" status="DONE" order="4" cdt:actor-set="depa-orm-model-loop">
+        <Description>修复 host Property fixture 迁移发现的 one_through_one 缺失 through 时 compiler 抛出异常而非返回诊断的问题。</Description>
+        <SubNodes>
+          <Task id="G3D-T1" name="Execute through diagnostic correction" status="DONE" order="0">
+            <Description>创建并执行 common relation projector correction track，使 source/code-first 路径对缺失 mandatory through fail closed 且不抛异常。</Description>
+            <cdt:TrackLink state="archived" id="return-diagnostic-for-missing-through" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3D-T2" name="Verify corrected depa artifact" status="DONE" order="1">
+            <Description>独立验证 source/programmatic reproducer、property-first suite、build 与 host one-through-one contract。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3E" name="depa ORM Relation Option Field Validation Correction" status="DONE" order="5" cdt:actor-set="depa-orm-model-loop">
+        <Description>恢复 Property-first projector 中丢失的 relation conditions/order 目标 Field 引用校验，防止 host 迁移固化无效查询选项。</Description>
+        <SubNodes>
+          <Task id="G3E-T1" name="Execute relation option field validation correction" status="DONE" order="0">
+            <Description>创建并执行 common projector correction track，使 source/code-first 路径在构造 runtime relation 前验证 conditions/order 引用目标实体的持久化 Field。</Description>
+            <cdt:TrackLink state="archived" id="restore-property-option-field-validation" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3E-T2" name="Verify corrected depa artifact" status="DONE" order="1">
+            <Description>独立验证无效条件与排序 Field 的双入口诊断、有效 runtime option 保留、property-first suite、build 和 host reciprocal contract。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3F" name="depa ORM Public Runtime Type Identity Correction" status="DONE" order="6" cdt:actor-set="depa-orm-model-loop">
+        <Description>修复 linked public package artifact 同时加载 src/dist contract class copies 时缺少稳定逻辑身份，导致 ModelInstance 在 admission copy 中退化为普通 Map 的运行时边界偏差。</Description>
+        <SubNodes>
+          <Task id="G3F-T1" name="Execute public runtime type identity correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，确保公共消费者与包内实现的 contract module copies 共享稳定逻辑身份，更新记录在 admission copy 后仍保持 ModelInstance 语义。</Description>
+            <cdt:TrackLink state="archived" id="preserve-runtime-type-identity-across-linked-packages" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3F-T2" name="Verify corrected public artifact" status="DONE" order="1">
+            <Description>独立验证 package-level identity reproducer、detached mutation admission、workspace gates 与 host belongs-to/many-to-many update regressions。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3G" name="depa ORM Public Read Value Identity Correction" status="DONE" order="7" cdt:actor-set="depa-orm-model-loop">
+        <Description>修复 host 从 public dist 构造查询 AST 和 nested selection、包内 source-copy read planner 以 nominal instanceof 分派时拒绝这些公共值的边界偏差。</Description>
+        <SubNodes>
+          <Task id="G3G-T1" name="Execute public read value identity correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，为公共 SQL expression 与 select value families 建立稳定逻辑身份，同时保持 kind-specific 分派和不可变值语义。</Description>
+            <cdt:TrackLink state="archived" id="preserve-read-query-value-identity-across-linked-packages" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3G-T2" name="Verify corrected public read artifact" status="DONE" order="1">
+            <Description>独立验证 built/source AST identity、nested selection planning、现有 public-read gates 与 host relation read planning。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3H" name="depa ORM Delete Action Policy Correction" status="DONE" order="8" cdt:actor-set="depa-orm-model-loop">
+        <Description>恢复 Property-first projector 丢失的 delete-action cardinality/through 许可校验，防止 many-to-many 或 through 关系发布不受支持的 CASCADE/SET_NULL。</Description>
+        <SubNodes>
+          <Task id="G3H-T1" name="Execute delete-action policy correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，在 owner/inverse Property projection 发布 relation schema 前验证 write policy。</Description>
+            <cdt:TrackLink state="archived" id="restore-property-delete-action-policy-validation" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3H-T2" name="Verify corrected delete-action policy" status="DONE" order="1">
+            <Description>独立验证 source/programmatic invalid/valid matrix、property-first suite、package gates 与 host cascade regression。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3I" name="depa ORM Internal Relation Lifecycle Traversal Correction" status="DONE" order="9" cdt:actor-set="depa-orm-model-loop">
+        <Description>修复 visible-only navigation index 被内部 snapshot 与 delete lifecycle 误用，确保隐藏但已声明的反向 Property 仍参与 CASCADE/RESTRICT 遍历而不暴露给公共查询或调用者写入。</Description>
+        <SubNodes>
+          <Task id="G3I-T1" name="Execute internal relation lifecycle correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，分离 navigable 与 internal Property direction catalogs，并把内部 snapshot/delete traversal 接到完整关系目录。</Description>
+            <cdt:TrackLink state="archived" id="include-hidden-property-directions-in-write-lifecycle" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3I-T2" name="Verify hidden direction lifecycle behavior" status="DONE" order="1">
+            <Description>独立验证隐藏反向 Property 的递归 CASCADE/RESTRICT、内部 snapshot 规划、公开导航不可见性、workspace gates 与 host cascade regression。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3J" name="depa ORM Public Error Type Identity Correction" status="DONE" order="10" cdt:actor-set="depa-orm-model-loop">
+        <Description>修复 linked public package 同时加载 src/dist error class copies 时 nominal instanceof 失败，确保 query/write error families 保持准确逻辑身份与继承语义。</Description>
+        <SubNodes>
+          <Task id="G3J-T1" name="Execute public error identity correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，为公共 query/write error families 安装 exact logical identity，并覆盖 base/subclass 与 unbranded rejection。</Description>
+            <cdt:TrackLink state="archived" id="preserve-public-error-type-identity-across-linked-packages" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3J-T2" name="Verify linked public error behavior" status="DONE" order="1">
+            <Description>独立验证 built/source error identity、subclass semantics、host duplicate-id/validation/hooks regressions 与 workspace gates。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3K" name="depa ORM One Through One Property Setter Correction" status="DONE" order="11" cdt:actor-set="depa-orm-model-loop">
+        <Description>修复 Kunun canonical Entity.property identity 被旧 Entity__property 方向判断误分类，恢复 ONE_THROUGH_ONE owner property 的重绑定、置空与 inverse normalization 语义。</Description>
+        <SubNodes>
+          <Task id="G3K-T1" name="Execute one-through-one property setter correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，使 canonical 与 legacy relation identities 都能稳定识别声明方向，且 owner set/null 不再误走 inverse guard。</Description>
+            <cdt:TrackLink state="archived" id="restore-one-through-one-property-setter-semantics" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3K-T2" name="Verify one-through-one setter behavior" status="DONE" order="1">
+            <Description>独立验证 owner rebind、owner unset、inverse rebind、untouched relation、workspace gates 与 host through-write regression。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3L" name="depa ORM Public Query Condition Value Identity Correction" status="DONE" order="12" cdt:actor-set="depa-orm-model-loop">
+        <Description>补齐 linked src/dist contract copies 间 public query condition 与 operand carriers 的 exact logical identity，使 source-copy projector 可识别公共包构造的 LogicalCondition、ComparisonCondition 与 tuple/literal values。</Description>
+        <SubNodes>
+          <Task id="G3L-T1" name="Execute query condition value identity correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，为 condition/value carrier families 安装精确身份并验证 cross-copy AST projection。</Description>
+            <cdt:TrackLink state="archived" id="preserve-query-condition-value-identity-across-linked-packages" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3L-T2" name="Verify linked query condition behavior" status="DONE" order="1">
+            <Description>独立验证 logical/comparison/literal/tuple/row-set identity、unbranded rejection、workspace gates 与 host association-filtering regression。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3M" name="depa ORM Public Relation Storage Value Identity Correction" status="DONE" order="13" cdt:actor-set="depa-orm-model-loop">
+        <Description>补齐 compiled relation storage family 跨 linked src/dist contract copies 的 exact logical identity，使公共 storage override 可组合 source-copy endpoint、through 与 relation schema values。</Description>
+        <SubNodes>
+          <Task id="G3M-T1" name="Execute relation storage value identity correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，为 OrmRelationEndpointStorage、OrmThroughStorageSegment、OrmRelationStorage 安装精确身份并验证 mixed-copy composition。</Description>
+            <cdt:TrackLink state="archived" id="preserve-relation-storage-value-identity-across-linked-packages" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3M-T2" name="Verify linked relation storage behavior" status="DONE" order="1">
+            <Description>独立验证 mixed-copy construction、schema withStorage、reverse storage、unbranded rejection、workspace gates 与 host dispatch-shape regression。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3N" name="depa ORM Public Operation State Identity Correction" status="DONE" order="14" cdt:actor-set="depa-orm-model-loop">
+        <Description>补齐 operation runtime state family 跨 linked src/dist contract copies 的 exact logical identity，使 source assembly 创建的状态可由公共消费者准确分类。</Description>
+        <SubNodes>
+          <Task id="G3N-T1" name="Execute operation state identity correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，为 read execution、write operation、write validation 与 write snapshot state 安装精确身份。</Description>
+            <cdt:TrackLink state="archived" id="preserve-operation-state-identity-across-linked-packages" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3N-T2" name="Verify linked operation state behavior" status="DONE" order="1">
+            <Description>独立验证双向 identity、cross-kind/subclass/unbranded rejection、workspace gates 与 host operation-context boundary。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3O" name="depa ORM Kunun Field Validation Admission Correction" status="DONE" order="15" cdt:actor-set="depa-orm-model-loop">
+        <Description>恢复 Kunun Field metadata 路径中丢失的 validation rule 语义校验，防止 property-first host migration 固化无效规则。</Description>
+        <SubNodes>
+          <Task id="G3O-T1" name="Execute Kunun field validation correction" status="DONE" order="0">
+            <Description>创建并执行 depa ORM correction track，使 source/code-first field metadata 对边界值、正则、operator 和 application profile fail closed。</Description>
+            <cdt:TrackLink state="archived" id="restore-kunun-field-validation-admission" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3O-T2" name="Verify corrected field validation artifact" status="DONE" order="1">
+            <Description>独立验证 source/programmatic rule matrix、property-first suite、workspace gates 与 host field contract。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4" name="spl-bun Consumer Migration" status="DONE" order="16">
+        <Description>迁移 active capsule 的文档、fixtures、tests 和 workbench consumers，并固化反漂移守卫。</Description>
+        <SubNodes>
+          <Task id="G4-T1" name="Execute host consumer migration track" status="DONE" order="0">
+            <Description>迁移 canonical DSL docs、82 个 relation fixtures、code-first tests、consumer integrations 与 reference examples；增加禁止 relationships/relation canonical source 的 architecture guard。</Description>
+            <cdt:TrackLink state="archived" id="migrate-orm-consumers-to-property-relations" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G4-T2" name="Verify host integration and dependency alignment" status="DONE" order="1">
+            <Description>验证 capsule full suite、workspace typecheck/build、domain runtime/workbench consumers 和 dependency resolution 使用已完成的 property-first contracts。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G2R" name="Kunun Detached ORM Annotation Retirement" status="DONE" order="17" cdt:actor-set="kunun-type-loop">
+        <Description>移除 Kunun public annotation surface 中仍可正向解析 detached ORM relation 的旧 profile，保持通用 ontology relation 与 typed Property 语义边界。</Description>
+        <SubNodes>
+          <Task id="G2R-T1" name="Execute Kunun detached ORM annotation retirement track" status="DONE" order="0">
+            <Description>删除公开 OrmRelationAnnotation profile、正向用例和生成产物，增加 package/source residue guard，并验证 typed Property 与其他 annotation profiles 不回归。</Description>
+            <cdt:TrackLink state="archived" id="remove-detached-orm-relation-annotations" project-ref="kunun-language"/>
+          </Task>
+          <Task id="G2R-T2" name="Verify Kunun authority retirement" status="DONE" order="1">
+            <Description>独立验证 Kunun public package 不再导出或接受 detached ORM relation annotation，而 typed Property、通用 relation type 和 annotation extraction 继续工作。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3P" name="depa ORM Shadow Code-First Authority Retirement" status="DONE" order="18" cdt:actor-set="depa-orm-model-loop">
+        <Description>从 depa ORM 编译与发布输入中移除仍维护 EntityModel/RelationModel 并双发 detached syntax 的旧 code-first 实现。</Description>
+        <SubNodes>
+          <Task id="G3P-T1" name="Execute shadow code-first authority retirement track" status="DONE" order="0">
+            <Description>删除无公共契约消费者的 legacy code-first source/composer/workflow/snapshot authority，增加 source、dist 和 package residue guard，并保持 Kunun Definition compiler 为唯一 code-first 入口。</Description>
+            <cdt:TrackLink state="archived" id="remove-shadow-code-first-relation-authority" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3P-T2" name="Verify depa ORM authority retirement" status="DONE" order="1">
+            <Description>独立验证源码、声明、JavaScript 和发布包均不再含 RelationModel、relationships emitter 或 detached relation emitter，property-first suites 与 workspace gates继续通过。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3Q" name="depa ORM Published Detached Compiler Retirement" status="DONE" order="19" cdt:actor-set="depa-orm-model-loop">
+        <Description>移除仍可从 detached relation node 或 ORM relation annotation 生成 runtime relation schema 的已发布 compiler/projector 旁路。</Description>
+        <SubNodes>
+          <Task id="G3Q-T1" name="Execute published detached compiler retirement track" status="DONE" order="0">
+            <Description>删除 detached relation schema compiler/source projector/admission/reciprocal 旧图，移除 KununAnnotationProjector.compileRelation，并扩展 src/dist/package 可执行旁路守卫。</Description>
+            <cdt:TrackLink state="archived" id="remove-published-detached-relation-compilers" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3Q-T2" name="Verify detached compiler retirement" status="DONE" order="1">
+            <Description>独立验证 source 与 compiled dist 均不能从 detached relation node 或 relation marker 编译 runtime schema，且 property-first source/code-first/runtime 行为保持。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="VERIFY" name="Mission Convergence Verification" status="DONE" order="20">
+        <Description>从用户目标而非已迁移实现出发进行 fresh 跨项目验证，必要时触发受控 replan。</Description>
+        <SubNodes>
+          <Task id="VERIFY-T1" name="Run fresh cross-project property-first audit" status="DONE" order="0">
+            <Description>fresh observer 从 Kunun source/code-first class properties 追踪到 depa ORM compiler/runtime 和 spl-bun consumers，逐条验证 proposal success criteria。</Description>
+          </Task>
+          <Task id="VERIFY-T2" name="Reject residual modeling authorities" status="DONE" order="1">
+            <Description>搜索并分类 field-owned relation、detached relation primitive、shadow RelationModel、dual-emission compatibility 和 stale canonical docs；任何 live authority 残留都进入 replan。</Description>
+          </Task>
+          <Task id="VERIFY-T3" name="Close mission evidence" status="DONE" order="2">
+            <Description>汇总真实 archived tracks、test evidence、durable decisions 和剩余非阻塞风险，执行 completed gate。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_restore-property-first-orm-modeling">
+      <Node id="G2"><After ref="G1"/></Node>
+      <Node id="G3"><After ref="G2"/></Node>
+      <Node id="G3C"><After ref="G3"/></Node>
+      <Node id="G3D"><After ref="G3C"/></Node>
+      <Node id="G3E"><After ref="G3D"/></Node>
+      <Node id="G3F"><After ref="G3E"/></Node>
+      <Node id="G3G"><After ref="G3F"/></Node>
+      <Node id="G3H"><After ref="G3G"/></Node>
+      <Node id="G3I"><After ref="G3H"/></Node>
+      <Node id="G3J"><After ref="G3I"/></Node>
+      <Node id="G3K"><After ref="G3J"/></Node>
+      <Node id="G3L"><After ref="G3K"/></Node>
+      <Node id="G3M"><After ref="G3L"/></Node>
+      <Node id="G3N"><After ref="G3M"/></Node>
+      <Node id="G3O"><After ref="G3N"/></Node>
+      <Node id="G4"><After ref="G3O"/></Node>
+      <Node id="G2R"><After ref="G4"/></Node>
+      <Node id="G3P"><After ref="G2R"/></Node>
+      <Node id="G3Q"><After ref="G3P"/></Node>
+      <Node id="VERIFY"><After ref="G3Q"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+
+  <Hooks>
+    <Hook on="mission:after-node"><cdt:MissionReconcile max-tracks="10" on-limit="checkpoint" on-drift="replan-or-block"/></Hook>
+  </Hooks>
+</Mission>

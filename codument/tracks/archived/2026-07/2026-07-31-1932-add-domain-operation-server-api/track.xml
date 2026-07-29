@@ -1,0 +1,105 @@
+<Track id="add-domain-operation-server-api" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>Expose Domain Operation catalog and execution through a truthful, isolated Elysia server API.</Goal>
+    <Description>Register trusted bundles and current capabilities, project public catalogs, route exact execute requests, normalize pre-routing failures, preserve legacy APIs, and prove boundaries without adding business bundles or UI.</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-31T15:12:50Z</CreatedAt>
+    <UpdatedAt>2026-07-31T16:32:07Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/depa-orm-domain-workbench/design/"/>
+    <MaterialBundle role="input" name="contracts" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="input" name="runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="web-server" domain="package" path="vfs://@/packages/web-server/"/>
+    <MaterialBundle role="output" name="web-shared" domain="package" path="vfs://@/packages/web-shared/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-domain-operation-server-api" name="add-domain-operation-server-api" version="1">
+    <Description>Use focused RED/implementation slices for registration/catalog and execute routing, then close with compatibility, build, and boundary verification.</Description>
+    <SubNodes>
+      <TaskGroup id="P0" name="Registration and catalog API" status="DONE" order="0">
+        <Description>Specify and implement immutable registrations plus leak-free public catalog routes.</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P0 tasks are DONE</cdt:Criterion>
+          <cdt:Criterion>catalog and registration focused tests pass</cdt:Criterion>
+          <cdt:Criterion>duplicate ids reject and serialized responses expose no runtime internals</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T0.1" name="Write registration and catalog route RED tests" status="DONE" order="0" priority="P0">
+            <Description>Add a server-local deterministic bundle fixture and direct app.handle tests for empty/registered catalogs, exact projections, operations/presets, duplicate id rejection, current capabilities, stable 404, load-once behavior, and leak guards. Do not implement routes.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.1-AC1" checked="true">Tests cover all four GET routes for empty, hit, and miss cases using contract DTO expectations</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC2" checked="true">Tests prove duplicate context ids reject, including distinct versions, and bundle identity is catalog-derived</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC3" checked="true">Tests prove explicit serialization excludes seed, bindings, handlers, probes, functions, and mutable/runtime state</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T0.2" name="Implement registration and catalog projection" status="DONE" order="1" priority="P0">
+            <Description>Add route constants only to web-shared; implement injected registration loading, duplicate-id guard, frozen current capabilities, explicit public projection, and stable GET 404 in web-server. Preserve empty default registration and legacy app lifecycle.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.2-AC1" checked="true">Each unique bundle loads once and id/version have no second configuration truth</cdt:Criterion>
+              <cdt:Criterion id="T0.2-AC2" checked="true">GET routes return direct contract-owned projections with registered current capabilities</cdt:Criterion>
+              <cdt:Criterion id="T0.2-AC3" checked="true">All registration/catalog RED tests pass and legacy app creation still works with no registrations</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P1" name="Execute routing and isolation" status="DONE" order="1">
+        <Description>Specify and implement exact request forwarding, truthful routing failures, and per-request isolation.</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 tasks are DONE</cdt:Criterion>
+          <cdt:Criterion>execute/error/isolation focused tests pass</cdt:Criterion>
+          <cdt:Criterion>no invalid or unknown context selects a fallback bundle</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Write execute, error, and isolation RED tests" status="DONE" order="0" priority="P0">
+            <Description>Add direct app.handle cases for fetched preset request POST parity, original-body forwarding, success/partial/failure HTTP 200 envelopes, missing/invalid context, unknown id/version, no-fallback/no-allocation evidence, and sequential/concurrent deterministic isolation. Do not implement execute routing.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">A fetched complete preset request is posted unchanged and runtime receives the same parsed object/value graph</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">Invalid and catalog-mismatch cases assert exact diagnostic, nullable facts, no commit/mutations/tree, HTTP 200, and no runtime allocation</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">Runtime domain statuses and sequential/concurrent fresh-state behavior are covered</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Implement execute routing and failure envelopes" status="DONE" order="1" priority="P0">
+            <Description>Use the contract request-fact projector for context resolution, construct truthful transport-side failure responses, pass the original parsed body and frozen current capabilities to runtime, and return every execute envelope with HTTP 200. Do not reconstruct requests or allocate server-owned SQLite.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">Resolved requests are forwarded without clone, merge, normalization, or defaults</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">Missing/invalid context reports REQUEST_VALIDATION_FAILED and unknown/version mismatch reports OPERATION_CATALOG_MISMATCH truthfully</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">All execute/error/isolation tests pass and server retains no live execution resources</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Compatibility, build, and boundaries" status="DONE" order="2">
+        <Description>Close the transport slice with legacy regressions, declared builds, import guards, and capsule integrity.</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P2 task is DONE</cdt:Criterion>
+          <cdt:Criterion>web-server, contracts, and runtime focused tests pass</cdt:Criterion>
+          <cdt:Criterion>web-server typecheck/build and root build pass without --if-present</cdt:Criterion>
+          <cdt:Criterion>boundary guard and protected capsule hashes pass</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Verify legacy compatibility, build, and package boundaries" status="DONE" order="0" priority="P0">
+            <Description>Declare direct web-server contract/runtime dependencies and a real typecheck build, make root build mandatory, add/extend source import guards, run health/execute-kon regressions plus focused suites/builds, and verify capsule regular-file and direct-symlink hashes remain unchanged.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">Existing health and execute-kon behavior remains covered and passing</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">Web-server declares public dependencies; package typecheck/build and root build pass without optional skip</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">Guard rejects capsule, halfcode, dist, node_modules, internal/unallowlisted subpaths, and test-fixture imports from production source</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC4" checked="true">Protected capsule hashes equal both recorded baselines</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding" status="PASS" note="Fresh rerun after two bounded corrections found NO_GAP: TypeScript-AST import guard covers TS/TSX/static/resolved dynamic imports and rejects private/capsule/generated/test/subpath patterns; executable capsule manifests match 564 regular files and 9 direct links; web-server 28/28, contract/runtime 172/172, typecheck, package/root builds, strict Codument validation, HTTP facts, isolation, legacy compatibility and boundaries pass. Report: reports/attractor-check-report.md."/></Hook>
+        </Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

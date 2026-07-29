@@ -1,0 +1,43 @@
+<behavior-patch capability="depa-orm-property-first-consumers" version="1">
+  <upsert selector="behavior://depa-orm-property-first-consumers/requirements/property-authority">
+    <requirement id="property-authority">
+      <statement>All spl-bun depa ORM model fixtures and code-first consumers SHALL author relations only as typed Kunun navigation Properties with ORM metadata; scalar Fields, detached relation nodes, entity relationship sections and shadow code-first relation models SHALL NOT be accepted as canonical sources.</statement>
+      <suite id="source-and-code-first" name="Source and code-first authority">
+        <case id="source-property-projection">
+          <given>a source bundle declaring scalar Fields and typed owner or inverse Properties</given>
+          <when>the public depa ORM compiler builds the model</when>
+          <then>every navigable runtime relation SHALL trace to one declared Property and preserve its storage and runtime options</then>
+        </case>
+        <case id="programmatic-property-projection">
+          <given>a programmatic Kunun ClassDefinition built with Field and Property members</given>
+          <when>the public definition compiler builds the model</when>
+          <then>the catalog SHALL be equivalent to the corresponding source model without rendering Kon or creating a detached relation graph</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://depa-orm-property-first-consumers/requirements/migration-preserves-runtime">
+    <requirement id="migration-preserves-runtime">
+      <statement>The property-first migration SHALL preserve direct, inverse, one/many, composite, through, nested read/write, cascade, visibility, ordering and load-strategy behavior covered by the capsule suite.</statement>
+      <suite id="runtime-regression" name="Runtime regression">
+        <case id="full-capsule-suite">
+          <given>all canonical fixtures have been migrated and dependencies resolve through public package exports</given>
+          <when>the complete capsule and host workspace gates run</when>
+          <then>the suites SHALL pass without compatibility readers, package deep imports or absolute workspace aliases</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://depa-orm-property-first-consumers/requirements/anti-drift-guard">
+    <requirement id="anti-drift-guard">
+      <statement>Repository guards SHALL reject renewed canonical use of `:relationships=`, detached `(relation ...)`, `property_key`, `reverse_property_key`, retired `CodeFirstOrm*` relation authoring and unexported depa ORM package subpaths.</statement>
+      <suite id="architecture-guard" name="Architecture guard">
+        <case id="legacy-authority-is-rejected">
+          <given>a canonical fixture, test helper, runtime consumer or copied DSL document reintroduces a retired authority marker</given>
+          <when>the package boundary and schema contract guards run</when>
+          <then>the build SHALL fail with a path and matched authority marker</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

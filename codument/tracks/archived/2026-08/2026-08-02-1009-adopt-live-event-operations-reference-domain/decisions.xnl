@@ -1,0 +1,37 @@
+<decision #track.adopt_live_event_operations_reference_domain.domain_identity {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "high"
+}
+(
+  <question ?>Which neutral reference domain replaces the first current DomainContext while preserving feature coverage?</?>
+  <answer { }
+  (
+    <raw-answer ?>Adopt Live Event Operations and remove the former source-domain identity from the track name and current product truth.</?>
+    <decision-text ?>Use event-operations-lifecycle, EventOps.*, and the exact 12-operation model frozen in design.md.</?>
+    <rationale ?>The event domain is neutral, distinct from Commerce, and naturally supports association, lifecycle, constraint, process, composed Action and relational observation scenarios.</?>
+    <evidence ?>User request plus plan-track:before coding AttractorCheck PASS.</?>
+  )
+  >
+)>
+
+<decision #track.adopt_live_event_operations_reference_domain.history_boundary {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>Does removing current reference traces include rewriting historical Codument evidence?</?>
+  <answer { }
+  (
+    <raw-answer ?>No. Current product and test truth changes; archived evidence remains immutable.</?>
+    <decision-text ?>Remove the legacy identity from non-archived source, tests and promoted behavior target state, but preserve archived tracks, missions, decisions and reports.</?>
+    <rationale ?>Historical evidence is an audit record rather than a product reference surface.</?>
+    <evidence ?>Codument archive ownership rules and fresh coding AttractorCheck.</?>
+  )
+  >
+)>

@@ -1,0 +1,11 @@
+{
+  "source": "/Users/kongweixian/infra-dev/spl-bun",
+  "snapshot": "/private/tmp/spl-parse-closeout-20261024/workspace",
+  "filesCopied": 2843,
+  "businessSha256": "e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5",
+  "dependencyCopy": "APFS copy-on-write, workspace relative symlinks; no links back to source workspace",
+  "allowedMetadataDifference": [
+    ".cdmt-lite/missions/active/spl-parse-conversion/loop.md"
+  ],
+  "sourceFilesVerified": true
+}

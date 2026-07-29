@@ -1,0 +1,37 @@
+<decision #track.add_domain_operation_contracts.owner_boundary {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>Domain Operation 的共享 JSON contract 由哪个 package 拥有？</?>
+  <answer { }
+  (
+    <raw-answer ?>采用 mission 已接受的独立 transport-neutral capsule。</?>
+    <decision-text ?>由 depa-data-domain-operation-contracts 独立拥有 catalog、request、response、schema 与纯 validation，不放入 web-shared。</?>
+    <rationale ?>server、IDE、runtime 和未来适配器需要共享同一语义边界，不能绑定 SPL 页面、HTTP framework 或数据库实现。</?>
+    <evidence ?>mission decisions.xnl 的 contract_boundary 决策、design/http-contract.md，以及 plan-track:before coding attractor PASS。</?>
+  )
+  >
+)>
+
+<decision #track.add_domain_operation_contracts.selection_batch {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>selection 与 batch 在 wire contract 中如何区分？</?>
+  <answer { }
+  (
+    <raw-answer ?>采用 mission 已冻结的 selection 设计。</?>
+    <decision-text ?>selection 是 mode=single 下由 selector 圈定的一个逻辑 subject；batch 是多个带稳定 key 的独立 invocation，每个 item 仍可使用任意 subject。</?>
+    <rationale ?>subject 回答对谁执行，invocation 回答一次请求包含多少个独立调用，两个维度必须正交。</?>
+    <evidence ?>mission decisions.xnl 的 selection_semantics 与 operation_dimensions 决策，以及 design/operation-model.md。</?>
+  )
+  >
+)>

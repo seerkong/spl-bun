@@ -1,0 +1,47 @@
+<behavior-patch capability="domain-context-reference-bundles" version="1">
+  <upsert selector="behavior://domain-context-reference-bundles/requirements/bundle-authority">
+    <requirement id="bundle-authority">
+      <statement>The system SHALL provide at least two immutable DomainContextBundle values through a production package that depends only on public contract/runtime roots, uses the live catalog/seed/bindings/probes API, stores semantic entries in catalog resources, exports no server or execution state, and models associations as explicit scalar-id entities until public relation compilation exists.</statement>
+      <suite id="authority" name="Bundle authority and boundaries">
+        <case id="load-and-freeze"><given>both reference bundles</given><when>the public loader validates them</when><then>all definitions, bindings, probes, model sources, and complete presets are valid and frozen</then></case>
+        <case id="semantic-resources"><given>the two catalogs</given><when>semantic resources are inspected</when><then>business objects, association, lifecycle, constraint, process, capability, and raw resources are represented without private schema types</then></case>
+        <case id="public-boundary"><given>bundle production source and package metadata</given><when>the boundary guard and build run</when><then>only declared public roots are imported and capsule, private, generated, web-server, and test paths are rejected</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-context-reference-bundles/requirements/it-asset-matrix">
+    <requirement id="it-asset-matrix">
+      <statement>The it-asset-lifecycle bundle SHALL execute a BO query, CancelRepair BO Action, independent BO Mutation, association Mutation, lifecycle Transition, constraint Validate, business-process composed operation, and ScrapAndDispose extension Action; CancelRepair SHALL invoke its four registered children in order, root probes SHALL observe every affected entity, constraint violations SHALL be structured outcomes, and thrown business execution failures SHALL roll back and return diagnostics.</statement>
+      <suite id="it-asset" name="IT asset operation matrix">
+        <case id="cancel-repair-success"><given>a repair case with returned loaner and damaged asset</given><when>CancelRepair executes atomically</when><then>four child refs are preserved, case and asset writes commit, and before/after/diff expose both changes</then></case>
+        <case id="cancel-repair-failure"><given>a repair case whose loaner is not returned</given><when>CancelRepair executes</when><then>query and validation children remain visible, no write commits, and a stable execution diagnostic identifies failure</then></case>
+        <case id="semantic-writes"><given>association, lifecycle, process, and disposal presets</given><when>they execute through the registry</when><then>real relational rows change with truthful mutation summaries and probes</then></case>
+        <case id="constraint-outcome"><given>valid and missing purchase-source records</given><when>the constraint operation validates them</when><then>both are successful structured outcomes whose valid field distinguishes business violation from execution failure</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-context-reference-bundles/requirements/commerce-matrix">
+    <requirement id="commerce-matrix">
+      <statement>The commerce-operations bundle SHALL execute a domain-context computed operation, filter/all/ids selection mutation as one single invocation, atomic and best-effort independent batch mutation with stable item keys, capability composition through registered children, raw graph/tree/table queries, and one atomic raw ingest whose payload batch does not change invocation mode.</statement>
+      <suite id="commerce" name="Commerce operation matrix">
+        <case id="selection-not-batch"><given>filter, all, and ids ArchiveEligible presets</given><when>each executes</when><then>mode remains single; all performs an unfiltered public read; the handler deterministically resolves eligible rows; and shared-payload writes commit with truthful mutations and probes</then></case>
+        <case id="independent-batch"><given>CorrectOwner atomic and best-effort requests</given><when>items execute</when><then>keys and independent payload/status mapping are retained and partial commit is reported honestly</then></case>
+        <case id="global-capability-raw"><given>global summary, capability overview, and raw query presets</given><when>they execute</when><then>composite, graph, tree, and table outcomes contain seeded relational facts and composed child refs</then></case>
+        <case id="raw-ingest"><given>one IngestBatch request containing multiple payload rows</given><when>it executes atomically</when><then>invocation mode remains single, real rows are created, and a composite outcome plus mutation summaries reports them</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-context-reference-bundles/requirements/integration-isolation">
+    <requirement id="integration-isolation">
+      <statement>Every reference preset SHALL remain exact through catalog load and server exposure; sequential and concurrent executions SHALL start from deterministic seed; production server startup SHALL register both reference bundles while createApp without registrations SHALL remain empty; focused tests, package/root builds, import guards, and protected capsule manifests SHALL pass.</statement>
+      <suite id="integration" name="Integration and isolation">
+        <case id="preset-parity"><given>every preset in both bundles</given><when>contract parsing, catalog matching, runtime load, and server catalog serialization run</when><then>the complete request remains semantically identical and directly executable</then></case>
+        <case id="fresh-execution"><given>the same write preset</given><when>it runs sequentially and concurrently</when><then>each response starts from equivalent seed and independent execution ids/state</then></case>
+        <case id="server-composition"><given>default createApp and real import.meta.main startup composition</given><when>registries are inspected</when><then>default remains empty and production startup exposes both bundle ids without importing server from the bundle package</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

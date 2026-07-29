@@ -1,0 +1,14 @@
+[
+  {"id":1,"name":"Alice","email":"alice@example.com","region":"North","signupDate":"2024-12-01","profile":{"age":31,"tier":"gold","tags":["a","b"]}},
+  {"id":2,"name":"Bob","email":"bob@example.com","region":"East","signupDate":"2024-12-03","profile":{"age":27,"tier":"silver","tags":["b"]}},
+  {"id":3,"name":"Cathy","email":"cathy@example.com","region":"West","signupDate":"2024-12-05","profile":{"age":29,"tier":"gold","tags":["a","c"]}},
+  {"id":4,"name":"Derek","email":"derek@example.com","region":"South","signupDate":"2024-12-07","profile":{"age":35,"tier":"platinum","tags":["a"]}},
+  {"id":5,"name":"Ella","email":"ella@example.com","region":"North","signupDate":"2024-12-10","profile":{"age":22,"tier":"bronze","tags":["d"]}},
+  {"id":6,"name":"Frank","email":"frank@example.com","region":"East","signupDate":"2024-12-12","profile":{"age":41,"tier":"gold","tags":["b","d"]}},
+  {"id":7,"name":"Grace","email":"grace@example.com","region":"West","signupDate":"2024-12-14","profile":{"age":30,"tier":"silver","tags":["c"]}},
+  {"id":8,"name":"Henry","email":"henry@example.com","region":"South","signupDate":"2024-12-16","profile":{"age":26,"tier":"bronze","tags":["a","e"]}},
+  {"id":9,"name":"Ivy","email":"ivy@example.com","region":"North","signupDate":"2024-12-18","profile":{"age":33,"tier":"gold","tags":["b","c"]}},
+  {"id":10,"name":"Jack","email":"jack@example.com","region":"East","signupDate":"2024-12-20","profile":{"age":28,"tier":"silver","tags":["d"]}},
+  {"id":11,"name":"Karen","email":"karen@example.com","region":"West","signupDate":"2024-12-22","profile":{"age":24,"tier":"bronze","tags":["e"]}},
+  {"id":12,"name":"Leo","email":"leo@example.com","region":"South","signupDate":"2024-12-24","profile":{"age":37,"tier":"platinum","tags":["a","b","c"]}}
+]

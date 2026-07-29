@@ -1,0 +1,26 @@
+[
+  {
+    "generation": "implement-5",
+    "count": 22,
+    "mismatches": []
+  },
+  {
+    "generation": "implement-6",
+    "count": 22,
+    "mismatches": []
+  },
+  {
+    "move": "formatting-move.json",
+    "count": 43,
+    "mismatches": [],
+    "oldActiveAbsent": true,
+    "archivedExists": true
+  },
+  {
+    "move": "sort-move.json",
+    "count": 5,
+    "mismatches": [],
+    "oldActiveAbsent": true,
+    "archivedExists": true
+  }
+]

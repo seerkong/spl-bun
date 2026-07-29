@@ -1,0 +1,42 @@
+-- Extra tables/data for SPL Web-IDE demos.
+-- This script is designed to be idempotent and safe to run on every startup.
+
+CREATE TABLE IF NOT EXISTS CUSTOMERS(
+  CUSTOMER_ID INTEGER PRIMARY KEY,
+  NAME TEXT,
+  EMAIL TEXT,
+  REGION_ID INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS ORDERS(
+  ORDER_ID INTEGER PRIMARY KEY,
+  CUSTOMER_ID INTEGER,
+  PRODUCT_ID INTEGER,
+  QUANTITY INTEGER,
+  ORDER_DATE TEXT
+);
+
+WITH RECURSIVE seq(x) AS (
+  SELECT 1
+  UNION ALL SELECT x + 1 FROM seq WHERE x < 24
+)
+INSERT INTO CUSTOMERS (CUSTOMER_ID, NAME, EMAIL, REGION_ID)
+SELECT x,
+  printf('Customer %02d', x),
+  printf('customer%02d@example.com', x),
+  ((x - 1) % 4) + 1
+FROM seq
+WHERE NOT EXISTS (SELECT 1 FROM CUSTOMERS LIMIT 1);
+
+WITH RECURSIVE seq(x) AS (
+  SELECT 1
+  UNION ALL SELECT x + 1 FROM seq WHERE x < 120
+)
+INSERT INTO ORDERS (ORDER_ID, CUSTOMER_ID, PRODUCT_ID, QUANTITY, ORDER_DATE)
+SELECT x,
+  ((x - 1) % 24) + 1,
+  ((x - 1) % 25) + 1,
+  ((x - 1) % 5) + 1,
+  date('2025-01-01', printf('+%d day', x))
+FROM seq
+WHERE NOT EXISTS (SELECT 1 FROM ORDERS LIMIT 1);

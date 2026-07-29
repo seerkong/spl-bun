@@ -1,0 +1,75 @@
+<Track id="align-domain-operation-response-facts" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>让 Domain Operation failure response 对未建立的 request/execution facts 使用显式 unavailable 语义。</Goal>
+    <Description>以 contract-owned request fact projector 和 nullable response fields 消除 runtime malformed-response 默认值，同时保持合法 response 兼容。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-31T12:27:28Z</CreatedAt>
+    <UpdatedAt>2026-07-31T13:32:12Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/depa-orm-domain-workbench/design/"/>
+    <MaterialBundle role="output" name="contract-package" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_align-domain-operation-response-facts" name="align-domain-operation-response-facts" version="1">
+    <Description>先锁定 unavailable/partial/full fact contract，再实现最小 type/helper correction 并做公共兼容验收。</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Response fact contract" status="DONE" order="0">
+        <Description>用 tests-first 固定 parse-failure fact availability、partial projection 和 admitted response compatibility。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>request fact projector 与 nullable failure response focused tests 通过</cdt:Criterion>
+          <cdt:Criterion>合法 response fixtures 保持 non-null facts</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="编写 unavailable 与 partial request facts 红测" status="DONE" order="0" priority="P0">
+            <Description>为完整、部分和只有 apiVersion 的 unknown input 添加 projector tests；添加 null context/ref/requested/tree failure response roundtrip，并保持现有成功 response fixtures。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">测试覆盖 full/partial/absent request facts 且独立验证每个字段</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">测试覆盖 pre-admission failure response 的四个 null facts 与 JSON roundtrip</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">测试仅因 projector/nullable contract 尚不存在而按预期 RED</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="实现 request fact projector 与 nullable response fields" status="DONE" order="1" priority="P0">
+            <Description>新增纯 projector 并拓宽 context、operationRef、requested atomicity、operationTree；保持 exact parser、valid response 和其他 DTO 不变。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">projector 对每个 fact 独立验证且不产生默认值</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">nullable fields 可表达 pre-admission failure，valid response 保持原值</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">focused request/response tests 与 declaration build 通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Compatibility and direction verification" status="DONE" order="1">
+        <Description>验证公共 export、完整 contract suites、root build 和 owner boundary。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P2 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>bun test packages/domain-operation-contracts 通过</cdt:Criterion>
+          <cdt:Criterion>bun run --filter depa-data-domain-operation-contracts build 通过</cdt:Criterion>
+          <cdt:Criterion>bun run build 通过</cdt:Criterion>
+          <cdt:Criterion>contract package 无 runtime/web/database/capsule dependency</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="运行 public compatibility 与 boundary 验证" status="DONE" order="0" priority="P0">
+            <Description>运行全部 contract tests、strict declaration build、root build、export/type spot-check、dependency/import guard、Codument strict 和 capsule baseline；记录 compatibility evidence。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">全部 contract suites 与 root build 通过</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">public projector/type declarations 可从 package root 消费</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">无 runtime/transport/database dependency，capsule 未修改</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding" status="PASS" note="Fresh rerun confirmed exact plain-context projection, parser rejection, nullable response compatibility, owner boundaries, builds, and capsule baselines; report: reports/attractor-check-report.md."/></Hook>
+        </Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

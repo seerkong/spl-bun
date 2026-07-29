@@ -1,0 +1,120 @@
+<behavior-patch capability="kon-spl-dsl" version="1">
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/enable-spl-dsl">
+    <requirement id="enable-spl-dsl">
+      <statement>系统 SHALL 提供 EnableSplDsl(runtime, splContext) 单入口，在 kunun 运行时上注册 spl_connect、spl_query、spl_execute、spl_eval、spl_flow 五个 prefix keyword word；SplContext SHALL 经 createSplContext(config) 创建，封装数据源注册表、初始 scope 与 workspaceRoot。</statement>
+      <suite id="registration" name="注册">
+        <case id="register-words">
+          <given>一个 RuntimeInterpreter.CreateRuntime() 创建的运行时与一个 SplContext</given>
+          <when>调用 EnableSplDsl(runtime, splContext)</when>
+          <then>五个 spl_* word SHALL 可在 Kon 源码中作为 prefix 调用求值</then>
+          <and>注册过程 SHALL 不修改 kunun 仓库任何代码</and>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/knot-reading">
+    <requirement id="knot-reading">
+      <statement>spl_* word SHALL 从 knot 的 Conf（`:{}`）读取普通配置、从 Name（省值 `#tag`）读取结果命名，且 SHALL 沿 knot.Next 链合并读取 Conf、Metadata、Attr（parser 会在 Attr 与 `:{}` 同现时把后者分裂到 Next 节点）；word SHALL NOT 依赖根层级 `:tag = value` 具名槽位承载普通配置。</statement>
+      <suite id="reading" name="knot 读取">
+        <case id="conf-and-name">
+          <given>源码 `(spl_query #orders :{ conn = db sql = "..." })`</given>
+          <when>展开器读取配置</when>
+          <then>SHALL 得到 name=orders 与 Conf 中的 conn/sql 键值</then>
+        </case>
+        <case id="next-chain-merge">
+          <given>源码 `(spl_eval @a :{ expr = "A.pos(2)" })`（Attr 导致 Conf 分裂到 Next）</given>
+          <when>展开器读取配置</when>
+          <then>SHALL 合并 Next 链取得 expr 与 Attr a=true</then>
+        </case>
+        <case id="named-result-binding">
+          <given>word 带 `#name` 命名</given>
+          <when>word 求值完成</when>
+          <then>结果 SHALL push 到操作数栈并以该名字在当前环境定义变量，供后续表达式引用</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/spl-options">
+    <requirement id="spl-options">
+      <statement>系统 SHALL 支持以 knot 系统级元数据键值语法表达 SPL 函数选项（func@sub）：`#opt = 选项串`（Metadata）为权威形态；省值 `@x`（Attr）为单选项糖形态，多个可叠加；读取优先级 SHALL 为 Metadata 优先于 Attr；spl_eval SHALL 将选项改写进透传表达式最外层函数调用（如 age → age@y）；表达式串内已含 `@选项` 且与声明冲突时 SHALL 报错。</statement>
+      <suite id="options" name="选项映射">
+        <!-- T2.2 实现期修订：引擎 builtins 无 interval、member registry 无 pos，
+             改用真实存在且选项可观测的 age（age=按月日修正年龄，age@y=整年差）。
+             见 track findings（T2.2）。 -->
+        <case id="metadata-opt">
+          <given>源码 `(spl_eval #years :{ expr = "age(start, end)" } #opt = y)`</given>
+          <when>求值</when>
+          <then>实际执行的 SPL 表达式 SHALL 为 age@y(start, end)（结果与无选项形态可观测地不同）</then>
+        </case>
+        <case id="attr-sugar">
+          <given>源码 `(spl_eval @y :{ expr = "age(start, end)" })`</given>
+          <when>求值</when>
+          <then>实际执行的 SPL 表达式 SHALL 为 age@y(start, end)</then>
+        </case>
+        <case id="conflict-error">
+          <given>表达式串内已写 `age@y(...)` 且又声明 `#opt = m`</given>
+          <when>求值</when>
+          <then>SHALL 抛出含冲突说明的错误</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/datasource-words">
+    <requirement id="datasource-words">
+      <statement>spl_connect SHALL 按 Conf{type, path|...} 同步注册/打开 sqlite、csv、json 数据源并返回可查询句柄；spl_query SHALL 按 Conf{conn, sql, params?} 同步执行查询并返回 DataSet；spl_execute SHALL 同步执行 DML/DDL 并返回变更计数；文件路径解析 SHALL 受 SplContext.workspaceRoot 沙箱约束（越界报错）。</statement>
+      <suite id="datasource" name="数据源与查询">
+        <case id="sqlite-roundtrip">
+          <given>一个含数据的 sqlite 文件与 `(spl_connect #db :{ type = "sqlite" path = "..." })`</given>
+          <when>随后执行 `(spl_query #rows :{ conn = db sql = "select ..." })`</when>
+          <then>rows SHALL 为 DataSet 且内容与直接用 SQLiteAdapter 查询一致</then>
+        </case>
+        <case id="workspace-escape">
+          <given>path 解析越出 workspaceRoot</given>
+          <when>spl_connect 求值</when>
+          <then>SHALL 抛出路径越界错误</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/spl-eval-passthrough">
+    <requirement id="spl-eval-passthrough">
+      <statement>spl_eval SHALL 把 Conf.expr 字符串交给 depa-data-expression 同步求值；求值 scope SHALL 依序合并 SplContext.scope、当前 Kon 环境可见变量、Conf.with 显式映射（后者覆盖前者）；DataSet 等结果值 SHALL 可作为 Kon 变量继续流转。</statement>
+      <suite id="eval" name="表达式透传">
+        <!-- T2.2 实现期修订：通用 expression parser 不支持 SPL param 风格
+             `:alias` 实参（derive(amount*rate:gross)），且 derive record 形态的
+             内层列表达式仅以行记录为 scope（外层 rate 不可见）→ 改为引擎真实
+             支持的写法：rate 在外层 scope 求值后拼进列表达式字符串。
+             见 track findings（T2.2）。 -->
+        <case id="scope-merge">
+          <given>Kon 变量 orders 为 DataSet，且 Conf.with 提供 rate=1.1</given>
+          <when>`(spl_eval #g :{ expr = "orders.derive({gross: 'amount*' + rate})" with = {rate = 1.1} })`</when>
+          <then>SHALL 求值成功且 g 为带 gross 列的 DataSet（rows/schema 结构）</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/spl-flow-sync">
+    <requirement id="spl-flow-sync">
+      <statement>depa-data-spl-flow SHALL 新增 evaluateFlowSync(cells, ctx)：语义与 evaluateFlow 一致但全程同步，仅支持同步数据源路径；遇到需要真异步的 adapter 时 SHALL 抛出明确错误提示改用 evaluateFlow。spl_flow word SHALL 用 evaluateFlowSync 整体执行 Conf.cells 描述的 FlowCell 网格脚本并返回其 result。</statement>
+      <suite id="flow-compat" name="网格脚本兼容">
+        <case id="grid-parity">
+          <given>一段含 sqlite 查询与 derive/select 的 FlowCell 网格脚本</given>
+          <when>分别经 evaluateFlow 与 evaluateFlowSync 执行</when>
+          <then>两者的 cells 求值状态与最终 result SHALL 一致</then>
+        </case>
+        <case id="kon-grid-parity">
+          <given>示例 Kon 脚本（spl_connect/spl_query/spl_eval 组合）与等价网格脚本</given>
+          <when>各自执行</when>
+          <then>最终 DataSet 结果 SHALL 一致</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+</behavior-patch>

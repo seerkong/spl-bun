@@ -1,0 +1,103 @@
+<behavior-patch capability="domain-workbench-ui" version="1">
+  <upsert selector="behavior://domain-workbench-ui/requirements/catalog-workspace">
+    <requirement id="catalog-workspace">
+      <statement>The system SHALL provide a `/domain-workbench` application surface that lists registered DomainContext bundles, shows read-only model sources, groups semantic resources, and lets users filter operations by owner, behavior, subject, invocation, and effect without editing Kon model source.</statement>
+      <suite id="catalog" name="Catalog workspace">
+        <case id="bundle-selector">
+          <given>the production server registers the reference bundles</given>
+          <when>a user opens `/domain-workbench`</when>
+          <then>the workbench SHALL load both bundle ids and select a stable default bundle</then>
+        </case>
+        <case id="readonly-model">
+          <given>a selected bundle catalog with Kon model sources</given>
+          <when>the model panel renders</when>
+          <then>the model text SHALL be visible as read-only content and no upload or recompile control SHALL be exposed</then>
+        </case>
+        <case id="operation-filters">
+          <given>the operation catalog contains BO, association, lifecycle, constraint, process, capability, domain-context, and raw owners</given>
+          <when>filters are applied</when>
+          <then>the visible operation list SHALL update without mutating the selected preset request</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-workbench-ui/requirements/exact-request-preview">
+    <requirement id="exact-request-preview">
+      <statement>The workbench SHALL use the preset's complete `ExecuteOperationRequest` as the preview JSON and as the submitted body; editing JSON SHALL update that exact object or surface schema/catalog diagnostics without maintaining a second hidden request model.</statement>
+      <suite id="request-preview" name="Exact request preview">
+        <case id="preset-preview">
+          <given>a selected operation preset</given>
+          <when>the preview editor renders</when>
+          <then>the JSON SHALL include apiVersion, context, operation, invocation, and execution exactly as a directly POSTable request body</then>
+        </case>
+        <case id="edited-valid-json">
+          <given>a user edits only business payload or execution observe channels within contract rules</given>
+          <when>the user executes the request</when>
+          <then>the workbench SHALL POST the edited JSON body unchanged and browser tests SHALL assert the network request body</then>
+        </case>
+        <case id="catalog-mismatch">
+          <given>a user edits a catalog-owned field such as operation ref or verb into a mismatch</given>
+          <when>the user executes the request</when>
+          <then>the workbench SHALL surface the returned validation or catalog diagnostic and SHALL keep the edited preview visible</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-workbench-ui/requirements/execution-observation">
+    <requirement id="execution-observation">
+      <statement>The workbench SHALL execute selected requests through `POST /api/domain-operations/execute` and render the response envelope through distinct views for outcome, changes, before/after, operation tree, plan or SQL availability, and diagnostics, including partial batch item mapping when present.</statement>
+      <suite id="execution" name="Execution and observation">
+        <case id="successful-write">
+          <given>a write preset with before, after, diff, trace, and plan observation channels</given>
+          <when>the user executes it</when>
+          <then>status, outcome, mutation summaries, probe snapshots, operation tree, public plan, and diagnostics SHALL be inspectable</then>
+        </case>
+        <case id="partial-batch">
+          <given>a best-effort batch preset with one failing item</given>
+          <when>the user executes it</when>
+          <then>the response SHALL show partial status and stable item keys for success and failure rows</then>
+        </case>
+        <case id="business-failure">
+          <given>a business execution failure preset such as CancelRepair failure</given>
+          <when>the user executes it</when>
+          <then>failure diagnostics and the visible child-operation prefix SHALL be rendered without treating HTTP 200 as success-only UI state</then>
+        </case>
+        <case id="unavailable-facts">
+          <given>runtime response facts mark SQL trace or batch item mapping unavailable</given>
+          <when>the related result view renders</when>
+          <then>the workbench SHALL display the unavailable diagnostic or mapping state and SHALL NOT fabricate SQL or item outcomes</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-workbench-ui/requirements/browser-quality">
+    <requirement id="browser-quality">
+      <statement>The workbench SHALL remain usable on desktop and mobile widths, preserve the existing Kon IDE route, avoid overlapping controls or text, and pass Playwright E2E coverage for catalog loading, request preview, execution, diagnostics, and responsive layout.</statement>
+      <suite id="browser" name="Browser quality">
+        <case id="route-coexistence">
+          <given>the existing Kon IDE remains mounted at `/`</given>
+          <when>a user navigates between `/` and `/domain-workbench`</when>
+          <then>both surfaces SHALL render their own controls and existing Kon E2E tests SHALL remain green</then>
+        </case>
+        <case id="responsive-layout">
+          <given>desktop and mobile viewport sizes</given>
+          <when>the workbench renders catalog, request, and response panes</when>
+          <then>primary controls and text SHALL fit without incoherent overlap</then>
+        </case>
+        <case id="network-and-console">
+          <given>Playwright observes browser network and console events</given>
+          <when>workbench E2E cases load catalogs and execute presets</when>
+          <then>the tests SHALL assert expected request bodies and SHALL fail on unexpected console errors</then>
+        </case>
+        <case id="build-boundary">
+          <given>the web-ide production build and E2E webServer setup</given>
+          <when>validation runs</when>
+          <then>the UI SHALL typecheck/build and use only public web-shared and contract APIs</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

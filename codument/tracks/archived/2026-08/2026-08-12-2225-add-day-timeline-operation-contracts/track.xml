@@ -1,0 +1,114 @@
+<Track id="add-day-timeline-operation-contracts" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>为标准 Domain Operation request/catalog 与 depa ORM domain runtime 增加天级时间上下文、封闭关系查询 predicate、稳定系统记录时间和 read-only effect guard。</Goal>
+    <Description>以 additive timeline contract 保持现有 requests；在 allocation 前做 exact timeline admission；把受信任 RuntimeQuery predicate 投影到 depa ORM public AST；一次 execution 只捕获一个 recordedAt；read-only handler 写入 fail closed。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-08-12T18:15:02Z</CreatedAt>
+    <UpdatedAt>2026-08-12T19:25:52Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/build-temporal-organization-adjustment-workbench/"/>
+    <MaterialBundle role="output" name="operation-contracts" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="output" name="domain-runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-day-timeline-operation-contracts" name="add-day-timeline-operation-contracts" version="1" cdt:child-mode="dag">
+    <Description>Additive timeline request/catalog contract and trusted relational predicate runtime boundary.</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Timeline Contract And Admission" status="DONE" order="0">
+        <Description>先用 request/catalog tests 冻结 timeline union、日期语法和 definition match，再实现 public DTO 与 exact validation。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>非时间 request 保持原 shape 和行为</cdt:Criterion>
+          <cdt:Criterion>非法日历日、reversed range、unknown key/mode 与 required mismatch 均有 path-aware issue</cdt:Criterion>
+          <cdt:Criterion>timeline mismatch 在 runtime allocation 前失败</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Write timeline contract characterization and red tests" status="DONE" order="0" priority="P0">
+            <Description>锁定现有 exact request baseline，并为 as-of/effective-on/range、optional recordedAt、closed keys、calendar validation 和 catalog matching 写失败测试。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">positive/negative timeline cases 在实现前验红，现有 request fixtures 继续通过</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">测试覆盖非法 leap day、非零填充、day 字段 timestamp、reversed range、missing required 与 unsupported mode</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Implement additive timeline DTO parser and catalog match" status="DONE" order="1" priority="P0">
+            <Description>增加 closed timeline union 与 definition timeline capability；实现真实 Gregorian day 和 UTC instant validation、exact keys、required/mode/granularity catalog match，不改变五维 identity。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">timeline DTO 可从公共 root 导入并通过 JSON roundtrip，legacy requests 不需要 timeline</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">parser/catalog tests 全绿且 mismatch path 精确定位到 $.timeline 或 definition timeline</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Predicate Recorded Time And Effect Guard" status="DONE" order="1">
+        <Description>用 public depa ORM AST 扩展 trusted RuntimeQuery，并把 recordedAt/effect boundary 接入实际 operation execution。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>predicate grammar 只有 comparison/null/and/or，逻辑节点非空，不接受 raw SQL</cdt:Criterion>
+          <cdt:Criterion>所有 scalar value 经 Literal/adapter 参数化路径，不做 SQL 字符串拼接</cdt:Criterion>
+          <cdt:Criterion>一次 parent/child execution 使用同一个 system recordedAt</cdt:Criterion>
+          <cdt:Criterion>read-only write 被稳定 diagnostic 拒绝且事务零提交</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Write runtime predicate clock and effect red tests" status="DONE" order="0" priority="P0">
+            <Description>为 nested AND/OR、Eq/Ne/Lt/Le/Gt/Ge、IS NULL/IS NOT NULL、where+predicate AND、empty logical reject、single recordedAt、child propagation 与 read-only rollback 写失败测试。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">AST tests 能证明半开 valid/recorded predicate 与 null infinity，无 raw SQL 或 value interpolation</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">runtime tests 能证明 injected clock 只调用一次且 parent/children 共享 recordedAt</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">read-only handler 人工写入在 mutation 前失败并返回 READ_ONLY_OPERATION_WRITE_REJECTED</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="Implement trusted predicate projection and execution boundaries" status="DONE" order="1" priority="P0">
+            <Description>实现封闭 RuntimeQueryPredicate 到 ColumnRef/Comparison/IsNull/Logical 的递归投影；execution 在 preflight 后捕获一个 UTC recordedAt 并传入 handler context；write 根据 admitted definition effect fail closed。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">public query adapter 生成结构正确且不可变的 depa ORM AST，invalid trusted shape 抛出明确错误</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">recordedAt 在一次 execution 稳定、跨 execution 独立，并且不是 request 可控字段</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC3" checked="true">read-only write diagnostic 稳定，outer transaction 回滚，mutation summary 不宣称提交</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Regression And Convergence" status="DONE" order="2">
+        <Description>运行 affected-package baseline、typecheck/build、public boundary 与 fresh direction review，确认公共扩展没有组织域泄漏或旧行为回退。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>规划前实跑的 315 affected-package tests 保持通过，并叠加本 track 新测试</cdt:Criterion>
+          <cdt:Criterion>两个 package build、public import guard、XML/XNL/diff checks 通过</cdt:Criterion>
+          <cdt:Criterion>新增 public DTO、predicate 与 handler context types 只从两个 package root 导出，external consumer 不导入 src/private/internal subpath</cdt:Criterion>
+          <cdt:Criterion>fresh coding AttractorCheck PASS</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Run package regression build and boundary checks" status="DONE" order="0" priority="P0">
+            <Description>运行 contract/runtime focused tests、五个受影响 package baseline、两个 package build、public dependency/import guards、git diff check。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">所有新增与既有测试通过，失败数为零</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">build 与 public boundary 通过；OperationTimelineContext/OperationTimelineCapabilitiesDto 从 contract root 导出，RuntimeQueryPredicate/DomainOperationHandlerContext.recordedAt 从 runtime root 导出；external consumer 不使用 src/private/internal subpath</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC3" checked="true">runtime 源码不含组织域、server 或 UI 依赖，新增 depa ORM imports 仍在既有 public-root allowlist 内</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="Audit behavior authority and track evidence" status="DONE" order="1" priority="P0">
+            <Description>核对 behavior cases、acceptance、source diff、preflight lifecycle evidence、AttractorCheck 与 mission G2 映射，修复任何 completion-critical gap。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">每个 behavior case 有测试或命令证据，track XML/decisions/deltas strict-valid</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC2" checked="true">fresh reviewer 对 public authority、effect boundary 和 scope 给出 PASS</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding" status="PASS"/></Hook></Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_add-day-timeline-operation-contracts">
+      <Node id="P2"><After ref="P1"/></Node>
+      <Node id="P3"><After ref="P2"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+</Track>

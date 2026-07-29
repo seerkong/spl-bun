@@ -1,0 +1,125 @@
+<Track id="migrate-orm-consumers-to-property-relations" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>将 spl-bun 的 depa ORM fixtures、code-first consumers、文档与运行集成迁移到 Kunun typed Property 唯一关系 authority。</Goal>
+    <Description>建立语义迁移 oracle，迁移 82 个 detached relation fixtures、同 bundle 的 typed Field profiles 和 retired code-first/deep-import consumers，增加反漂移守卫并运行完整 capsule/workspace 验证。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-08-09T17:13:52Z</CreatedAt>
+    <UpdatedAt>2026-08-09T22:44:28Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="capsule" domain="repo" path="vfs://@/packages/depa-orm-capsule/"/>
+    <MaterialBundle role="input" name="domain-runtime" domain="repo" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_migrate-orm-consumers-to-property-relations" name="migrate-orm-consumers-to-property-relations" version="1" cdt:child-mode="dag">
+    <Description>先冻结公共产物和迁移 oracle，再按 source/programmatic 两条入口迁移，最后以 guard、完整 runtime suite 和 host build 收口。</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Artifact Baseline And Migration Oracle" status="DONE" order="0">
+        <Description>让 host 可复现地消费新公共产物，并在修改 fixture 前记录完整 relation 语义。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>Public artifacts resolve without committed local paths or deep imports</cdt:Criterion>
+          <cdt:Criterion>All legacy fixture relations are represented in a deterministic inventory</cdt:Criterion>
+          <cdt:Criterion>Representative migrated fixtures prove the oracle and compiler path</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Rebase public package consumption" status="DONE" order="0" priority="P0">
+            <Description>临时链接或打包 sibling public artifacts，迁移 DSL deep imports 到 root，并建立不会提交绝对路径的 package resolution gate。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">The capsule and domain runtime resolve the completed Kunun/depa public JS and declarations.</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">Committed manifests, lockfiles, tsconfig and source contain no sibling absolute path or unexported DSL subpath.</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Freeze relation migration inventory and oracle" status="DONE" order="1" priority="P0">
+            <Description>从旧 fixtures 提取 owner/target/property/cardinality/tuple/through/options，建立 before/after catalog normalization 与 coverage test。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">Every legacy relation fixture and owner edge appears exactly once in the inventory.</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">The oracle detects tuple order, cardinality, visibility, through and write-option drift.</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.3" name="Migrate representative relation shapes" status="DONE" order="2" priority="P0">
+            <Description>先迁移 direct/inverse、hidden reverse、composite 与 many-to-many/through 代表 fixture，修正共享 helper 并验证新 compiler。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.3-AC1" checked="true">Representative source fixtures compile only through typed Properties and match the migration oracle.</cdt:Criterion>
+              <cdt:Criterion id="T1.3-AC2" checked="true">Visible inverse navigation is declared and hidden reciprocal behavior remains non-navigable.</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Corpus And Code-First Migration" status="DONE" order="1">
+        <Description>迁移完整 source corpus、programmatic consumers、复制文档与旧 authority guards。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>No canonical fixture or consumer uses detached relation authoring</cdt:Criterion>
+          <cdt:Criterion>Programmatic tests construct real Kunun Property members</cdt:Criterion>
+          <cdt:Criterion>Focused relation, composite, read/write and cascade suites pass</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Migrate the complete source fixture graph" status="DONE" order="0" priority="P0">
+            <Description>迁移剩余 82-file graph 及同 bundle 的 typed Field object profiles，逐 bundle 校验 scalar schema、owner/inverse 唯一性、tuple、through 与 runtime options。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">All canonical Kon relation fixtures use typed Fields plus owner/inverse Properties and compile without diagnostics.</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">The normalized catalog inventory has no missing, duplicate or behaviorally changed edge.</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="Replace retired code-first and compiler tests" status="DONE" order="1" priority="P0">
+            <Description>用 Kunun builders、metadata helper、definition compiler 与 host-owned normalization 替换 composer/workflow/snapshot/diff/parser-internal consumers。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">No runtime or test consumer imports retired CodeFirstOrm APIs or unexported DSL subpaths.</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">Source and programmatic definitions remain behaviorally equivalent for direct, inverse, composite and through cases.</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.3" name="Align canonical docs and anti-drift guards" status="DONE" order="2" priority="P0">
+            <Description>同步 property-first DSL bundle，扩展 architecture/schema guard；负例 marker 必须显式 allowlist。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.3-AC1" checked="true">Copied canonical docs describe only typed Property relation authoring.</cdt:Criterion>
+              <cdt:Criterion id="T2.3-AC2" checked="true">Guards reject detached syntax, Field-owned relation metadata, retired code-first APIs and DSL deep imports.</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Host Integration And Verification" status="DONE" order="2">
+        <Description>验证完整 capsule、domain runtime/workbench、workspace build 和 package authority。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>Complete capsule suite passes against the property-first public artifacts</cdt:Criterion>
+          <cdt:Criterion>Domain runtime and workbench flows preserve their behavior</cdt:Criterion>
+          <cdt:Criterion>Repository-wide authority and package boundary checks pass</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Verify focused relation runtime behavior" status="DONE" order="0" priority="P0">
+            <Description>运行 derivation、composite、through、nested read/write、cascade、eager loading 和 package-boundary focused suites。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">Focused runtime suites preserve all modeled relation behaviors.</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">Negative authority cases fail closed with current public diagnostics.</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="Run complete host gates and handoff" status="DONE" order="1" priority="P0">
+            <Description>运行 capsule full suite、domain package tests、workspace typecheck/build、workbench flow checks、strict Codument 与 diff checks，记录可复现 handoff。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">The complete capsule, runtime, bundle, server and workbench test surfaces pass.</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC2" checked="true">Workspace typecheck/build and repository guards pass with no committed local dependency escape.</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC3" checked="true">The verification report records artifact identities, commands and any non-blocking residual risk.</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_migrate-orm-consumers-to-property-relations">
+      <Node id="P2"><After ref="P1"/></Node>
+      <Node id="P3"><After ref="P2"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+</Track>

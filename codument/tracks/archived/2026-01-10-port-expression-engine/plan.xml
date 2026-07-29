@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>port-expression-engine</track_id>
+    <track_name>Port expression engine to Bun/TypeScript</track_name>
+    <goal>移植表达式引擎到 TypeScript，支持 esProc 表达式语法</goal>
+    <created_at>2026-01-10</created_at>
+    <status>archived</status>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="范围定义与设计">
+      <goal>定义兼容性范围并设计 TypeScript 模块布局</goal>
+      <tasks>
+        <task id="T1.1" name="清点 Java 表达式操作符/函数">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.1.1" name="清点 com.scudata.expression 操作符/函数" status="DONE"/>
+            <subtask id="T1.1.2" name="定义首批兼容性范围" status="DONE"/>
+            <subtask id="T1.1.3" name="优先支持 filter/aggregate/join/window 和步骤参数所需功能" status="DONE"/>
+          </subtasks>
+        </task>
+        <task id="T1.2" name="设计 TypeScript 模块布局">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.2.1" name="设计包放置位置" status="DONE"/>
+            <subtask id="T1.2.2" name="设计 AST/tokenizer 结构" status="DONE"/>
+            <subtask id="T1.2.3" name="设计求值上下文" status="DONE"/>
+            <subtask id="T1.2.4" name="设计 null/boolean 语义" status="DONE"/>
+            <subtask id="T1.2.5" name="保持与 Java 源码的命名/结构接近" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="实现表达式引擎">
+      <goal>实现解析器/求值器和核心函数库</goal>
+      <tasks>
+        <task id="T2.1" name="实现表达式解析器/求值器">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.1.1" name="实现核心操作符" status="DONE"/>
+            <subtask id="T2.1.2" name="实现初始函数集（math/string/datetime/collection）" status="DONE"/>
+            <subtask id="T2.1.3" name="实现变量解析（dataset 行和步骤上下文）" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="测试与文档">
+      <goal>移植/编写测试并更新文档</goal>
+      <tasks>
+        <task id="T3.1" name="移植/编写测试">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T3.1.1" name="编写解析测试" status="DONE"/>
+            <subtask id="T3.1.2" name="编写求值语义测试（算术、比较、逻辑短路、null 处理）" status="DONE"/>
+            <subtask id="T3.1.3" name="编写函数库基础测试" status="DONE"/>
+            <subtask id="T3.1.4" name="编写与 dataset/engine 步骤的集成测试" status="DONE"/>
+          </subtasks>
+        </task>
+        <task id="T3.2" name="更新文档和示例">
+          <priority>P1</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T3.2.1" name="更新 docs/examples 展示表达式用法" status="DONE"/>
+            <subtask id="T3.2.2" name="确保 bun test 和 bun run build 成功" status="DONE"/>
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+  </phases>
+</plan>

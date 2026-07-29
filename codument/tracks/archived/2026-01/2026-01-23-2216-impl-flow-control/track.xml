@@ -1,0 +1,22 @@
+<Track id="impl-flow-control" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>Add grid-based flow execution and SPL control-flow statements to packages/spl-flow.</Goal>
+    <Description>Legacy plan migration wrapper. The completed plan.xml and spec.md remain the detailed historical evidence.</Description>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-01-23T10:07:24Z</CreatedAt>
+    <UpdatedAt>2026-01-23T19:16:27Z</UpdatedAt>
+  </Metadata>
+  <TaskSpace id="space_impl-flow-control" name="impl-flow-control" version="1">
+    <Description>Preserve the completed legacy plan as an archived historical track.</Description>
+    <SubNodes>
+      <TaskGroup id="legacy-plan" name="Preserved legacy plan" status="DONE" order="0">
+        <SubNodes>
+          <Task id="legacy-plan-complete" name="Completed plan.xml evidence" status="DONE" order="0">
+            <Description>The original plan.xml records all completed implementation phases and tasks.</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

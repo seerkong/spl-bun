@@ -1,0 +1,15 @@
+{
+  "verification.md": "7c75bb0beddfcaf9034eae2974e4dc356f011dda495a598506fbb38db11c7867",
+  "checks.json": "f1c194a0630902055bff3b6d283bd3e190c17058d933de0242e28eb049ee0a5d",
+  "reuse-audit.json": "97d311647d2fa1b0a63a470a1062d11af6e4431a71b9d6258990cc375dbce9a8",
+  "baseline-reference.json": "1315e25229c44cf976a0a480625caabadacf544c00d74a8bc4f5f8d92689e952",
+  "final-baseline.json": "35c8991157788fcee5abce086be1bac487582dffd4bdb29f82f1a50dca3007eb",
+  "static.json": "1dae0245b538fd296c0814288af426c801595713b1aa6238e0580e7739930379",
+  "preservation.json": "1927ff6958c38963bde4e26d0d90804d4bb3331e4eaae2269c17b023ef20d489",
+  "related.log": "25231b73ad11035b109b59fb03114d8408afbe701f77f436c9ef6ca169ee3aa3",
+  "sort-oracle.log": "bda1a059225bb0a1730e514677b207f6035acc2ab7193489b916945b7b83c192",
+  "parse-oracle.log": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044",
+  "formatter-oracle.log": "9e3ab43d522f7d4ebd9050c5caf30d1ae4b22e0a51f8685faf82a41bea8d28d9",
+  "extended-parse-oracle.log": "244287a5cd5aa372e8aa16d8d48ccb79a161e8e7de57cccae10ed3bf6c3fba35",
+  "parse-entry-probes.log": "85f5bc7e540c97b5df10573bc4ac6824393fa654e513a945a60572827213195d"
+}

@@ -1,0 +1,69 @@
+<Track id="add-kon-flow-server-api" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>服务端 Kon 执行链路：kon-spl-dsl runSplKon 门面 + web-server /api/execute-kon 端点</Goal>
+    <Description>kunun 依赖收敛在 kon-spl-dsl 单点；每请求 fresh 执行；旧 /api/execute 并存不回归。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>light</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-04T21:00:00Z</CreatedAt>
+    <UpdatedAt>2026-07-04T21:00:00Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input"  name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input"  name="kunun-repo" domain="external" path="vfs://kunun.ts/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-kon-flow-server-api" name="add-kon-flow-server-api" version="1">
+    <Description>服务端 Kon 执行链路实现</Description>
+    <SubNodes>
+
+      <TaskGroup id="P1" name="runSplKon 门面" status="DONE" order="0">
+        <Description>kon-spl-dsl 的执行门面与归一 helper</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 任务全 DONE 且 bun test packages/kon-spl-dsl 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="runSplKon 与 toQueryResult" status="DONE" order="0" priority="P0">
+            <Description>src/run.ts：runSplKon(source, {workspaceRoot?, scope?, dataSources?, maxSourceBytes?}) → {value, bindings}（fresh runtime/context、EnableSplDsl、EvalBlockSourceWithRuntimeSync、bindings 采集 #name 绑定）；toQueryResult(value)（DataSet/{columns,rows} 归一，非表格返回 null）。TDD 覆盖 behavior run-spl-kon-facade 全部 case。</Description>
+            <SubNodes>
+              <Task id="T1.1.1" name="编写测试" status="DONE" order="0"/>
+              <Task id="T1.1.2" name="实现" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">run-spl-kon-facade 全部 case 测试通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="web-server 端点" status="DONE" order="1">
+        <Description>/api/execute-kon 端点与服务端测试</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P2 任务全 DONE 且全仓 bun test 通过（旧端点零回归）</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="/api/execute-kon 端点" status="DONE" order="0" priority="P0">
+            <Description>web-server 依赖声明 + 端点实现（既有数据源清单转 SplDataSourceConfig、runSplKon、data/result 归一、结构化错误、64KB 源码限制）；端点级测试（Elysia handle 或抽 handler）+ 旧端点回归测试；behavior execute-kon-endpoint 全部 case。</Description>
+            <SubNodes>
+              <Task id="T2.1.1" name="编写测试" status="DONE" order="0"/>
+              <Task id="T2.1.2" name="实现" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">execute-kon-endpoint 全部 case 测试通过；全仓 bun test 通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+    </SubNodes>
+  </TaskSpace>
+</Track>

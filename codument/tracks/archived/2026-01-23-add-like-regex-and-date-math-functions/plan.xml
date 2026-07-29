@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>add-like-regex-and-date-math-functions</track_id>
+    <track_name>Add like/regex and date/math functions + demos</track_name>
+    <goal>Add Phase-2 expression functions (like/regex, exp/ln/sign/gcd/lcm, age/workday/workdays) and Web-IDE grouped demos.</goal>
+    <created_at>2026-01-22T03:31:00Z</created_at>
+    <updated_at>2026-01-22T21:08:24Z</updated_at>
+    <status>completed</status>
+    <commit_mode>auto</commit_mode>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="Expression Builtins" status="DONE">
+      <description>Add missing Phase-2 built-in functions with unit tests</description>
+      <tasks>
+        <task id="T1.1" name="Add like() builtin" priority="high" status="DONE" commit="da6241593">
+          <acceptance_criteria>
+            <criterion checked="true">like() supports standard (*,?) and SQL (%,_) wildcards with escaping</criterion>
+            <criterion checked="true">like() supports options 'c' and 's' with Java-parity behavior</criterion>
+            <criterion checked="true">Unit tests cover wildcards, escaping, options, and null inputs</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T1.1.1" name="Write failing tests for like()" status="DONE" />
+            <subtask id="T1.1.2" name="Implement like() builtin" status="DONE" />
+            <subtask id="T1.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/src/functions.ts</file>
+            <file>packages/expression/__tests__/like.test.ts</file>
+          </changed-key-files>
+        </task>
+
+        <task id="T1.2" name="Add regex() builtin and string member" priority="high" status="DONE" commit="f32ff31d5">
+          <acceptance_criteria>
+            <criterion checked="true">regex() builtin supports extraction + replacement modes</criterion>
+            <criterion checked="true">String member .regex() behaves equivalently to builtin</criterion>
+            <criterion checked="true">Unit tests cover groups (0/1/multi), options, and replace-first vs replace-all</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T1.2.1" name="Write failing tests for regex()" status="DONE" />
+            <subtask id="T1.2.2" name="Implement regex() builtin" status="DONE" />
+            <subtask id="T1.2.3" name="Implement string member .regex()" status="DONE" />
+            <subtask id="T1.2.4" name="Run tests and fix" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/src/functions.ts</file>
+            <file>packages/expression/src/memberRegistry.ts</file>
+            <file>packages/expression/__tests__/regex.test.ts</file>
+          </changed-key-files>
+        </task>
+
+        <task id="T1.3" name="Add math builtins exp/ln/sign/gcd/lcm" priority="high" status="DONE" commit="2a9c5a7fd">
+          <acceptance_criteria>
+            <criterion checked="true">exp(), ln(), sign() work and are tested</criterion>
+            <criterion checked="true">gcd()/lcm() accept arrays and variadic inputs</criterion>
+            <criterion checked="true">gcd/lcm edge cases match documented behavior</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T1.3.1" name="Write failing tests for exp/ln/sign/gcd/lcm" status="DONE" />
+            <subtask id="T1.3.2" name="Implement exp/ln/sign/gcd/lcm" status="DONE" />
+            <subtask id="T1.3.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/src/functions.ts</file>
+            <file>packages/expression/__tests__/mathPhase2.test.ts</file>
+          </changed-key-files>
+        </task>
+
+        <task id="T1.4" name="Add date builtins age/workday/workdays" priority="high" status="DONE" commit="6c92870c7">
+          <acceptance_criteria>
+            <criterion checked="true">age() supports options y/m and default behavior</criterion>
+            <criterion checked="true">workday() shifts by workdays with optional offDays</criterion>
+            <criterion checked="true">workdays() returns list or count (option n) and supports option x</criterion>
+            <criterion checked="true">Unit tests cover edge cases (direction, endpoints, offDays)</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T1.4.1" name="Write failing tests for age/workday/workdays" status="DONE" />
+            <subtask id="T1.4.2" name="Implement age/workday/workdays" status="DONE" />
+            <subtask id="T1.4.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/src/functions.ts</file>
+            <file>packages/expression/__tests__/datePhase2.test.ts</file>
+          </changed-key-files>
+        </task>
+
+        <task id="T1.5" name="Coverage gate" priority="high" status="DONE">
+          <acceptance_criteria>
+            <criterion checked="true">bun test --coverage passes</criterion>
+            <criterion checked="true">New code coverage >80%</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="Web-IDE Demos" status="DONE">
+      <description>Add grouped demos showcasing the new functions</description>
+      <tasks>
+        <task id="T2.1" name="Add grouped string demo (like/regex)" priority="high" status="DONE" commit="b3976f656">
+          <changed-key-files>
+            <file>packages/web-ide/src/pages/SplIde.vue</file>
+            <file>packages/web-ide/__tests__/e2e/expression-execution.spec.ts</file>
+          </changed-key-files>
+        </task>
+        <task id="T2.2" name="Add grouped math demo (exp/ln/sign/gcd/lcm)" priority="high" status="DONE" commit="b3976f656">
+          <changed-key-files>
+            <file>packages/web-ide/src/pages/SplIde.vue</file>
+            <file>packages/web-ide/__tests__/e2e/expression-execution.spec.ts</file>
+          </changed-key-files>
+        </task>
+        <task id="T2.3" name="Add grouped date demo (age/workday/workdays)" priority="high" status="DONE" commit="b3976f656">
+          <changed-key-files>
+            <file>packages/web-ide/src/pages/SplIde.vue</file>
+            <file>packages/web-ide/__tests__/e2e/expression-execution.spec.ts</file>
+          </changed-key-files>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="Codument Validation" status="DONE">
+      <description>Validate track files and prepare for review</description>
+      <tasks>
+        <task id="T3.1" name="Run codument validate --strict" priority="high" status="DONE" />
+      </tasks>
+    </phase>
+  </phases>
+</plan>

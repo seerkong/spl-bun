@@ -1,0 +1,9 @@
+{
+  "track_id": "add-expression-core-ops",
+  "type": "feature",
+  "status": "completed",
+  "commit_mode": "auto",
+  "created_at": "2026-01-18T10:41:45Z",
+  "updated_at": "2026-01-19T16:33:09Z",
+  "description": "Expression engine Phase 1 core ops: sequence member ops (select/sort/group/join/derive), file member ops (read/write/import/export), cursor ops (fetch/skip), and type conversion (json/parse) with count/icount aggregations."
+}

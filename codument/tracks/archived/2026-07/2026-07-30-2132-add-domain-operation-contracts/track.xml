@@ -1,0 +1,83 @@
+<Track id="add-domain-operation-contracts" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>建立独立、transport-neutral 的 Domain Operation catalog 与 execute JSON contract。</Goal>
+    <Description>实现五维 Operation DTO、single/selection/batch request、response outcome/effects/observations/trace/diagnostics、unknown-input validation 与 catalog consistency tests。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-30T17:45:19Z</CreatedAt>
+    <UpdatedAt>2026-07-30T18:32:07Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/depa-orm-domain-workbench/design/"/>
+    <MaterialBundle role="output" name="contract-package" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-domain-operation-contracts" name="add-domain-operation-contracts" version="1">
+    <Description>用测试先行方式建立 request/catalog 与 response/diagnostics 两个 contract slice。</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Operation catalog 与 request contract" status="DONE" order="0">
+        <Description>先固定 request 代表性行为，再实现五维 DTO、subject/invocation union、unknown-input parser 与 JSON roundtrip。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>bun test packages/domain-operation-contracts/__tests__/request-contracts.test.ts 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="编写 request contract 失败测试与 package scaffold" status="DONE" order="0" priority="P0">
+            <Description>按 behavior request/catalog cases 创建 package scaffold 和 request-contracts.test.ts；覆盖五维 literal、api/bundle version 分离、single、selection、batch、duplicate key、unknown JSON path issue 与 JSON roundtrip。测试应因公共实现尚缺失而失败，不能因测试语法或环境错误失败。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">package scaffold 符合现有 ESM、strict TypeScript 与 declaration build 约定</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">request tests 覆盖五维、single/selection/batch 消歧、invalid input 和 roundtrip</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">测试以缺少最小 contract 实现的预期原因失败</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="实现 catalog、request DTO 与 unknown-input validation" status="DONE" order="1" priority="P0">
+            <Description>实现 JSON value、DomainContext catalog、Operation definition、subject selector、single/batch invocation、execute request、structured validation issue/error 与 parser，使 T1.1 tests 通过；禁止 framework/database/runtime 依赖。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">公开 DTO 精确表达五维 Operation 与独立 atomicity</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">parseExecuteOperationRequest 对合法 fixtures roundtrip，对 malformed/empty/duplicate batch 返回 path-aware issues</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">request contract focused tests 全部通过且 package 无 runtime dependency</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Response、catalog compatibility 与 package integration" status="DONE" order="1">
+        <Description>先固定 response 与 mismatch 行为，再实现 outcome/effects/observations/trace/diagnostics、纯 catalog consistency validation 和构建集成。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P2 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>bun test packages/domain-operation-contracts 通过</cdt:Criterion>
+          <cdt:Criterion>bun run --filter depa-data-domain-operation-contracts build 通过</cdt:Criterion>
+          <cdt:Criterion>bun run build 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="编写 response 与 catalog compatibility 失败测试" status="DONE" order="0" priority="P0">
+            <Description>创建 response-contracts.test.ts；覆盖七种 outcome、effects/observations/trace/diagnostics JSON roundtrip、catalog dimension/context/invocation mismatch、稳定 capability codes、batch/SQL unavailable 不伪造结果。测试应因实现尚缺失而失败。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">tests 覆盖 table/entity/collection/scalar/graph/tree/composite outcome</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">tests 覆盖 catalog mismatch 与稳定 capability diagnostic codes</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">测试以缺少最小 response/compatibility 实现的预期原因失败</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="实现 response contract、compatibility validation 与构建集成" status="DONE" order="1" priority="P0">
+            <Description>实现 response outcome/effects/observations/trace/diagnostics DTO、stable code exports、validateOperationCatalogMatch 纯校验与 representative fixtures；补 package 公共入口和 root build 集成，运行 focused tests、declaration build 和 root build。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">七种 outcome 与完整 response envelope 可 JSON roundtrip</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">catalog mismatch 返回 OPERATION_CATALOG_MISMATCH path-aware issues，且不包含 runtime 执行</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC3" checked="true">不可用 mapping/SQL/atomic capability 由稳定 diagnostics 表达而不伪造数据</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC4" checked="true">focused tests、package declaration build 与 root build 全部通过</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC5" checked="true">package 不依赖或导入 web-shared、Vue、Elysia、SQLite、Kon、depa-orm 或 depa-orm-capsule</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

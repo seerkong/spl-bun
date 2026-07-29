@@ -1,0 +1,22 @@
+{
+  "localIntendedEditsNotHostAllowlist": [
+    ".cdmt-lite/README.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/MISSION.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/loop.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/evidence.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/manifest.md"
+  ],
+  "changedOutsideCurrentReceiptDirectory": [
+    ".cdmt-lite/README.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/MISSION.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/evidence.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/loop.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/manifest.md"
+  ],
+  "unexpectedChangedPaths": [],
+  "allPriorContentsPreservedOutsideIntendedEdits": true,
+  "businessChanged": false,
+  "previousReceiptsPreserved": true
+}

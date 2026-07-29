@@ -1,0 +1,30 @@
+<behavior-patch capability="domain-context-reference-bundles" version="1">
+  <delete selector="behavior://domain-context-reference-bundles/requirements/it-asset-matrix"/>
+  <upsert selector="behavior://domain-context-reference-bundles/requirements/event-operations-matrix">
+    <requirement id="event-operations-matrix">
+      <statement>The event-operations-lifecycle bundle SHALL execute a BO query, CancelEvent BO Action, independent BO Mutation, association Mutation, lifecycle Transition, constraint Validate, business-process composed operation, and CloseAndArchive extension Action; CancelEvent SHALL invoke its four registered children in order, root probes SHALL observe every affected entity, constraint violations SHALL be structured outcomes, and thrown business execution failures SHALL roll back and return diagnostics.</statement>
+      <suite id="event-operations" name="Live event operation matrix">
+        <case id="cancel-event-success">
+          <given>a cancellation case whose attendees are notified and whose event slot is reserved</given>
+          <when>CancelEvent executes atomically</when>
+          <then>four child refs are preserved, case and event writes commit, and before/after/diff expose both changes</then>
+        </case>
+        <case id="cancel-event-failure">
+          <given>a cancellation case whose attendees are not notified</given>
+          <when>CancelEvent executes</when>
+          <then>query and validation children remain visible, no write commits, and a stable execution diagnostic identifies failure</then>
+        </case>
+        <case id="semantic-writes">
+          <given>association, publication lifecycle, refund settlement, and archive presets</given>
+          <when>they execute through the registry</when>
+          <then>real relational rows change with truthful mutation summaries and probes</then>
+        </case>
+        <case id="constraint-outcome">
+          <given>valid and missing venue-booking records</given>
+          <when>the constraint operation validates them</when>
+          <then>both are successful structured outcomes whose valid field distinguishes business violation from execution failure</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

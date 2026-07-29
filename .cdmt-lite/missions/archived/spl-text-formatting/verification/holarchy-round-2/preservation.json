@@ -1,0 +1,33 @@
+{
+  "originalHead": "1e37adb6a8eccb5087348f2abd2cc2ccbba251fb",
+  "currentHead": "1e37adb6a8eccb5087348f2abd2cc2ccbba251fb",
+  "businessBaselineSha256": "60f19579ae793131568fbd4a51b5e36ca43d81d957ae9dd1b8481ecae6fbf154",
+  "businessBaselineMatches": true,
+  "localIntendedEditsNotHostAllowlist": [
+    "packages/expression/src/formatting.ts",
+    "packages/expression/__tests__/formatting.test.ts",
+    "packages/kon-spl-dsl/__tests__/query-semantics.test.ts",
+    "packages/spl-flow/__tests__/dsl.test.ts",
+    ".cdmt-lite/missions/active/spl-text-formatting/verification/formatter-oracle.ts",
+    ".cdmt-lite/missions/active/spl-text-formatting/MISSION.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/loop.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/evidence.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/manifest.md"
+  ],
+  "changedOutsideCurrentReceiptDirectory": [
+    ".cdmt-lite/missions/active/spl-text-formatting/MISSION.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/evidence.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/loop.md",
+    ".cdmt-lite/missions/active/spl-text-formatting/verification/formatter-oracle.ts",
+    ".depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/manifest.md",
+    "packages/expression/__tests__/formatting.test.ts",
+    "packages/expression/src/formatting.ts",
+    "packages/kon-spl-dsl/__tests__/query-semantics.test.ts",
+    "packages/spl-flow/__tests__/dsl.test.ts"
+  ],
+  "unexpectedChangedPaths": [],
+  "preexistingContentsPreservedOutsideIntendedEdits": true,
+  "remainingFormatterOracleTempDirectories": []
+}

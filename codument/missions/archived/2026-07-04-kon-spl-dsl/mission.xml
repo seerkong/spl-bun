@@ -1,0 +1,88 @@
+<Mission id="kon-spl-dsl" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>在 spl-bun 中新增基于 kunun Kon 语言的 SPL 引擎封装调用方式（spl_* 语言内 DSL）</Goal>
+    <Description>先盘点 spl-bun 引擎 API 面与 kunun 扩展点并验证依赖可行性，再收敛 spl_* word 集语法设计（控制流用 Kon 自身、SPL 负责数据运算与数据源、表达式先透传后原生分两批），随后切片为桥接包 track 与原生 word track 逐批落地并端到端验证。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>light</QuestionSeverity>
+    <Revision>4</Revision>
+    <CreatedAt>2026-07-04T16:57:18Z</CreatedAt>
+    <UpdatedAt>2026-07-04T20:55:00Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="mission">
+    <MaterialBundle role="state" name="analysis" domain="mission" path="vfs://./analysis/"/>
+    <MaterialBundle role="state" name="reports" domain="mission" path="vfs://./reports/"/>
+    <MaterialBundle role="input" name="kunun-repo" domain="external" path="vfs://kunun.ts/"/>
+    <MaterialBundle role="output" name="tracks" domain="codument" path="vfs://@/codument/tracks/"/>
+  </Ports>
+
+  <TaskSpace id="space_kon-spl-dsl" name="kon-spl-dsl" version="1" cdt:child-mode="dag">
+    <Description>Kon 语言封装 SPL 引擎调用方式 mission。</Description>
+    <SubNodes>
+      <TaskGroup id="G1" name="证据盘点" status="DONE" order="0">
+        <Description>两侧能力面盘点与依赖可行性验证，产出 analysis/ 报告。</Description>
+        <SubNodes>
+          <Task id="G1-T1" name="盘点 spl-bun 引擎 API 面" status="DONE" order="0">
+            <Description>梳理 depa-data-expression（compileExpression/FunctionRegistry）、depa-data-core（DataSet/Engine）、depa-data-spl-flow（evaluateFlow/FlowExecutionContext/数据源与连接注册/同步异步边界/workspaceRoot 沙箱）的公开入口与约束，标注可被 Kon word 直接消费的最小 API 集，写入 analysis/spl-engine-surface.md。</Description>
+          </Task>
+          <Task id="G1-T2" name="盘点 kunun 扩展点并验证依赖可行性" status="DONE" order="1">
+            <Description>确认 registerPrefixKeyword/registerHostFunction/registerWorkflowExtension 的签名与 ai_* 范例（EnableWorkflowDsl）实现细节；用最小 spike 验证 spl-bun 以 bun 本地依赖方式引用 kunun 包（runtime/converter/core）可解析可测试；结论写入 analysis/kunun-extension-points.md，若不可行触发 D1 重议。</Description>
+          </Task>
+          <Task id="G1-T3" name="实测 Kon knot 元数据/省值语法行为" status="DONE" order="2">
+            <Description>用 kunun Kon parser 实测并记录：#tag 省值（现落 Name）与 #key = value（落 Metadata）的边界、同一 knot 内重复 # 标签与 @tag 省值（Attr=true）的行为、Conf/具名槽位路由；为 D7（SPL func@sub 选项映射到系统级元数据键值语法）提供定形依据，写入 analysis/kon-knot-syntax-evidence.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+      <TaskGroup id="G2" name="设计收敛" status="DONE" order="1">
+        <Description>收口 decision-tree D1–D6，产出语法草案与首批切片。</Description>
+        <SubNodes>
+          <Task id="G2-T1" name="定案集成方案与 spl_* 语法草案" status="DONE" order="0">
+            <Description>基于 G1 evidence 定案 D1（依赖方式）、D2（封装层级）、D3（表达式嵌入分层）、D7（SPL func@sub 选项经 knot 系统级元数据键值语法/省值形态表达的具体书写约定）；语法草案必须遵守 U1 惯例（普通配置进 :{} Conf、#name 命名、:[...] 块、具名槽位仅结构性用途）；产出 spl_* word 集语法草案（含示例 .kon 脚本、SPL 网格脚本对照、SPL «: , ; @» 到 Kon 习惯的映射表）写入 analysis/spl-kon-dsl-design.md；更新 decisions.md 状态。</Description>
+          </Task>
+          <Task id="G2-T2" name="确认首批 track 切片" status="DONE" order="1">
+            <Description>依据设计草案确认 G3/G4 两批 track 的范围、验收判据与依赖顺序；必要时受控修订 mission.xml（递增 Revision 并写 reports/replan-XXX.md）。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+      <TaskGroup id="G3" name="首批落地：Kon↔SPL 桥接包" status="DONE" order="2">
+        <Description>新增桥接 package，透传层全功能可用。</Description>
+        <SubNodes>
+          <Task id="G3-T1" name="创建并执行 add-kon-spl-dsl track" status="DONE" order="0">
+            <Description>新增 depa-data-kon-spl-dsl（暂名）：EnableSplDsl(runtime, splContext) 注册 spl_connect/spl_query/spl_eval 等透传 word 与 spl_flow 兼容执行 word；word 配置从 knot 的 Conf(:{}) 读取、命名从 Name(#name) 读取、SPL @选项从 Metadata/Attr（系统级元数据键值、省值形态，按 G2 定案）读取并拼接 SPL 表达式串；DataSet 值在 Kon 作用域流转；含 bun 测试与示例 .kon 脚本。</Description>
+            <cdt:TrackLink state="bound" id="add-kon-spl-dsl"/>
+          </Task>
+          <Task id="G3-T2" name="验证首批结果" status="DONE" order="1">
+            <Description>示例 Kon 脚本端到端跑通（sqlite/csv 数据源），与等价 SPL 网格脚本结果一致；收集使用反馈作为 G4 切片 evidence，写 reports/verify-g3.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+      <TaskGroup id="G4" name="第二批落地：原生 word 与总验证" status="DONE" order="3">
+        <Description>高频数据运算的 Kon 原生 word 集与 mission 总验证。</Description>
+        <SubNodes>
+          <Task id="G4-T1" name="创建并执行 add-kon-spl-native-words track" status="DONE" order="0">
+            <Description>依 G2 草案与 G3 反馈，为高频运算（select/groups/join/sort/derive/窗口等）实现 Kon 原生 word；范围以 reports/verify-g3.md 反馈为准。</Description>
+            <cdt:TrackLink state="bound" id="add-kon-spl-native-words"/>
+          </Task>
+          <Task id="G4-T2" name="mission 总验证" status="DONE" order="1">
+            <Description>核对成功判据：示例脚本全通过、D1–D6 全部定案或显式 backlog、各 track 回指 evidence；写 reports/verify-final.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_kon-spl-dsl">
+      <Node id="G2"><After ref="G1"/></Node>
+      <Node id="G3"><After ref="G2"/></Node>
+      <Node id="G4"><After ref="G3"/></Node>
+    </Dag>
+  </Schedule>
+
+  <Hooks>
+    <Hook on="mission:after-node">
+      <cdt:MissionReconcile max-rounds="3" on-drift="replan-or-block"/>
+    </Hook>
+  </Hooks>
+</Mission>

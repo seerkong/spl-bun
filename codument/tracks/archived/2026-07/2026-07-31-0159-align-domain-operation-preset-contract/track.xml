@@ -1,0 +1,83 @@
+<Track id="align-domain-operation-preset-contract" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>让 host Domain Operation contract 与完整 preset request、静态 verb 和分层 capability 语义一致。</Goal>
+    <Description>以测试先行修正 preset DTO、request exact parser、ownerRef、Operation definition verb/requestable capabilities、batch 同构和 preset/catalog consistency validation。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-30T21:31:12Z</CreatedAt>
+    <UpdatedAt>2026-07-30T22:59:14Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/depa-orm-domain-workbench/design/"/>
+    <MaterialBundle role="output" name="contract-package" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_align-domain-operation-preset-contract" name="align-domain-operation-preset-contract" version="1">
+    <Description>先锁定 exact request/preset envelope，再锁定 definition verb、capability 和 catalog/preset parity。</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Exact request 与 preset envelope" status="DONE" order="0">
+        <Description>以失败测试固定完整 request preset、递归闭合 JSON、ownerRef 与 duplicate observation 语义，再实现最小 contract 改动。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>bun test packages/domain-operation-contracts/__tests__/request-contracts.test.ts 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="编写 exact request 与 preset 失败测试" status="DONE" order="0" priority="P0">
+            <Description>更新 request fixtures 并添加测试，覆盖完整 preset.request、contract-owned unknown fields、payload/filter.where 开放、ownerRef 条件和 duplicate observations；测试先因旧实现缺少规则而失败。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">tests 覆盖完整 preset request 与 JSON roundtrip</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">tests 覆盖每层 unknown field、ownerRef 条件与 duplicate observe</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">测试以缺少目标 contract 行为的预期原因 RED</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="实现 exact parser 与 preset DTO" status="DONE" order="1" priority="P0">
+            <Description>把 preset 改为完整 request，递归校验 exact keys、ownerRef 和 duplicate observations，同时保持 payload/filter.where JSON 开放，使 T1.1 通过。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">OperationPresetDto 不含 request shadow fields</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">parser 对 exact request 接受并对目标 invalid input 返回 path-aware issues</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">request focused tests 全部通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Definition 与 catalog parity" status="DONE" order="1">
+        <Description>以失败测试固定静态 verb、必填 requestable capabilities、batch 同构、request subset 和 preset/catalog parity，再完成 breaking correction。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P2 所有任务 DONE</cdt:Criterion>
+          <cdt:Criterion>bun test packages/domain-operation-contracts 通过</cdt:Criterion>
+          <cdt:Criterion>bun run --filter depa-data-domain-operation-contracts build 通过</cdt:Criterion>
+          <cdt:Criterion>bun run build 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="编写 verb、capability 与 preset parity 失败测试" status="DONE" order="0" priority="P0">
+            <Description>添加 definition verb、非空/去重 capability set、single/batch verb、batch subject shape、request capability subset、apiVersion 和 preset outer-link parity 测试；测试先因旧实现缺少规则而失败。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">tests 覆盖 definition verb 与 requestable capability contract</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">tests 覆盖 single/batch verb、batch 同构和 request subset mismatch</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">tests 覆盖 preset outer operationRef 与完整 request/catalog parity</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC4" checked="true">测试以缺少目标 catalog behavior 的预期原因 RED</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="实现 definition 与 catalog/preset consistency" status="DONE" order="1" priority="P0">
+            <Description>增加静态 verb 和闭合 requestable capability DTO，扩展 catalog matcher，新增 preset matcher，移除旧 requirement type，使 focused tests、package build 和 root build 通过。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">Operation definition 的 verb 与 requestable capability set 为必填且无开放索引</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">catalog/preset matcher 对所有目标 mismatch 返回稳定 path</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC3" checked="true">package 无 runtime/web/database 依赖且不触碰 depa-orm-capsule</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC4" checked="true">focused tests、package declaration build 与 root build 全部通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

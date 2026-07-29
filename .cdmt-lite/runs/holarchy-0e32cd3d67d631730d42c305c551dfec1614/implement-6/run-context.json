@@ -1,0 +1,57 @@
+{
+  "round": 4,
+  "identityObservedFromCommand": {
+    "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|7|9:implement|46:6-user-continuation-20261024:hook:1fa0d370f570|6",
+    "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+    "node_id": "implement",
+    "node_revision": "6-user-continuation-20261024:hook:1fa0d370f570",
+    "generation": 6,
+    "graph_revision": 7
+  },
+  "commandRef": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/commands/89cd871c86eace99ecef82648c51d2070b0045303ca042ab42c296f04a53a040.json",
+  "commandSha256AtObservation": "016be3a2324c2d0edd6d0f849759a20d309b9524b61c9bebde61dbd3bd08879a",
+  "checkpointRef": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/checkpoint.json",
+  "checkpointSha256AtObservation": "1b3b824eb04b7163cc9dd612ea5d4f79cdf98b3f6d382c4283be2a1ef066a84e",
+  "feedback": {
+    "sourceNode": "gap-review",
+    "sourceGeneration": 5,
+    "outputHash": "3704820b20202e14ccc16e1f5adca2f5dfb45664b50693dc5e808dc540517de3"
+  },
+  "baselineRef": {
+    "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+    "node_id": "baseline-review",
+    "node_revision": "3-output-contract",
+    "generation": 3,
+    "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3",
+    "output_hash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae"
+  },
+  "predecessor": "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-5/final-worktree.json",
+  "authorization": {
+    "mode": "run",
+    "userStarted": true,
+    "receiptRef": "holarchy:082d4c9b3d20d7fdede36e6b563ff48ca84c",
+    "channelId": "org-topic-0a92332f2dc1a9b2c91f6764f9048e34b03d2d19",
+    "requestId": "3aa632cb-1a02-400f-bc15-645be100ed26",
+    "authorizedWorkspaces": [
+      "/Users/kongweixian/infra-dev/spl-bun"
+    ]
+  },
+  "authorizationProofRef": "/Users/kongweixian/.sparrow-app-support/sparrow-holarchy/workspace/.ace/app-data/sparrow-holarchy/5252046c67537c0d15b0fa397f2dd6b1/users/c69beec0772aa25a96d783f829d3b207/workflow-jobs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/input.json",
+  "authorizationBoundary": {
+    "kind": "existing-directory-authorization",
+    "workspace": "/Users/kongweixian/infra-dev/spl-bun",
+    "perFileAllowlistWasNotFrozen": true,
+    "restrictions": [
+      "Preserve existing dirty changes and historical receipts",
+      "Do not modify source Java, old Codument, external libraries or restore enterprise/domain/ORM scope",
+      "Do not reset/clean/commit/push/publish",
+      "Never approve native Agent tool or human approvals"
+    ]
+  },
+  "scope": [
+    "CANDIDATE-parse nonfinite lexical conversion and four-entry regressions",
+    "G2 S12 current/historical reconciliation",
+    "CANDIDATE-sort lifecycle closure using admitted independent Review"
+  ],
+  "note": "Actual generation6/graph7 read from current command/checkpoint, not inferred from review generation. Original generation5 command path has been overwritten by Host with the current command; its historical hash/identity in implement-5 remain historical receipts, unmodified."
+}

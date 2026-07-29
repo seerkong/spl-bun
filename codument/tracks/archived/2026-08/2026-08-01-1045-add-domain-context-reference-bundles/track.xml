@@ -1,0 +1,113 @@
+<Track id="add-domain-context-reference-bundles" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>Provide two deterministic relational DomainContext bundles that execute the complete representative Operation matrix.</Goal>
+    <Description>Create public immutable IT asset and commerce bundles with exact presets, real handlers, relational seed/probes, composed trees, selection/batch semantics, server startup composition, and matrix verification.</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-31T16:42:12Z</CreatedAt>
+    <UpdatedAt>2026-08-01T07:45:57Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/depa-orm-domain-workbench/design/"/>
+    <MaterialBundle role="input" name="contracts" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="input" name="runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="bundle-package" domain="package" path="vfs://@/packages/domain-context-bundles/"/>
+    <MaterialBundle role="output" name="server-composition" domain="package" path="vfs://@/packages/web-server/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-domain-context-reference-bundles" name="add-domain-context-reference-bundles" version="1">
+    <Description>Establish public package/catalog invariants, implement each domain tests-first, then execute the full cross-bundle matrix and server/build boundaries.</Description>
+    <SubNodes>
+      <TaskGroup id="P0" name="Package and catalog authority" status="DONE" order="0">
+        <Description>Create the package boundary and validate immutable authoring catalogs before operation implementation.</Description>
+        <cdt:Gate><cdt:Criterion>P0 tasks are DONE</cdt:Criterion><cdt:Criterion>both catalog skeletons load with exact complete presets</cdt:Criterion><cdt:Criterion>public import/package guard and package build pass</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T0.1" name="Write package, loader, and catalog RED tests" status="DONE" order="0" priority="P0">
+            <Description>Add package-boundary tests and catalog fixtures asserting two ids, read-only Kon, semantic resource families, complete matrix definitions/presets/bindings/probes, exact preset/catalog parity, freeze/no execution state, no web-server dependency, and capsule integrity. Do not implement bundles.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.1-AC1" checked="true">Tests require both live-API bundle shapes and every normative matrix definition/resource</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC2" checked="true">Tests parse and catalog-match every complete preset and require deterministic seed/probe coverage</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC3" checked="true">Boundary tests reject web-server, capsule, private/generated/subpath/test imports and undeclared dependencies</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T0.2" name="Implement package skeleton and immutable catalogs" status="DONE" order="1" priority="P0">
+            <Description>Create depa-data-domain-context-bundles, shared exact request/definition helpers, both Kon/entity catalogs, semantic resources, seeds, placeholder-capable registered handlers/probes, complete presets, capabilities and plain registration exports. All loader/catalog tests must pass without private imports.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.2-AC1" checked="true">Both bundles load/freeze and use only catalog, seed, bindings, probes with no server/current/execution state</cdt:Criterion>
+              <cdt:Criterion id="T0.2-AC2" checked="true">All required dimensions, child definitions, preset scenarios, semantic resources and explicit association entities are present</cdt:Criterion>
+              <cdt:Criterion id="T0.2-AC3" checked="true">Package build and boundary guard pass using contract/runtime public roots only</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P1" name="IT asset lifecycle bundle" status="DONE" order="1">
+        <Description>Implement the IT asset matrix with real relational changes, composed children, business outcomes, and root probes.</Description>
+        <cdt:Gate><cdt:Criterion>P1 tasks are DONE</cdt:Criterion><cdt:Criterion>IT asset focused operation matrix passes</cdt:Criterion><cdt:Criterion>CancelRepair rollback/tree and semantic write observations are truthful</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Write IT asset operation matrix RED tests" status="DONE" order="0" priority="P0">
+            <Description>Execute presets only through public runtime and cover BO query, CancelRepair success/failure exact child order, standalone MarkCanceled, association link, lifecycle guard transition, constraint valid/violation outcomes, ReturnReinbound composition, and ScrapAndDispose. Assert outcome/effects/probes/diff/tree/diagnostics/rollback. Do not implement handlers.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">All normative IT asset owner/behavior shapes have executable RED cases</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">CancelRepair tests require four registered child refs in order, multi-entity observations, commit on success and rollback on failure</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">Constraint business violations are distinguished from thrown execution failures</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Implement IT asset handlers, probes, and presets" status="DONE" order="1" priority="P0">
+            <Description>Implement payload validation, public reads/full-row writes, explicit link entity, lifecycle read guard, registered child invocation, structured constraint outcomes, business process child composition and extension action. Parent probes read all affected entities; no hidden state or dimension switch.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">BO query/action/mutations and CancelRepair child registry execute with truthful tree and transaction facts</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">Association, lifecycle, process and disposal operations change real seeded rows with mutation/probe evidence</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">Constraint valid/violation outcomes and execution failure/rollback semantics pass focused tests</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Commerce operations bundle" status="DONE" order="2">
+        <Description>Implement global, selection, batch, capability and raw operation shapes over deterministic order data.</Description>
+        <cdt:Gate><cdt:Criterion>P2 tasks are DONE</cdt:Criterion><cdt:Criterion>commerce focused operation matrix passes</cdt:Criterion><cdt:Criterion>selection/batch/raw semantics and outcomes are distinct and truthful</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Write commerce operation matrix RED tests" status="DONE" order="0" priority="P0">
+            <Description>Cover global computed summary; filter, all, and ids selection mode=single, including unfiltered read and deterministic eligible-row resolution for all; atomic and best-effort CorrectOwner batch keys/status; capability child tree; raw graph/tree/table queries; raw IngestBatch payload batch mode=single; before/after/diff/mutations and failure mapping. Do not implement handlers.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">Domain-context, selection, batch, capability and all four raw operation shapes have executable RED cases</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">Selection filter/all/ids remain one invocation; all uses unfiltered read with deterministic shared-payload mutations/probes; batch items retain independent keys/payload/status</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">Composite/graph/tree/table outcomes and raw ingest real writes are asserted without fabricated SQL</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="Implement commerce handlers, probes, and presets" status="DONE" order="1" priority="P0">
+            <Description>Implement equality/public-read selector resolution for filter and ids plus unfiltered read for all, deterministic in-handler eligibility filtering, full-row shared-payload updates, batch validation/failure scenario, global/raw outcomes, capability invokeChild composition, and atomic single-invocation ingest writes with root probes.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">Global, selection, batch, capability and raw handlers execute through operation-ref registry only</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">Filter/all/ids selection and atomic/best-effort batch semantics pass with real state, truthful probes, and item mapping</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC3" checked="true">Raw outcomes and ingest mutations/probes are JSON-safe, truthful, and deterministic</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Cross-bundle integration and server composition" status="DONE" order="3">
+        <Description>Prove complete matrix coverage, fresh execution, production startup registration, and build/boundary integrity.</Description>
+        <cdt:Gate><cdt:Criterion>P3 task is DONE</cdt:Criterion><cdt:Criterion>every preset/matrix/integration test passes</cdt:Criterion><cdt:Criterion>bundle/server/typecheck/root builds, guards and capsule manifests pass</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Integrate server registrations and verify complete matrix" status="DONE" order="0" priority="P0">
+            <Description>Add bundle before server in root build, declare server dependency, compose both plain registrations only in import.meta.main, keep createApp default empty, and add server catalog/preset direct-execution integration plus sequential/concurrent matrix coverage. Run bundle, contract, runtime, server tests/builds, boundary guards, strict Codument checks and capsule manifests.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">Every preset parses, catalog-matches, loads, serializes through server, and is directly executable unchanged</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">Representative matrix and sequential/concurrent deterministic isolation pass across both bundles</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC3" checked="true">Production startup registers both ids while createApp default remains empty and dependency direction stays acyclic</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC4" checked="true">Focused/full builds, AST import guards, diff/XML/Codument checks and protected capsule manifests pass</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding" status="PASS"/></Hook></Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

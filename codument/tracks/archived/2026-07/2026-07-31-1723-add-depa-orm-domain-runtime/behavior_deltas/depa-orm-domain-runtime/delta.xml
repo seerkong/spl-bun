@@ -1,0 +1,118 @@
+<behavior-patch capability="depa-orm-domain-runtime" version="1">
+  <upsert selector="behavior://depa-orm-domain-runtime/requirements/public-model-bridge">
+    <requirement id="public-model-bridge">
+      <statement>depa-data-depa-orm-domain-runtime SHALL declare production dependencies by package name, compile read-only Kon model sources through the depa-orm-dsl-kon public root, explicitly project public compilation properties into current storage-neutral root contracts, and prove public compose/assemble/SQLite Writer/Reader operation from its own package environment; it SHALL reject halfcode, dist, node_modules, capsule paths, casts of legacy schema, and non-allowlisted depa-orm subpaths.</statement>
+      <suite id="bridge" name="Public model bridge">
+        <case id="dependency-resolution">
+          <given>root install has run and runtime package declares all production dependencies</given>
+          <when>a smoke imports each dependency by package name from runtime package cwd</when>
+          <then>all imports resolve without capsule or external source-relative paths</then>
+        </case>
+        <case id="kon-write-read">
+          <given>a read-only Kon source defining an entity and fields</given>
+          <when>compile, explicit projection, SQLite initialize, public Writer create, and public Reader query run</when>
+          <then>the created row is read back and registry destroy completes using only allowed exports</then>
+        </case>
+        <case id="forbidden-import-guard">
+          <given>runtime source and package dependencies</given>
+          <when>the boundary guard scans them</when>
+          <then>halfcode, dist, node_modules, capsule paths, source-relative external imports, and unallowlisted subpaths are absent</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://depa-orm-domain-runtime/requirements/bundle-lifecycle">
+    <requirement id="bundle-lifecycle">
+      <statement>The runtime SHALL validate and freeze a stateless DomainContextBundle whose static catalog and complete preset requests remain separate from server current capability projection; exact request, preset/catalog, one-definition batch, and definition/binding/server capability preflight SHALL complete before SQLite allocation, seed, or handler execution; every accepted execute call SHALL own create-initialize-seed-execute-observe-destroy with a fresh in-memory SQLite registry, consecutive and concurrent calls SHALL not share data, and compile/initialize/seed/handler/probe failures SHALL still complete destroy before return.</statement>
+      <suite id="lifecycle" name="Bundle and execution lifecycle">
+        <case id="stateless-loader">
+          <given>a static catalog with complete presets, seed, operation bindings with actual capability sets, and probes</given>
+          <when>the bundle is loaded</when>
+          <then>ids, refs, preset parity, and binding capability subsets are validated; preset requests are frozen unchanged; the loaded definition contains no server projection, connection, transaction, or last execution state</then>
+        </case>
+        <case id="preflight-before-allocation">
+          <given>an exact, preset/catalog, mixed batch, or capability-intersection mismatch</given>
+          <when>execution preflight runs</when>
+          <then>structured diagnostics return before SQLite allocation, seed, or handler side effects</then>
+        </case>
+        <case id="server-projection-is-not-bundle-truth">
+          <given>the same loaded bundle is executed with two different server current capability projections</given>
+          <when>effective support is calculated</when>
+          <then>the static catalog and complete presets remain unchanged and only the per-execution capability verdict differs</then>
+        </case>
+        <case id="consecutive-isolation">
+          <given>the same seeded bundle and mutation preset</given>
+          <when>it executes twice sequentially</when>
+          <then>both executions observe the same before state and equivalent result</then>
+        </case>
+        <case id="concurrent-isolation">
+          <given>the same seeded bundle</given>
+          <when>two executions overlap</when>
+          <then>their database state and lifecycle ids remain independent</then>
+        </case>
+        <case id="failure-cleanup">
+          <given>a failure at compile, initialize, seed, handler, or probe stage</given>
+          <when>execution returns a failure envelope</when>
+          <then>destroy has completed and a later fresh execution succeeds</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://depa-orm-domain-runtime/requirements/operation-execution">
+    <requirement id="operation-execution">
+      <statement>The runtime SHALL parse and catalog-match the exact request, dispatch only by operation.ref, preserve single/selection/batch semantics, require every batch item to match one definition verb and subject shape, validate request choices against definition requestable ∩ binding actual ∩ server current, wrap same-datasource atomic work in the public outer transaction, reject cross-datasource atomic work before handlers, and isolate homogeneous best-effort batch items without silently changing requested atomicity.</statement>
+      <suite id="execution" name="Registry and transaction semantics">
+        <case id="unknown-or-mismatch">
+          <given>an unknown operation ref or exact request, preset, dimensions, verb, or batch shape inconsistent with catalog</given>
+          <when>execution is requested</when>
+          <then>no SQLite allocation, seed, or handler runs and stable validation diagnostics identify the path</then>
+        </case>
+        <case id="capability-intersection">
+          <given>a request choice excluded by the definition, binding, or server current capability set</given>
+          <when>capability preflight calculates effective support</when>
+          <then>the failing authority is reported and no SQLite allocation, seed, or handler runs</then>
+        </case>
+        <case id="same-source-atomic-rollback">
+          <given>a composed handler performs two public Writer calls on one datasource and the second fails</given>
+          <when>atomic execution runs</when>
+          <then>the outer transaction rolls both writes back and response reports failure</then>
+        </case>
+        <case id="cross-source-atomic-reject">
+          <given>a binding declares multiple datasources and request atomicity is atomic</given>
+          <when>capability validation runs</when>
+          <then>CROSS_DATASOURCE_ATOMICITY_REJECTED is returned before any handler runs</then>
+        </case>
+        <case id="best-effort-batch">
+          <given>homogeneous independently keyed batch items where one handler invocation fails</given>
+          <when>best-effort execution runs</when>
+          <then>successful siblings commit, response is partial, and item keys map to independent statuses</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://depa-orm-domain-runtime/requirements/runtime-observations">
+    <requirement id="runtime-observations">
+      <statement>The response SHALL truthfully normalize handler outcome, mutation effects, requested before/after/diff probes, operation child tree, public plan/stage projections, and diagnostics; unavailable storage row mapping or SQL trace SHALL be explicit and SHALL NOT fabricate item rows or SQL statements.</statement>
+      <suite id="observations" name="Effects, observations, and diagnostics">
+        <case id="before-after-diff">
+          <given>a write handler and declared probe</given>
+          <when>before, after, and diff are requested</when>
+          <then>snapshots show real seeded and committed states and diff identifies the change</then>
+        </case>
+        <case id="composed-tree-plan">
+          <given>a parent handler invokes registered children and uses Reader/Writer</given>
+          <when>trace and plan are requested</when>
+          <then>operation tree preserves child refs and plan/stages contain only JSON-safe public projections</then>
+        </case>
+        <case id="unavailable-capabilities">
+          <given>SQL observation or required storage row-level mapping is unavailable</given>
+          <when>response diagnostics are produced</when>
+          <then>SQL_TRACE_UNAVAILABLE or BATCH_ITEM_MAPPING_UNAVAILABLE is present without fabricated SQL or item rows</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

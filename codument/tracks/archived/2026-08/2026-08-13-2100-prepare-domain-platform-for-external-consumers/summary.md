@@ -1,0 +1,5 @@
+# Archive Summary: prepare-domain-platform-for-external-consumers
+
+- track.prepare_domain_platform_for_external_consumers.package_artifact
+- track.prepare_domain_platform_for_external_consumers.scope
+- track.prepare_domain_platform_for_external_consumers.server_capsule

@@ -1,0 +1,71 @@
+<behavior-patch capability="domain-operation-contracts" version="1">
+  <upsert selector="behavior://domain-operation-contracts/requirements/operation-catalog">
+    <requirement id="operation-catalog">
+      <statement>depa-data-domain-operation-contracts SHALL 提供 JSON-compatible、transport-neutral 的 DomainContext catalog、model source、semantic resource、Operation definition、preset 与 capability DTO；Operation definition SHALL 以 owner、behavior、subject、invocation、effect 五个正交维度表达，并以静态 verb 和必填 requestable capability set 描述调用约束；preset SHALL 保存一个完整 ExecuteOperationRequest v1，不得维护 subject、payload 或 execution 影子模型。</statement>
+      <suite id="catalog" name="Operation catalog contract">
+        <case id="five-dimensions">
+          <given>一个包含所有已接受 owner、behavior、subject、invocation 和 effect 值的 catalog</given>
+          <when>通过 package 公共入口构造并 JSON roundtrip</when>
+          <then>所有 literal value 稳定保留，且不需要 framework 或 database 类型</then>
+        </case>
+        <case id="version-separation">
+          <given>apiVersion 为 1 且 DomainContext bundle version 为独立字符串</given>
+          <when>构造 catalog 和 execute request</when>
+          <then>envelope version 与 bundle version 分别存在且不得互相替代</then>
+        </case>
+        <case id="definition-verb-and-capabilities">
+          <given>一个 Operation definition 声明静态 verb、非空 atomicity 集与可为空的 observation 集</given>
+          <when>request 与 definition 做纯 catalog consistency validation</when>
+          <then>single 或每个 batch item 的 verb、atomicity 选择和 observation 子集 SHALL 与 definition 一致</then>
+        </case>
+        <case id="preset-is-complete-request">
+          <given>一个带 catalog operationRef 的 invocation preset</given>
+          <when>客户端读取、展示并执行该 preset</when>
+          <then>preset.request SHALL 是完整 ExecuteOperationRequest v1，operationRef SHALL 与 request.operation.ref 相同，且 request 可原样 POST</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+  <upsert selector="behavior://domain-operation-contracts/requirements/execute-request">
+    <requirement id="execute-request">
+      <statement>Execute request SHALL 支持 none、single、selection subject 与 single、batch invocation；selection SHALL 是一个 mode=single 的逻辑调用，batch SHALL 包含一个或多个带唯一 key 的独立 item，并由同一个 Operation definition 约束所有 item 的 verb 与 subject shape；unknown JSON validation SHALL 递归拒绝 contract-owned object 的未知字段，只允许 payload 与 filter.where 保持开放 JSON，并返回 path-aware structured issues。</statement>
+      <suite id="requests" name="Execute request contract">
+        <case id="single-roundtrip">
+          <given>一个 single subject 的 exact-shape single invocation request</given>
+          <when>序列化为 JSON 并从 unknown input 解析</when>
+          <then>得到语义等价的 typed request</then>
+        </case>
+        <case id="selection-is-single">
+          <given>一个 filter 或 ids selector 圈定多个 subject</given>
+          <when>构造 execute request</when>
+          <then>invocation.mode 仍为 single 且 subject.kind 为 selection</then>
+        </case>
+        <case id="batch-items-are-independent">
+          <given>多个带唯一 key、各自 subject value 和 payload 的 invocation item</given>
+          <when>构造 batch request 并与一个 Operation definition 校验</when>
+          <then>每个 item 可独立关联结果，duplicate key 或空 items 被拒绝，且所有 item 的 verb 和 subject kind SHALL 匹配同一 definition</then>
+        </case>
+        <case id="closed-request-envelope">
+          <given>request 的 root、context、operation、invocation、subject、selector 或 execution 包含未知 contract field，或 execution.observe 包含重复 channel</given>
+          <when>从 unknown input 解析</when>
+          <then>返回对应 JSON path 的 structured issue；payload 和 filter.where 内部业务字段不受此限制</then>
+        </case>
+        <case id="owner-ref-contract">
+          <given>operation.ownerKind 为 domain-context、raw 或其他 semantic owner</given>
+          <when>解析 request</when>
+          <then>domain-context SHALL 禁止 ownerRef，raw MAY 省略 ownerRef，其余六种 owner SHALL 提供非空 ownerRef</then>
+        </case>
+        <case id="catalog-mismatch">
+          <given>request 的 apiVersion、context、五维声明、ownerRef、verb、invocation shape、subject shape 或 definition capability subset 不一致</given>
+          <when>运行纯 catalog consistency validation</when>
+          <then>返回 code=OPERATION_CATALOG_MISMATCH 且包含可定位 path，不执行 runtime 行为</then>
+        </case>
+        <case id="preset-catalog-mismatch">
+          <given>preset 外层 operationRef 与完整 request 或 catalog definition 不一致</given>
+          <when>运行 preset/catalog consistency validation</when>
+          <then>返回带 $.request 前缀或 $.operationRef path 的 OPERATION_CATALOG_MISMATCH</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

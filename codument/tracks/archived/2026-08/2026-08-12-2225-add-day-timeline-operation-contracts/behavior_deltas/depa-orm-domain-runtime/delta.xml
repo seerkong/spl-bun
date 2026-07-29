@@ -1,0 +1,29 @@
+<behavior-patch capability="depa-orm-domain-runtime" version="1">
+  <upsert selector="behavior://depa-orm-domain-runtime/requirements/timeline-runtime-boundary">
+    <requirement id="timeline-runtime-boundary">
+      <statement>The runtime SHALL project a closed trusted comparison/null/and/or RuntimeQuery predicate to immutable public depa ORM AST nodes without raw SQL or value interpolation, capture one system-owned UTC recordedAt per admitted execution and share it with every parent/child handler context, reject timeline mismatches before allocation, and fail closed with READ_ONLY_OPERATION_WRITE_REJECTED before Writer IO when an effect=read-only operation attempts a mutation.</statement>
+      <suite id="runtime-temporal-boundary" name="Temporal query, clock, and effect boundary">
+        <case id="half-open-bitemporal-predicate">
+          <given>a nested predicate for valid and recorded lower-inclusive upper-exclusive intervals with nullable upper bounds</given>
+          <when>runtimeQueryToSelectQuery projects it</when>
+          <then>Comparison, IsNull, AND, and OR nodes SHALL preserve the predicate; every value SHALL use Literal and no raw SQL SHALL be accepted</then>
+        </case>
+        <case id="execution-stable-recorded-at">
+          <given>an admitted parent operation that invokes registered children</given>
+          <when>the execution runtime obtains system time</when>
+          <then>the clock SHALL be read once and the same UTC recordedAt SHALL be visible to parent and child contexts while another execution obtains its own value</then>
+        </case>
+        <case id="read-only-write-rejected">
+          <given>a read-only definition whose faulty handler calls context.write inside an outer transaction</given>
+          <when>the operation executes</when>
+          <then>Writer IO SHALL not run, the transaction SHALL commit no mutation, and response diagnostics SHALL contain READ_ONLY_OPERATION_WRITE_REJECTED</then>
+        </case>
+        <case id="timeline-preflight-zero-allocation">
+          <given>a well-shaped request whose timeline does not match its catalog definition</given>
+          <when>runtime preflight runs</when>
+          <then>compile, initialize, seed, handler, probe, and destroy allocation stages SHALL not start</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

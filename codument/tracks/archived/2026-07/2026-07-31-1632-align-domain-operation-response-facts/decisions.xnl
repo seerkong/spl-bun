@@ -1,0 +1,37 @@
+<decision #track.align_response_facts.null_availability {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium; a future major API version can use a richer availability union"
+}
+(
+  <question ?>How should a response represent request and execution facts that were never established?</?>
+  <answer { }
+  (
+    <raw-answer ?>Use an explicit unavailable value instead of inventing a request or execution fact.</?>
+    <decision-text ?>Use null for unavailable context, operationRef, requested atomicity and operation tree; never use empty strings, bundle fallback or default atomicity.</?>
+    <rationale ?>Null is JSON-safe, explicit and does not imply a value or execution that did not exist.</?>
+    <evidence ?>Runtime P3 fresh coding AttractorCheck reproduced fabricated defaults on input containing only apiVersion.</?>
+  )
+  >
+)>
+
+<decision #track.align_response_facts.projection_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "high"
+}
+(
+  <question ?>Which component owns best-effort projection of independently valid request facts?</?>
+  <answer { }
+  (
+    <raw-answer ?>Keep partial fact inspection in the package that owns the exact request contract.</?>
+    <decision-text ?>The contract package exports a pure projector; runtime and transport adapters consume it but full exact parsing remains the only admission authority.</?>
+    <rationale ?>A single authority prevents divergent heuristics without making partial input executable.</?>
+    <evidence ?>The contract package already owns the exact parser, request DTO and response DTO.</?>
+  )
+  >
+)>

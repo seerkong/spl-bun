@@ -1,0 +1,37 @@
+{
+  "evidenceClass": "input_review_report",
+  "sourceNode": "gap-review",
+  "sourceGeneration": 3,
+  "outputHash": "bd8521f450c40da6b0b56f028df4abbe1874f8e4f91b718ea6c987d0f0162515",
+  "reviewedRound": 2,
+  "verdict": "continue",
+  "reviewedWorktreeContentSha256": "a64b1f286eff83719c36e43a9b3468e484614fb30a274296a0735bae32028b6a",
+  "reviewedBusinessSha256": "60f19579ae793131568fbd4a51b5e36ca43d81d957ae9dd1b8481ecae6fbf154",
+  "specificTechnicalRemediationPassed": [
+    "G6-null-character-format",
+    "G7-null-floating-format"
+  ],
+  "priorRemediationsMaintained": [
+    "G0-state-reconciliation",
+    "G3-decimal-sign-underflow",
+    "G4-validation-before-early-return"
+  ],
+  "criteria": {
+    "C1": "met",
+    "C2": "met",
+    "C3": "met",
+    "C4": "met",
+    "C5": "met",
+    "C6": "met",
+    "C7": "met",
+    "C8": "unknown",
+    "C9": "unknown",
+    "C10": "gap"
+  },
+  "remainingReportGapIds": [
+    "CANDIDATE-sort",
+    "CANDIDATE-parse",
+    "G5-run-lineage-context"
+  ],
+  "scopeCaveat": "Review recommends Host admission for sort/parse; no explicit admission decision supplied. Full accepted gap set, Host allowlist and Implement generation remain unknown. This is not missing run authorization or missing independent review."
+}

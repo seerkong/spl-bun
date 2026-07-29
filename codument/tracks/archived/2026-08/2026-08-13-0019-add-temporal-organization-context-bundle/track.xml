@@ -1,0 +1,148 @@
+<Track id="add-temporal-organization-context-bundle" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>以 Property-first Kon、双时间关系事实和唯一调整写者实现可执行的组织管理与组织调整 DomainContext bundle。</Goal>
+    <Description>新增独立组织域 bundle、确定性时间历史、完整 operation/preset/probe matrix、状态机与原子/best-effort 事务证据，并补齐 runtime 的可信 handler 结构化诊断边界；production server/UI 接入留给 mission G4。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-08-12T19:31:52Z</CreatedAt>
+    <UpdatedAt>2026-08-12T21:19:08Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/build-temporal-organization-adjustment-workbench/"/>
+    <MaterialBundle role="input" name="contracts" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="output" name="runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="bundle-package" domain="package" path="vfs://@/packages/domain-context-bundles/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-temporal-organization-context-bundle" name="add-temporal-organization-context-bundle" version="1" cdt:child-mode="dag">
+    <Description>先冻结 Property-first catalog/seed，再实现 temporal projections、adjustment workflow 与 batch/rollback convergence。</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Model Catalog And Seed" status="DONE" order="0">
+        <Description>用 RED tests 冻结八实体、typed Property relations、temporal bounds、资源/operation catalog、完整 presets 与 deterministic boundary seed。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>组织 bundle 通过 public loader 且 deep-frozen，不含 server/current/execution state</cdt:Criterion>
+          <cdt:Criterion>所有关联只由 Property NamedConf 拥有，Field 仅含物理 metadata</cdt:Criterion>
+          <cdt:Criterion>每个 operation 有 exact timeline-aware preset 和 binding/probe</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Write model catalog and seed RED tests" status="DONE" order="0" priority="P0">
+            <Description>断言公开 export、八实体、Property relation map、双时间字段、资源/definition 维度、timeline declarations、preset parity、seed workflow states 和 package boundary；实现前验红。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">RED tests 覆盖八实体、Property-first relation 和 valid/recorded bounds</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">RED tests 覆盖至少十个 operation refs、完整 presets、bindings/probes 与 frozen/no-state authority</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">planning baseline 的 39 个 bundle tests 保持通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Implement Property-first model catalog and deterministic seed" status="DONE" order="1" priority="P0">
+            <Description>新增独立 organization module，建立八实体 Kon model、resources、definitions、complete requests、DRAFT/VALIDATED/APPROVED/APPLIED/invalid seed 与 plain exports，不接 production registration。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">公共 compiler 产生正确字段、主键和 navigation relation tuple，无旧 ORM DSL residue</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">bundle load/freeze、catalog/preset parity 与 deterministic seed tests 全绿</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">root index 只 re-export 新 module，现有两个 reference registration 行为不变</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Temporal Projections" status="DONE" order="1">
+        <Description>实现 snapshot/history/compare 与同源 pure preview/validation，证明时间边界和零写 authority。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>2025-06-30 与 2025-07-01 snapshot tree 差异准确且确定</cdt:Criterion>
+          <cdt:Criterion>history/compare 只从 temporal facts 派生并支持 current/recorded slice</cdt:Criterion>
+          <cdt:Criterion>Preview/Validate 共用 validator 且 Writer 调用为零</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Write temporal projection and validator RED tests" status="DONE" order="0" priority="P0">
+            <Description>执行 exact presets，断言 boundary snapshots、ordered history、deterministic compare、recorded slice、preview projected changes、cycle/missing/interval-overlap/primary-assignment codes 与零 mutation/Writer。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">snapshot/history/compare 各有真实 relational execution case</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">valid lower inclusive、upper exclusive、null infinity 与 recorded slice 有边界证据</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">preview/validate 结果同源且 effect/evidence 均为 zero write</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="Implement temporal readers projectors and pure validator" status="DONE" order="1" priority="P0">
+            <Description>用 closed RuntimeQuery predicates 读取 current/recorded facts，组装 deterministic tree/table/composite outcomes，并以纯函数分别校验状态、目标、cycle、temporal interval overlap、Person primary-assignment uniqueness 和 sequence。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">所有 read-only handlers 通过 public context.read 且不导入 storage/private API</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">snapshot/history/compare 输出与 seed 边界精确一致</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC3" checked="true">validator 返回 stable structured facts，被 Preview/Validate 和后续 Apply 复用</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC4" checked="true">完整 current-recorded timeline 拒绝非法 valid/recorded bounds、dangling identity reference 与 future constraint drift</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Adjustment Workflow And Writer" status="DONE" order="2">
+        <Description>建立唯一 effect owner，完成 MarkValidated/Approve/Apply 的状态机、revalidation、temporal replacement、audit 与原子回滚。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>production module 中只有私有 OrganizationAdjustmentWriter 调用 context.write</cdt:Criterion>
+          <cdt:Criterion>MarkValidated 在同一 atomic execution 内 validate-then-transition；合法状态依序推进，非法/重复状态 fail closed</cdt:Criterion>
+          <cdt:Criterion>Apply 同事务提交 facts/event/status，post-replacement failure 全回滚</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Write workflow apply and rollback RED tests" status="DONE" order="0" priority="P0">
+            <Description>覆盖 MarkValidated validate-then-transition、approve/apply success、DRAFT/APPLIED/cycle/missing/interval-overlap/primary-assignment failure、context.recordedAt replacement、event/status、source unique-writer guard 和 after-first-replacement rollback。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">状态机 success/failure、MarkValidated validation failure、TEMPORAL_INTERVAL_OVERLAP 与 MULTIPLE_PRIMARY_ASSIGNMENTS cases 独立覆盖</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">apply success mutation/probe/diff 同时证明 temporal facts、audit 和 APPLIED status</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC3" checked="true">故障注入后 committed none、mutation facts empty、after equals before</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="Implement private adjustment writer and workflow handlers" status="DONE" order="1" priority="P0">
+            <Description>实现唯一 writer、full-row state updates、non-delete temporal replacements、same recordedAt audit append、MarkValidated 同执行 validation 与 Apply transaction-time 双不变量 revalidation，以及 handler registry wiring。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">source guard 证明只有 writer 持有 context.write，validator/projector 无 write port</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC2" checked="true">replacement 关闭 recordedTo 并插入 current rows，所有写使用同一 execution recordedAt</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC3" checked="true">workflow/apply/rollback focused tests 全绿</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC4" checked="true">create/close 维护完整 temporal relations，约束失败保留 stable code/path</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P4" name="Batch Freshness And Convergence" status="DONE" order="3">
+        <Description>实现独立 batch adjustment，运行 package regression/build/boundary，并以 fresh review 和独立 verify 收口。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>atomic invalid batch 全回滚，best-effort partial 仅提交 valid sibling 并映射失败 item</cdt:Criterion>
+          <cdt:Criterion>sequential/concurrent write executions 从等价 seed 开始且无 module-global state</cdt:Criterion>
+          <cdt:Criterion>bundle tests/build/import guard/Codument/XML/diff 与 fresh AttractorCheck 全 PASS</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T4.1" name="Implement and verify independent transfer batch" status="DONE" order="0" priority="P0">
+            <Description>为每个 Person item 建 adjustment/item/audit，并覆盖 atomic success/rollback、best-effort partial、stable mapping 和 fresh sequential/concurrent execution。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T4.1-AC1" checked="true">atomic 与 best-effort batch outcome/commit/mapping 符合统一 runtime semantics</cdt:Criterion>
+              <cdt:Criterion id="T4.1-AC2" checked="true">成功 item 有真实 adjustment/item/temporal/audit evidence，失败 item 无残留</cdt:Criterion>
+              <cdt:Criterion id="T4.1-AC3" checked="true">连续和并发执行 deterministic 且 execution ids 独立</cdt:Criterion>
+              <cdt:Criterion id="T4.1-AC4" checked="true">batch adjustment 不跳过 workflow 边，且 atomicity 不改变同一 items 的业务有效性</cdt:Criterion>
+              <cdt:Criterion id="T4.1-AC5" checked="true">每个 batch item 在 Writer 前复用完整 current-recorded candidate-state validator</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T4.2" name="Run package regression boundary and track convergence" status="DONE" order="1" priority="P0">
+            <Description>运行完整 bundle tests/build/import guards、old-reference compatibility、Codument strict/XNL/XML/diff、behavior matrix audit、fresh AttractorCheck 与独立 verify，修复 completion-critical gaps。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T4.2-AC1" checked="true">所有新增/既有 bundle tests 和 package build 通过，失败数为零</cdt:Criterion>
+              <cdt:Criterion id="T4.2-AC2" checked="true">无 server/capsule/private import、无旧 ORM DSL、无 module-global execution state</cdt:Criterion>
+              <cdt:Criterion id="T4.2-AC3" checked="true">fresh AttractorCheck 和 independent verify 均 PASS，track evidence 可归档</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding" status="PASS" note="Fresh reviewer found no remaining direction or temporal integrity gap; focused 45/45, bundle build, scoped Codument/decision validation, and diff check pass. Report: analysis/attractor-check-final-005.md."/></Hook></Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_add-temporal-organization-context-bundle">
+      <Node id="P2"><After ref="P1"/></Node>
+      <Node id="P3"><After ref="P2"/></Node>
+      <Node id="P4"><After ref="P3"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+</Track>

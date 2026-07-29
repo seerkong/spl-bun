@@ -1,0 +1,22 @@
+﻿{
+    "name":  "depa-data-test-utils",
+    "version":  "0.0.0",
+    "type":  "module",
+    "main":  "./dist/index.js",
+    "types":  "./dist/index.d.ts",
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./sqlite-fixtures": {
+                        "import": "./src/sqlite-fixtures.ts",
+                        "require": "./src/sqlite-fixtures.ts",
+                        "types": "./src/sqlite-fixtures.ts"
+                    },
+                    "./dist/*": "./dist/*"
+                },
+    "scripts":  {
+                    "build":  "bun x tsc -p tsconfig.json"
+                },
+    "dependencies":  {
+                         "depa-data-core":  "workspace:*"
+                     }
+}

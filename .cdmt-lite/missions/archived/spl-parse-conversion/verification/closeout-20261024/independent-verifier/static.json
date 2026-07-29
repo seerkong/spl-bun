@@ -1,0 +1,50 @@
+{
+  "reportCoreScan": {
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "codumentDiff": "7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049",
+  "codumentUntracked": "1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e",
+  "harness": [
+    {
+      "command": [
+        "/Users/kongweixian/.agents/skills/cdmt-mission-lite/scripts/check_mission",
+        ".cdmt-lite/missions/active/spl-parse-conversion",
+        "--phase",
+        "preflight"
+      ],
+      "exitCode": 0,
+      "stdout": "mission check passed: preflight (.cdmt-lite/missions/active/spl-parse-conversion)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/kongweixian/.agents/skills/cdmt-mission-lite/scripts/check_mission",
+        ".cdmt-lite/missions/archived/spl-stable-expression-sort",
+        "--phase",
+        "archived"
+      ],
+      "exitCode": 0,
+      "stdout": "mission check passed: archived (.cdmt-lite/missions/archived/spl-stable-expression-sort)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/Users/kongweixian/.agents/skills/cdmt-mission-lite/scripts/check_mission",
+        ".cdmt-lite/missions/archived/spl-text-formatting",
+        "--phase",
+        "archived"
+      ],
+      "exitCode": 0,
+      "stdout": "mission check passed: archived (.cdmt-lite/missions/archived/spl-text-formatting)\n",
+      "stderr": ""
+    }
+  ],
+  "bun": "1.3.14",
+  "lockSha256": "3c190fe35bf4c4498218e0556289eed66623f1e19fc553ee01c7fc2d379c8097",
+  "priorBun": "1.3.14",
+  "s12CurrentLine": [
+    "| S12 | 旧 spec 的字段/step/表达式诊断 | PASS 限于已绑定的 filter/derive/aggregate/window/sort 等入口；稀疏合法字段不回退外部值。当前sort('missing')及raw AST未知字段在非空/空schema表均明确报错，见sort-semantics.test.ts；旧静默返回反例仅保留在下方接纳前历史区，不宣称所有表成员均已覆盖。 |"
+  ]
+}

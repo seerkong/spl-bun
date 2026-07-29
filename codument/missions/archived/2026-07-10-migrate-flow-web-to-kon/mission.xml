@@ -1,0 +1,101 @@
+<Mission id="migrate-flow-web-to-kon" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>把 flow 使用面（web-server API）与前端（web-ide，含示例与测试）切换为基于 kunun Kon 语言的调用方式</Goal>
+    <Description>先盘点服务端/前端/E2E 现状与 Kon host 可行性，再收敛 E1–E7 设计，随后三批 track 落地：服务端 Kon 执行链路 → 前端与 demos/E2E 切换 → 旧网格使用面清退与总验证。引擎层不动。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>light</QuestionSeverity>
+    <Revision>4</Revision>
+    <CreatedAt>2026-07-04T20:22:12Z</CreatedAt>
+    <UpdatedAt>2026-07-09T13:59:07Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="mission">
+    <MaterialBundle role="state" name="analysis" domain="mission" path="vfs://./analysis/"/>
+    <MaterialBundle role="state" name="reports" domain="mission" path="vfs://./reports/"/>
+    <MaterialBundle role="input" name="kunun-repo" domain="external" path="vfs://kunun.ts/"/>
+    <MaterialBundle role="output" name="tracks" domain="codument" path="vfs://@/codument/tracks/"/>
+  </Ports>
+
+  <TaskSpace id="space_migrate-flow-web-to-kon" name="migrate-flow-web-to-kon" version="1" cdt:child-mode="dag">
+    <Description>flow 使用面与前端切换为 Kon。</Description>
+    <SubNodes>
+      <TaskGroup id="G1" name="证据盘点" status="DONE" order="0">
+        <Description>服务端/前端/E2E 现状与 Kon host 可行性。</Description>
+        <SubNodes>
+          <Task id="G1-T1" name="盘点 web-server flow API 面" status="DONE" order="0">
+            <Description>server.ts 全部端点、flow 执行请求/响应契约、连接与数据源配置来源、demo 数据；写 analysis/web-server-surface.md。</Description>
+          </Task>
+          <Task id="G1-T2" name="盘点 web-ide 前端与 E2E 面" status="DONE" order="1">
+            <Description>页面/组件/路由/custom-formulas、与后端的交互协议、demos 清单（逐个记录其网格脚本内容与 Kon 改写映射）、五组 E2E 用例逐个清单化；写 analysis/web-ide-surface.md。</Description>
+          </Task>
+          <Task id="G1-T3" name="服务端 host Kon 可行性 spike" status="DONE" order="2">
+            <Description>验证 E2：web-server 经 workspace 依赖 depa-data-kon-spl-dsl 时 kunun tsconfig paths 是否随包生效（bun 直跑最小 spike）；不通则验证 web-server 包内 paths 备选；同时确认每请求 fresh runtime 的开销可接受；写 analysis/kon-host-spike.md，若两方案皆不通触发 replan。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+      <TaskGroup id="G2" name="设计收敛" status="DONE" order="1">
+        <Description>定案 E1–E7 与 track 切片。</Description>
+        <SubNodes>
+          <Task id="G2-T1" name="定案迁移方案" status="DONE" order="0">
+            <Description>基于 G1 evidence 定案 E1–E7：API 契约（请求/响应/错误结构）、runSplKon 门面签名、前端 Kon 主模式交互稿（文本编辑+运行+结果+demos）、demos 迁移清单、清退范围；写 analysis/kon-migration-design.md；更新 decisions.md。</Description>
+          </Task>
+          <Task id="G2-T2" name="确认 track 切片" status="DONE" order="1">
+            <Description>确认 G3/G4/G5 三个 track 的范围、验收与依赖；必要时受控修订 mission.xml（Revision+replan report）。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+      <TaskGroup id="G3" name="服务端 Kon 执行链路" status="DONE" order="2">
+        <Description>kon-spl-dsl 门面 + web-server 新端点。</Description>
+        <SubNodes>
+          <Task id="G3-T1" name="创建并执行 add-kon-flow-server-api track" status="DONE" order="0">
+            <Description>kon-spl-dsl 新增 runSplKon 门面 API；web-server 新增 Kon 执行端点（每请求隔离、结构化错误、沙箱与源码限制）；服务端测试。</Description>
+            <cdt:TrackLink state="bound" id="add-kon-flow-server-api"/>
+          </Task>
+          <Task id="G3-T2" name="验证服务端链路" status="DONE" order="1">
+            <Description>独立验证：新端点执行示例 Kon 脚本返回正确结果与错误结构；旧端点行为不回归；写 reports/verify-g3.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+      <TaskGroup id="G4" name="前端与 demos/E2E 切换" status="DONE" order="3">
+        <Description>web-ide Kon 主模式、demos Kon 化、E2E 改写。</Description>
+        <SubNodes>
+          <Task id="G4-T1" name="创建并执行 migrate-web-ide-to-kon track" status="DONE" order="0">
+            <Description>SplIde 切换为 Kon 脚本主模式（编辑区/运行/ResultTable/demos 下拉）；demos 按 G1-T2 清单全部 Kon 化；新增 Kon 路径 E2E（与旧用例暂双跑）。</Description>
+            <cdt:TrackLink state="bound" id="migrate-web-ide-to-kon"/>
+          </Task>
+          <Task id="G4-T2" name="验证前端切换" status="DONE" order="1">
+            <Description>独立验证：Playwright 全量 E2E（新旧双跑）通过；手动路径抽查（加载 demo→运行→结果）；写 reports/verify-g4.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+      <TaskGroup id="G5" name="旧路径清退与总验证" status="DONE" order="4">
+        <Description>按 E5 清退旧使用面；mission 总验证。</Description>
+        <SubNodes>
+          <Task id="G5-T1" name="创建并执行 retire-legacy-grid-flow-surfaces track" status="DONE" order="0">
+            <Description>清退旧 flow 端点、网格编辑页面与旧 demos/旧 E2E（按 G2 定案范围）；引擎层 spl-flow 保留；文档同步。</Description>
+            <cdt:TrackLink state="bound" id="retire-legacy-grid-flow-surfaces"/>
+          </Task>
+          <Task id="G5-T2" name="mission 总验证" status="DONE" order="1">
+            <Description>completed gate 逐项核对：E2E 全绿（仅 Kon 路径）、全仓 bun test、E1–E7 定案或 backlog、track 回指 evidence；写 reports/verify-final.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_migrate-flow-web-to-kon">
+      <Node id="G2"><After ref="G1"/></Node>
+      <Node id="G3"><After ref="G2"/></Node>
+      <Node id="G4"><After ref="G3"/></Node>
+      <Node id="G5"><After ref="G4"/></Node>
+    </Dag>
+  </Schedule>
+
+  <Hooks>
+    <Hook on="mission:after-node">
+      <cdt:MissionReconcile max-rounds="3" on-drift="replan-or-block"/>
+    </Hook>
+  </Hooks>
+</Mission>

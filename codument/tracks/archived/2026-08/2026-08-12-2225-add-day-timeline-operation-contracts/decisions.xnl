@@ -1,0 +1,95 @@
+<decision #track.add_day_timeline_operation_contracts.timeline_shape {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Timeline 是 payload 约定、Operation identity 维度还是顶层 request capability？</?>
+  <answer { }
+  (
+    <raw-answer ?>Mission 冻结为顶层时间概念。</?>
+    <decision-text ?>Request 使用 optional top-level timeline union，definition 使用 optional requestable timeline declaration；不改变五维 identity。</?>
+    <rationale ?>保持时间可发现与 exact admission，同时不为业务上下文扩张 identity switch。</?>
+    <evidence ?>Mission decision timeline_contract。</?>
+  )>
+)>
+
+<decision #track.add_day_timeline_operation_contracts.predicate_grammar {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Runtime query 需要开放到什么程度才能表达双时间区间？</?>
+  <answer { }
+  (
+    <raw-answer ?>使用关系数据库 predicate，不暴露任意 SQL。</?>
+    <decision-text ?>只增加 comparison/null/and/or 封闭 AST；operator 限 Eq/Ne/Lt/Le/Gt/Ge 与 IsNull/IsNotNull，值经 Literal，逻辑节点非空。</?>
+    <rationale ?>足以表达半开 valid/recorded interval，并保持 storage-neutral 与参数化 renderer boundary。</?>
+    <evidence ?>depa ORM public AST capability inspection and plan-track AttractorCheck GAP。</?>
+  )>
+)>
+
+<decision #track.add_day_timeline_operation_contracts.recorded_at_owner {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>System recordedAt 由 request、bundle 还是 execution runtime 提供？</?>
+  <answer { }
+  (
+    <raw-answer ?>系统记录时间必须与业务有效时间分离。</?>
+    <decision-text ?>Runtime 在 preflight 后每 execution 捕获一次 UTC instant，传给 parent/child handler context；request recordedAt 只用于 read slice，不拥有 write timestamp。</?>
+    <rationale ?>避免客户端伪造记录时间，并保证同一事务内所有事实共享一致 system time。</?>
+    <evidence ?>Mission temporal model and AttractorCheck correction。</?>
+  )>
+)>
+
+<decision #track.add_day_timeline_operation_contracts.or_execution_lowering {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>depa ORM 0.2 public AST 支持 OR、但 public Reader 只 admission conjunction 时，runtime 如何执行双时间 predicate？</?>
+  <answer { }
+  (
+    <raw-answer ?>不能修改安装依赖、绕过 adapter boundary 或把过滤退化为不受约束的 raw SQL。</?>
+    <decision-text ?>Runtime 把封闭 predicate 有界规范化为最多 64 个 DNF conjunction，逐分支交给 public Reader，以实体 primary key 去重并恢复请求字段；单一 AST projection 继续表达完整逻辑语义。</?>
+    <rationale ?>在当前 package scope 内让关系型 OR 真正执行，同时保留 public API、Literal 参数化、row multiplicity identity 和明确的复杂度上限。</?>
+    <evidence ?>Coding AttractorCheck 001 reproduced Unsupported storage-neutral logical operator OR；real SQLite bitemporal read regression。</?>
+  )>
+)>
+
+<decision #track.add_day_timeline_operation_contracts.read_only_guard {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Operation effect 声明如何成为可执行边界而非仅 catalog 标签？</?>
+  <answer { }
+  (
+    <raw-answer ?>只读 processor 不应持有可生效写能力。</?>
+    <decision-text ?>Runtime context.write 在 Writer IO 前拒绝当前或任一祖先 invocation effect=read-only；read-only restriction 与首个 violation 沿 child chain 共享并保持 sticky，handler 即使捕获异常也不能清除；返回 READ_ONLY_OPERATION_WRITE_REJECTED，并由 outer transaction 与 Writer-call evidence 证明零提交和零委派。</?>
+    <rationale ?>把 effect 声明转为整棵 invocation tree 的 runtime-owned fail-closed capability，阻止错误 handler、write child 或 catch-and-return 成为绕过入口。</?>
+    <evidence ?>DEPA effect boundary、mission unique-writer correction、AttractorCheck 002 child bypass 与 AttractorCheck 005 swallowed-rejection reproductions。</?>
+  )>
+)>
+
+<decision #track.add_day_timeline_operation_contracts.handler_input_snapshot {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>Handler 传入的 query/mutation 与响应中的 plan/effect evidence 由什么事实快照驱动？</?>
+  <answer { }
+  (
+    <raw-answer ?>异步调用期间不能继续信任 caller-owned mutable object。</?>
+    <decision-text ?>Runtime 在 context.read/context.write 入口同步生成唯一 detached/frozen snapshot；Reader/Writer 委托、Writer observer、mutation summary 和 public plan 统一消费该 snapshot。</?>
+    <rationale ?>阻止调用方在 Promise 返回后、await 前篡改对象，使数据库实际行为与公开响应证据保持同一 authority。</?>
+    <evidence ?>Coding AttractorCheck 004 的 read/write mutate-before-await reproduction 与 temporal-runtime regressions。</?>
+  )>
+)>

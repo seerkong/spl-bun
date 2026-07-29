@@ -1,0 +1,24 @@
+<behavior-patch capability="depa-orm-domain-runtime" version="1">
+  <upsert selector="behavior://depa-orm-domain-runtime/requirements/public-model-bridge">
+    <requirement id="public-model-bridge">
+      <statement>depa-data-depa-orm-domain-runtime SHALL declare Kunun 1.0.4 and depa ORM 0.2.0 production dependencies by formal package name, compile read-only Kon model sources through the depa-orm-dsl-kon public root using only prefix NamedConf, flat Field profiles, typed Property relations and declaration-owned DataSource identity, explicitly project public compilation properties into current storage-neutral root contracts, and prove public compose/assemble/SQLite Writer/Reader operation from its own package environment; it SHALL reject old marker transport, nested Field storage, Field relations, direct datasource Conf, duplicate datasource identity, halfcode, dist, node_modules, capsule paths, casts of legacy schema, hidden symlink provenance and non-allowlisted depa ORM subpaths.</statement>
+      <suite id="bridge" name="Public model bridge">
+        <case id="dependency-resolution">
+          <given>formal target versions are declared and sibling packages are available as hashed ephemeral tarballs</given>
+          <when>an isolated package smoke imports each dependency by package name</when>
+          <then>all imports SHALL resolve under the isolated consumer without capsule, sibling source-relative, workspace or global symlink paths</then>
+        </case>
+        <case id="kon-write-read">
+          <given>a read-only canonical Kon source defining a datasource, entity, flat fields and typed Property relation</given>
+          <when>compile, explicit projection, SQLite initialize, public Writer create, and public Reader query run</when>
+          <then>the created related rows SHALL be read back and registry destroy SHALL complete using only allowed exports</then>
+        </case>
+        <case id="forbidden-import-and-model-guard">
+          <given>runtime source, model fixtures and package dependencies</given>
+          <when>the boundary and canonical-model guards scan them</when>
+          <then>old annotation authorities, legacy versions, halfcode, dist, node_modules, capsule paths, source-relative external imports and unallowlisted subpaths SHALL be absent</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

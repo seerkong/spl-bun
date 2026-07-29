@@ -1,0 +1,75 @@
+<decision #track.add_domain_operation_server_api.one_active_version {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>How does an id-only catalog route select a bundle version?</?>
+  <answer { }
+  (
+    <raw-answer ?>Allow one active version for each context id in one server instance.</?>
+    <decision-text ?>Registration derives id/version from bundle.catalog.context and rejects every duplicate id, including a second version.</?>
+    <rationale ?>This keeps id-only routes deterministic and avoids an implicit latest-version policy.</?>
+    <evidence ?>Mission HTTP version requirements and fresh G6 coding attractor review.</?>
+  )
+  >
+)>
+
+<decision #track.add_domain_operation_server_api.transport_status {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>Which failures use HTTP status versus Domain Operation envelopes?</?>
+  <answer { }
+  (
+    <raw-answer ?>Catalog GET lookup misses are transport 404; execute validation, lookup, and domain outcomes are contract envelopes with HTTP 200.</?>
+    <decision-text ?>Context-scoped GET misses use one DOMAIN_CONTEXT_NOT_FOUND shape. POST always returns ExecuteOperationResponse and expresses status and diagnostics inside the envelope.</?>
+    <rationale ?>The execute protocol can represent validation and domain failure without conflating them with transport reachability.</?>
+    <evidence ?>Mission HTTP contract and G6 acceptance map.</?>
+  )
+  >
+)>
+
+<decision #track.add_domain_operation_server_api.registration_capabilities {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>Where do loaded bundles and current server capabilities live?</?>
+  <answer { }
+  (
+    <raw-answer ?>Inject immutable registrations into createApp; keep capabilities beside, not inside, the loaded authoring bundle.</?>
+    <decision-text ?>The server loads each bundle once and freezes its current capabilities. Runtime resources remain per execute call.</?>
+    <rationale ?>Deployment facts do not rewrite authoring truth, and the server never becomes database lifecycle owner.</?>
+    <evidence ?>Promoted server_projection_ownership decision and completed runtime behavior.</?>
+  )
+  >
+)>
+
+<decision #track.add_domain_operation_server_api.dto_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>Does web-shared own Domain Operation DTOs?</?>
+  <answer { }
+  (
+    <raw-answer ?>No. It may publish route constants only.</?>
+    <decision-text ?>All Domain Operation DTOs and validation/projector helpers are imported directly from depa-data-domain-operation-contracts; web-shared gains no duplicate domain schema.</?>
+    <rationale ?>A single transport-neutral contract authority prevents client/server drift.</?>
+    <evidence ?>Mission capsule ownership design and archived contracts behavior.</?>
+  )
+  >
+)>

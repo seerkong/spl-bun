@@ -1,0 +1,29 @@
+<behavior-patch capability="domain-workbench-ui" version="1">
+  <upsert selector="behavior://domain-workbench-ui/requirements/execution-observation">
+    <requirement id="execution-observation">
+      <statement>The workbench SHALL execute selected requests through `POST /api/domain-operations/execute` and render the response envelope through distinct views for outcome, changes, before/after, operation tree, plan or SQL availability, and diagnostics, including partial batch item mapping when present.</statement>
+      <suite id="execution" name="Execution and observation">
+        <case id="successful-write">
+          <given>a write preset with before, after, diff, trace, and plan observation channels</given>
+          <when>the user executes it</when>
+          <then>status, outcome, mutation summaries, probe snapshots, operation tree, public plan, and diagnostics SHALL be inspectable</then>
+        </case>
+        <case id="partial-batch">
+          <given>a best-effort batch preset with one failing item</given>
+          <when>the user executes it</when>
+          <then>the response SHALL show partial status and stable item keys for success and failure rows</then>
+        </case>
+        <case id="business-failure">
+          <given>a business execution failure preset such as CancelEvent failure</given>
+          <when>the user executes it</when>
+          <then>failure diagnostics and the visible child-operation prefix SHALL be rendered without treating HTTP 200 as success-only UI state</then>
+        </case>
+        <case id="unavailable-facts">
+          <given>runtime response facts mark SQL trace or batch item mapping unavailable</given>
+          <when>the related result view renders</when>
+          <then>the workbench SHALL display the unavailable diagnostic or mapping state and SHALL NOT fabricate SQL or item outcomes</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

@@ -1,0 +1,15 @@
+<behavior-patch capability="depa-orm-domain-runtime" version="1">
+  <upsert selector="behavior://depa-orm-domain-runtime/requirements/operation-execution">
+    <requirement id="operation-execution">
+      <statement>The runtime SHALL parse and catalog-match the exact request, dispatch only by operation.ref, preserve single/selection/batch semantics, require every batch item to match one definition verb and subject shape, validate request choices against definition requestable ∩ binding actual ∩ server current, wrap same-datasource atomic work in the public outer transaction, reject cross-datasource atomic work before handlers, isolate homogeneous best-effort batch items without silently changing requested atomicity, and adapt update/delete RuntimeMutation values to an exact public Writer equality target derived from the compiled entity primary key; missing or invalid primary-key facts SHALL be rejected before Writer IO and SHALL NOT degrade to an unscoped mutation.</statement>
+      <suite id="execution" name="Registry and transaction semantics">
+        <case id="unknown-or-mismatch"><given>an unknown operation ref or exact request, preset, dimensions, verb, or batch shape inconsistent with catalog</given><when>execution is requested</when><then>no SQLite allocation, seed, or handler runs and stable validation diagnostics identify the path</then></case>
+        <case id="capability-intersection"><given>a request choice excluded by the definition, binding, or server current capability set</given><when>capability preflight calculates effective support</when><then>the failing authority is reported and no SQLite allocation, seed, or handler runs</then></case>
+        <case id="same-source-atomic-rollback"><given>a composed handler performs two public Writer calls on one datasource and the second fails</given><when>atomic execution runs</when><then>the outer transaction rolls both writes back and response reports failure</then></case>
+        <case id="cross-source-atomic-reject"><given>a binding declares multiple datasources and request atomicity is atomic</given><when>capability validation runs</when><then>CROSS_DATASOURCE_ATOMICITY_REJECTED is returned before any handler runs</then></case>
+        <case id="best-effort-batch"><given>homogeneous independently keyed batch items where one handler invocation fails</given><when>best-effort execution runs</when><then>successful siblings commit, response is partial, and item keys map to independent statuses</then></case>
+        <case id="primary-key-mutation-targeting"><given>a multi-row entity whose compiled primary key may not be named id</given><when>a handler submits update or delete values containing one valid key</when><then>only that row changes; sibling rows remain unchanged; create stays compatible; and missing or invalid key values fail before any unscoped Writer mutation</then></case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

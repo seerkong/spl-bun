@@ -1,0 +1,155 @@
+<Mission id="canonicalize-orm-annotation-named-conf" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>以 Kunun NamedConf 统一 ORM prefix annotation transport，删除 Field、Property 与 DataSource 建模中的旧语法和双 authority，并完成跨项目无兼容迁移。</Goal>
+    <Description>先冻结完整 attachment/authority/diagnostic contract，再依次落地 Kunun 1.0.4 annotation profiles、depa ORM breaking compiler contract、spl-bun fixtures/docs/app consumers，最后检查 build/pack/publish dry-run 与 source-to-runtime 收敛。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <Revision>14</Revision>
+    <CreatedAt>2026-08-10T09:50:36Z</CreatedAt>
+    <UpdatedAt>2026-08-12T17:15:49Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="mission">
+    <MaterialBundle role="state" name="analysis" domain="mission" path="vfs://./analysis/"/>
+    <MaterialBundle role="state" name="reports" domain="mission" path="vfs://./reports/"/>
+    <MaterialBundle role="output" name="tracks" domain="codument" path="vfs://@/codument/tracks/"/>
+  </Ports>
+
+  <cdt:ProjectRefs>
+    <cdt:ProjectRef id="spl-bun" kind="host"/>
+    <cdt:ProjectRef id="kunun-language" kind="external"/>
+    <cdt:ProjectRef id="depa-orm" kind="external"/>
+  </cdt:ProjectRefs>
+
+  <cdt:ActorSets default="host-integration-loop">
+    <cdt:ActorSet id="host-integration-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="spl-bun"><Description>维护 NamedConf hard-cut desired DAG、跨项目版本顺序和最终验收矩阵，仅以 evidence 或 human decision 重规划。</Description></cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="spl-bun"><Description>观察三个项目的 mission/track、fixtures、docs、app bundles、依赖、生成物、tarball 和验证结果，识别旧 transport 或 shadow authority。</Description></cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="spl-bun"><Description>比较 attachment mapping、Kunun single authority、Property relation ownership、flat Field、DataSource split authority 和 zero compatibility 目标与实际态。</Description></cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="spl-bun"><Description>连续执行真实 track 生命周期、跨项目集成和 fresh verification；动作内验证明确且无 drift 时推进下一 ready node。</Description></cdt:Actor>
+    </cdt:ActorSet>
+
+    <cdt:ActorSet id="kunun-annotation-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="kunun-language"><Description>把四类 ORM profile 收敛到 prefix annotation NamedConf，同时保持 Kunun public type-system model 为 source/code-first 唯一语义 authority。</Description></cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="kunun-language"><Description>观察 parser、KnKnot、type annotations、target-kind admission、programmatic metadata、generated artifacts、pack 内容和 1.0.4 package state。</Description></cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="kunun-language"><Description>判断 NamedConf 是否只承担 transport、旧 marker Conf 是否已拒绝、source/code-first 是否结构等价且没有 shadow model。</Description></cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="kunun-language"><Description>创建并执行 Kunun 所属 track，完成 profile contract、diagnostics、版本内集成和 package dry-run 证据。</Description></cdt:Actor>
+    </cdt:ActorSet>
+
+    <cdt:ActorSet id="depa-orm-contract-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="depa-orm"><Description>规划 strict ORM projection、flat Field、Property-only relation、DataSource single authority、compatibility retirement 和 breaking package graph。</Description></cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="depa-orm"><Description>观察 annotation projector、datasource parselet、metadata adapters、runtime schemas、tests、dist/declarations、package exports 和 packed artifacts。</Description></cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="depa-orm"><Description>判断旧 reader/fallback 是否物理退出、Field/Property/DataSource authority 是否唯一、runtime behavior 和 composite joins 是否保持。</Description></cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="depa-orm"><Description>创建并执行 depa ORM 所属 breaking track，完成源码、测试、版本、build/pack/publish dry-run 与独立验证。</Description></cdt:Actor>
+    </cdt:ActorSet>
+  </cdt:ActorSets>
+
+  <TaskSpace id="space_canonicalize-orm-annotation-named-conf" name="canonicalize-orm-annotation-named-conf" version="1" cdt:child-mode="dag">
+    <Description>跨 Kunun、depa ORM 与 spl-bun 的 ORM NamedConf hard-cut mission。</Description>
+    <SubNodes>
+      <TaskGroup id="G1" name="Contract Freeze And Inventory" status="DONE" order="0">
+        <Description>以本 mission 已确认设计为基线，形成 live/negative/archive/generated/package 分类清单和逐项目 acceptance map。</Description>
+        <SubNodes>
+          <Task id="G1-T1" name="Freeze canonical and forbidden contract" status="DONE" order="0">
+            <Description>核对四类 attachment、Field/Property/DataSource authority、programmatic API、diagnostics、zero compatibility 和 non-publish boundary，任何变化必须走 human intervention。</Description>
+          </Task>
+          <Task id="G1-T2" name="Classify cross-project residue" status="DONE" order="1">
+            <Description>将三个项目中的旧 transport、nested storage、direct datasource Conf 和兼容 reader 分为 live positive、negative、generated、current docs、app bundle、pack 或 immutable archive。</Description>
+          </Task>
+          <Task id="G1-T3" name="Map package and verification graph" status="DONE" order="2">
+            <Description>确定 Kunun 1.0.4、受影响 depa ORM breaking package set、spl-bun dependencies，以及 test/typecheck/build/pack/publish dry-run 顺序。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G2" name="Kunun NamedConf Annotation Contract" status="DONE" order="1" cdt:actor-set="kunun-annotation-loop">
+        <Description>让 Kunun 现有 datasource/entity/field ORM profiles 只读取 NamedConf，保真 typed Property 上的 generic relation metadata，固化 source/code-first 等价并拒绝旧 transport，且不重建已退役的 public ORM relation profile。</Description>
+        <SubNodes>
+          <Task id="G2-T1" name="Execute Kunun NamedConf track" status="DONE" order="0">
+            <Description>创建并执行 Kunun track，修改现有 public profiles、generic NamedConf preservation、diagnostics、tests、generated outputs 和 package preparation，纳入未发布 1.0.4 且不恢复 ORM relation parser。</Description>
+            <cdt:TrackLink state="bound" id="canonicalize-orm-annotations-with-named-conf" project-ref="kunun-language"/>
+          </Task>
+          <Task id="G2-T2" name="Verify Kunun semantic authority" status="DONE" order="1">
+            <Description>独立验证 prefix attachment、NamedConf-only admission、old-form rejection、typed Property generic metadata preservation、programmatic/source equivalence、retired relation profile absence、no shadow model 和 package content。</Description>
+          </Task>
+          <Task id="G2-T3" name="Remove residual datasource identity surface" status="DONE" order="2">
+            <Description>创建并执行 Kunun correction track，物理删除 public datasource descriptor/declaration 中的 Key/Name，并修正 dry-run 报告措辞。</Description>
+            <cdt:TrackLink state="bound" id="remove-orm-datasource-identity-duplication" project-ref="kunun-language"/>
+          </Task>
+          <Task id="G2-T4" name="Reverify Kunun datasource authority" status="DONE" order="3">
+            <Description>fresh verifier 重新检查 source、declarations、aggregate bundles 和 packed tarball，确认 datasource identity 只来自 declaration #name，且原 NamedConf contract 全部保持。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3" name="depa ORM Strict Projection Hard Cut" status="DONE" order="2" cdt:actor-set="depa-orm-contract-loop">
+        <Description>迁移 depa ORM profiles/compiler/adapters，删除旧 transport 与 datasource fallback，保持 property-first runtime behavior 并进行 breaking package bump。</Description>
+        <SubNodes>
+          <Task id="G3-T1" name="Execute depa ORM hard-cut track" status="DONE" order="0">
+            <Description>创建并执行 depa ORM track，落实 flat Field、Property-only relation、DataSource split authority、strict diagnostics、compatibility removal 和 package graph versioning。</Description>
+            <cdt:TrackLink state="bound" id="enforce-canonical-orm-named-conf-contract" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G3-T2" name="Verify depa ORM projection and artifacts" status="DONE" order="1">
+            <Description>独立验证 source/code-first projection、composite/through/owner/inverse/read/write suites、datasource rejection、src/dist/declaration/export/tarball residue 和 dry-run gates。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4" name="spl-bun Consumer Migration" status="DONE" order="3">
+        <Description>迁移 active capsule、current docs、fixtures、domain bundles、web IDE/workbench/server consumers 和 dependency declarations，建立 canonical-only residue guard。</Description>
+        <SubNodes>
+          <Task id="G4-T1" name="Execute host consumer migration track" status="DONE" order="0">
+            <Description>创建并执行 spl-bun track，迁移所有 positive uses 与 generated expectations，保留明确 negative inputs，更新 app bundles 和 package dependencies。</Description>
+            <cdt:TrackLink state="bound" id="migrate-orm-consumers-to-named-conf" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G4-T2" name="Verify host applications and residue guard" status="DONE" order="1">
+            <Description>验证 capsule suites、domain runtime、domain-context bundles、web IDE/workbench/server flows、current docs 和 live-source zero-residue guard。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G5" name="Cross-Project Release Readiness" status="DONE" order="4">
+        <Description>按依赖顺序验证三项目 workspace 与 package artifacts 已准备好供后续人工发布，但不执行发布。</Description>
+        <SubNodes>
+          <Task id="G5-T1" name="Run version and dependency audit" status="DONE" order="0">
+            <Description>核对 Kunun 1.0.4、depa ORM breaking versions、内部依赖范围和 spl-bun 正式 package consumption，不允许 workspace shadow dependency 掩盖问题。</Description>
+          </Task>
+          <Task id="G5-T2" name="Run build pack and publish dry runs" status="DONE" order="1">
+            <Description>执行 test/typecheck/build/pack、tarball source/dist/declaration inspection 和 registry-targeted publish dry-run；记录没有实际 publish 的命令证据。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="VERIFY" name="Mission Convergence Verification" status="DONE" order="5">
+        <Description>从用户确认的 design 与 decisions 出发进行 fresh 跨项目审计，发现任何 live old authority 时受控 replan。</Description>
+        <SubNodes>
+          <Task id="VERIFY-T1" name="Trace both authoring paths end to end" status="DONE" order="0">
+            <Description>从 canonical Kon 和 programmatic Kunun model 追踪 NamedConf metadata 经 depa ORM projection 到 runtime read/write behavior，逐条验证 proposal criteria。</Description>
+          </Task>
+          <Task id="VERIFY-T2" name="Reject all residual authorities" status="DONE" order="1">
+            <Description>扫描源码、tests 分类、docs、bundles、generated output、exports 和 tarballs，拒绝 old marker Conf、nested field storage、field relation、direct datasource Conf、fallback reader 和 shadow model。</Description>
+          </Task>
+          <Task id="VERIFY-T3" name="Close mission evidence" status="DONE" order="2">
+            <Description>汇总真实 archived tracks、fresh verification、package dry-run、durable decisions 和剩余非阻塞风险；只有全部 success criteria 有客观证据时进入 completed。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_canonicalize-orm-annotation-named-conf">
+      <Node id="G2"><After ref="G1"/></Node>
+      <Node id="G3"><After ref="G2"/></Node>
+      <Node id="G4"><After ref="G3"/></Node>
+      <Node id="G5"><After ref="G4"/></Node>
+      <Node id="VERIFY"><After ref="G5"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+
+  <Hooks>
+    <Hook on="mission:after-node"><cdt:MissionReconcile max-tracks="10" on-limit="checkpoint" on-drift="replan-or-block"/></Hook>
+  </Hooks>
+</Mission>

@@ -1,0 +1,1365 @@
+{
+  "kind": "data",
+  "runId": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+  "backend": "codex-desktop",
+  "status": "completed",
+  "output": {
+    "baseline-review": {
+      "summary": "needs_changes。本轮授权核对通过，HEAD、工作树状态、tracked diff、275个未跟踪文件manifest及关键源码哈希均与前次报告一致。本次修正severity枚举，保留原评审证据与范围；未修改文件、运行测试或派发节点。formatting及安全整数提升实现已存在，但最终验收未闭合，并存在两个静态代码问题。mission保持active；以下为待接纳候选gap，不代表已完成验收。",
+      "criteria": [
+        "C1：期望1/2及AT1须由当前共享expression语义实现，Kon/Flow复用；精确数值、非法输入、输入不变与报表既有规则均有断言。",
+        "C2：最终业务基线执行bun test packages/expression packages/core packages/kon-spl-dsl packages/spl-flow packages/report-logic并通过。",
+        "C3：最终业务基线执行bun test及bun run build，全量回归及13包构建通过。",
+        "C4：report-logic/src无隐藏文件IO或动态eval；吸引子排除集包含精度、懒分支、字段遮蔽、输入不变等负向验证。",
+        "C5：Codument diff及未跟踪列表哈希分别保持7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049和1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e。",
+        "C6：执行当前mission的verification/formatter-oracle.ts，42项Java Formatter/ICU/SimpleDateFormat实值通过，临时编译目录清理。",
+        "C7：SPL_E2E_FRONTEND_PORT=4394 SPL_E2E_BACKEND_PORT=4396 bun run test:e2e通过17个产品用例，包含网页精确值format派生。",
+        "C8：独立review不存在未关闭的已接纳gap；实现者声明、历史绿色及simulation均不能替代最终基线证据。",
+        "C9：当前run的基线、允许修改集、gap接纳状态及generation/feedback关联可追溯，回退保留lineage。",
+        "C10：先收口formatting，再对照esProc、旧迁移承诺和nop-report重评兼容边界；保留dirty内容，不改源Java、旧Codument或外部库，不恢复企业平台及domain/ORM。"
+      ],
+      "gaps": [
+        {
+          "id": "G0-state-reconciliation",
+          "severity": "minor",
+          "criterion": "C8；mission状态必须反映真实实现和证据。",
+          "evidence": [
+            "current_observation：/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/loop.md:30仍写尚未写业务代码，Next仍为preflight后实现；evidence.md:3仅E1。",
+            "current_observation：/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/functions.ts:463已绑定format/string/number；scalar.ts:124已有安全整数提升；formatting.test.ts:3及网页kon-execution.e2e.ts:117已有断言。"
+          ],
+          "action": "由实施者校正loop的Actual state、Last action和Next，追加区分historical_claim、historical_receipt与当前证据的条目；保持最终验收待完成，不从零重写或提前归档。"
+        },
+        {
+          "id": "G1-final-baseline-verification",
+          "severity": "major",
+          "criterion": "C1–C8；所有验收绑定最后scalar修改之后的最终业务基线。",
+          "evidence": [
+            "historical_receipt：原会话JSONL L6141记录42项oracle通过，L6151记录408项切片通过；L6161随后修改scalar，L6165仅记录两文件9项测试通过。",
+            "historical_receipt：原会话JSONL L6169为server_overloaded，L6209为用户中断；前次检查其后至文件末尾只有设置事件，没有新的业务验收回执。",
+            "current_observation：MISSION.md:29–35的六项Acceptance均未勾选；oracle脚本与17个E2E测试声明存在，存在不等于执行成功。",
+            "current_observation：前次静态扫描report-logic/src未发现合同列出的IO/eval模式；本轮复核两项Codument哈希仍与C5一致。这些只覆盖相应静态检查。"
+          ],
+          "action": "VerifyPlan：先处理已接纳代码问题并重新固定基线，再逐项执行C2、C3、C4负向测试、C5、C6和C7，保存命令、退出码、日志及基线；oracle使用隔离临时目录，E2E使用专用端口和测试数据库。任一后续业务改动均需更新受影响验收，历史9/408/450项绿色不得替代。"
+        },
+        {
+          "id": "G3-decimal-sign-underflow",
+          "severity": "major",
+          "criterion": "C1；AT1禁止精确Decimal格式化时静默丢失符号。",
+          "evidence": [
+            "current_observation／静态代码确定、未运行复现：/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/formatting.ts:164和:332使用Number(value)<0判断符号；后续对精确amount取abs。",
+            "current_observation：scalar.ts:11允许指数绝对值不超过2048的Decimal；decimal('-1e-400')在支持域内，但转Number后为负零，两个符号判断均为false。",
+            "source_evidence：/Users/kongweixian/infra-dev/esProc/src/main/java/com/scudata/expression/fn/convert/Format.java:57直接调用String.format；当前oracle仅覆盖普通负Decimal，未覆盖下溢边界。"
+          ],
+          "action": "使用精确数值自身的符号信息。补充format('%e',decimal('-1e-400'))的Java实值对照，预期为-1.000000e-400，并覆盖string的负子模式、正负极小值及共享入口；修复后执行G1验收。"
+        },
+        {
+          "id": "G4-validation-before-early-return",
+          "severity": "minor",
+          "criterion": "C1；未知格式及非法参数必须明确诊断。",
+          "evidence": [
+            "current_observation／静态代码确定、未运行复现：/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/formatting.ts:184–190对字符串提前返回，绕过:192–195的pattern/locale类型校验；string('x',123)因此忽略非法pattern。",
+            "source_evidence：/Users/kongweixian/infra-dev/esProc/src/main/java/com/scudata/expression/fn/convert/ToString.java:54–83在字符串返回之前校验格式及locale类型。",
+            "current_observation：formatting.ts:256允许任意字母作为日期转换；:293在值为null时不调用datePart，format('%tq',null)绕过未知转换诊断。"
+          ],
+          "action": "将协议合法性校验放在按值提前返回之前；增加非法pattern/locale及未知日期转换配合null的负例，同时保留合法null输出和自定义函数替换契约。"
+        },
+        {
+          "id": "G2-compatibility-reassessment",
+          "severity": "minor",
+          "criterion": "C10；旧适配说明不能直接作为剩余迁移范围已闭合的证明。",
+          "evidence": [
+            "current_observation：/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/report-parity-2026-10-22/spl-acceptance-matrix.md:3称续作已补齐格式边界，但链接的../spl-compatibility-2026-10-23/acceptance-matrix.md不存在；该目录当前仅有manifest.md。",
+            "current_observation：该manifest.md:9–11仅列三个mission，实际已有18个archived及1个active；旧SPL矩阵:34–38仍保留数值、日期和成员参数的上批边界描述。",
+            "source/current_observation：nop-report的ExpandedSheetGenerator.java:69–149及ExpandedSheetEvaluator.java:166–181存在动态sheet和显示格式处理；目标sheet-instances.ts:42及cell-processing.ts:91已有对应实现，但前次初评未做完整来源矩阵验收，本次也未执行验收。",
+            "historical_requirement：原会话JSONL L1506要求报表优先，L5307要求重新核查兼容边界；旧backlog不能自动成为永久豁免。"
+          ],
+          "action": "formatting验收后逐项重对旧SPL库存、旧Codument承诺及报表RP/F矩阵，记录source行为、当前入口、实值验证及显式适配裁决；补齐当前对账索引。未复现差异标为待验证，不把本项当作已证明的额外功能缺陷或全库移植授权。"
+        },
+        {
+          "id": "G5-run-lineage-context",
+          "severity": "minor",
+          "criterion": "C8–C9；同一run的接纳、回退和最终基线关联可审计。",
+          "evidence": [
+            "context_gap：本轮提供round=1、策略、启动授权及前次未准入报告，但未提供generation/feedback关联、已接纳gap清单及冻结允许修改集，无法核验回退lineage和已接纳gap关闭情况。",
+            "current_observation：HEAD未变但工作树含91 modified、650 deleted、66个折叠untracked条目，实际未跟踪文件275个；本轮指纹复核一致，仅用HEAD仍不足以标识基线。"
+          ],
+          "action": "由Host保存并关联本次观测指纹、未跟踪内容manifest、允许修改集及gap接纳决定；进入后续轮次或回退时保留原run/generation/feedback链。材料未提供前保持该条件未验证，不据此推断平台实现有缺陷。"
+        }
+      ],
+      "evidenceRefs": [
+        "本轮复核基线：HEAD=1e37adb6a8eccb5087348f2abd2cc2ccbba251fb；与前次报告一致。",
+        "本轮复核：git status --porcelain=v1 -z的SHA256=c5ed99b8f8dc92b2d74772f4a571eb6b96536878391f75231e6c69e3696144d4。",
+        "本轮复核：git diff HEAD --binary的SHA256=8587fd721d0ff64f5f3d72158439cdbabe6f73ebda4ee5faa40c95a742bf4452。",
+        "本轮复核：275个未跟踪路径及内容SHA256组成的紧凑UTF-8 JSON数组摘要=b6ac67f8132755aad6504cd09f3b950d9bb360f032b92d7caac1f08e9c0bc78a；仅内存观测，未落盘manifest。",
+        "本轮复核文件SHA256：/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/formatting.ts=949a6d764a7b3a156aee77a33b5e8e9a4505d5fa421f6e3cf2a6fef977db2015。",
+        "本轮复核文件SHA256：/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/scalar.ts=659e51e4753f2bbebc606f61e97ab4767c2be4ac09eb7b4d11343b61dcebc76c。",
+        "本轮复核Codument diff SHA256=7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049；未跟踪列表SHA256=1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e。",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/MISSION.md:27",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/attractors/source-parity.md:13",
+        "/Users/kongweixian/.codex/sessions/2026/10/22/rollout-2026-10-22T19-05-02-01a1645b-d553-7f31-b149-4e777610e9e9.jsonl:6141",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/formatting.ts:164",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/evaluator.ts:227",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/kon-spl-dsl/src/words/eval.ts:24",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/spl-flow/src/index.ts:533",
+        "/Users/kongweixian/infra-dev/spl-bun/codument/tracks/archived/2026-01-10-port-expression-engine/design.md:13",
+        "/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/report-parity-2026-10-22/acceptance-matrix.md:9"
+      ]
+    },
+    "implement": {
+      "summary": "已修复 parse 非有限数值词法及 S12 现状漂移，四入口和完整验收通过。排序依据已准入独立 Review 重验归档；parse/G2 本轮修复等待新独立核销。实际执行身份为 generation6、graph revision7。",
+      "round": 4,
+      "status": "implemented",
+      "changeRef": "未提交；HEAD=1e37adb6a8eccb5087348f2abd2cc2ccbba251fb；worktreeContentSHA256=917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f；businessSHA256=e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5；摘要范围与移动映射见 implement-6/final-worktree.json、preservation.json、sort-move.json。",
+      "changedFiles": [
+        "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/parse-conversion.ts",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/expression/__tests__/parse-conversion.test.ts",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/expression/README.md",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/kon-spl-dsl/__tests__/parse-parity.test.ts",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/spl-flow/__tests__/parse-parity.test.ts",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/web-ide/__tests__/e2e/kon-execution.e2e.ts",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/README.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/manifest.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion/loop.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion/evidence.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion/verification/source-parse-oracle.ts",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/archived/spl-stable-expression-sort/MISSION.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/archived/spl-stable-expression-sort/loop.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/archived/spl-stable-expression-sort/evidence.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/archived/spl-stable-expression-sort/attractors/shared-semantics.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/archived/spl-stable-expression-sort/verification/source-oracle.ts",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/baseline.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/run-context.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/review-decision.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/sort-move.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/record-final.ts",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/checks.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/preservation.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/business-baseline.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/final-worktree.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/evidence-hashes.json"
+      ],
+      "checks": [
+        "新增回归先复现：修复前 exit1，6 pass/3 fail；修复后三文件 exit0，9 pass/328 expects。",
+        "parse 原专项命令：exit0，232 pass/909 expects/39 files；排序专项：exit0，231 pass/776 expects/39 files。",
+        "规定五包相关切片：exit0，432 pass/1791 expects/74 files。",
+        "bun test：exit0，479 pass/2099 expects/89 files。",
+        "bun run build：exit0，13包构建通过。",
+        "parse 源码 oracle：exit0，592项实际Java对照通过；原 Review 152项脚本原样重跑 exit0、零差异。",
+        "原 Review 四入口探针：exit0，20项全部通过，明确验证 number 类型、NaN/正负Infinity及输入不变。",
+        "Formatter 112项、排序80项实际Java对照均 exit0；临时编译目录已清理。",
+        "4394/4396端口 E2E：exit0，17 passed（17.9s），新增五种非有限转换显示断言。",
+        "纯报表核心 IO/eval 扫描无命中；Codument两项保护哈希保持冻结值；本轮修改的tracked路径diff检查通过。",
+        "排序 completion/archived、parse preflight及formatting archived校验通过；排序5项移动内容、formatting43项内容及上一轮22项收据哈希保持，既有dirty及删除未覆盖。"
+      ],
+      "remainingGaps": [
+        {
+          "id": "CANDIDATE-parse",
+          "severity": "major",
+          "criterion": "C1、C8、C10；当前修复须由原流程独立核销。",
+          "evidence": [
+            "+NaN、-NaN、NaN%、Infinity%、-Infinity%已在共享转换路径修复，default/q/e/qe/en/qen返回数值，n/qn及引号优先级保持。",
+            "592项来源对照、原152项检查及四入口20项探针全部通过；本 generation 的独立 Verify/Review 尚未返回。"
+          ],
+          "action": "原流程按最终指纹独立验证并核销；parse mission保持active，实施者不自行归档。"
+        },
+        {
+          "id": "G2-compatibility-reassessment",
+          "severity": "minor",
+          "criterion": "C10；当前对账修订及剩余边界须独立重评。",
+          "evidence": [
+            "S12已改为当前排序字段诊断，静默返回反例仅保留于历史区；已追加本轮独立parse差异和修复证据。",
+            "任意来源工作簿、完整Java nop-report及其他未验证边界仍未作为全面兼容证明。"
+          ],
+          "action": "独立Review核对索引修订并继续按具体来源和输入重评剩余范围；证据充分的新差距进入后续有限mission，不扩企业平台。"
+        }
+      ],
+      "evidenceRefs": [
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/run-context.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/review-decision.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/checks.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/final-worktree.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/preservation.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/evidence-hashes.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion/evidence.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md",
+        "反馈关联：gap-review generation5，outputHash=3704820b20202e14ccc16e1f5adca2f5dfb45664b50693dc5e808dc540517de3；原baselineRef及generation5收据完整保留。"
+      ],
+      "loopState": {
+        "consecutiveNoProgress": 0
+      }
+    },
+    "verify": {
+      "summary": "技术验证 passed。实际基线匹配，本节点必需检查及证据全部通过；当前基线收据经独立核验后复用，关键检查已重跑。C8记录not-run，由下游gap-review负责最终接纳；未修改旧报告或业务源码。",
+      "round": 4,
+      "changeRef": "未提交；HEAD=1e37adb6a8eccb5087348f2abd2cc2ccbba251fb；worktreeContentSHA256=917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f；businessSHA256=e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5；摘要范围与移动映射见 implement-6/final-worktree.json、preservation.json、sort-move.json。",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "授权、实际基线与证据审计",
+          "status": "passed",
+          "evidence": "授权四条件及原input.json核对通过。验证前后全部指纹匹配，2843个文件无变化；此前隔离副本逐文件一致，11条原始命令/日志及19项证据哈希无不符。未继承旧报告status。"
+        },
+        {
+          "name": "C1：共享语义及parse整改",
+          "status": "passed",
+          "evidence": "本轮原样重跑152项真实Java反例，零差异；四入口20项探针全部通过，确认number类型、NaN/正负Infinity及输入不变。选项、精度、溢出和非法协议回归保持。"
+        },
+        {
+          "name": "C2：相关切片",
+          "status": "passed",
+          "evidence": "本轮运行规定五包命令，exit 0；432 pass、1791 expects、74 files。"
+        },
+        {
+          "name": "C3：全量及构建",
+          "status": "passed",
+          "evidence": "独立核对实际基线、隔离副本、原始命令和日志SHA256后复用：bun test为479 pass、2099 expects、89 files；bun run build为13包通过，均exit 0。本轮未重跑这两项。"
+        },
+        {
+          "name": "C4：纯核心及负向验证",
+          "status": "passed",
+          "evidence": "本轮report-logic IO/eval扫描无命中；当前回归及核验后的证据覆盖精度、懒分支、字段遮蔽、输入不变、只读视图和非法patch。"
+        },
+        {
+          "name": "C5：Codument保护",
+          "status": "passed",
+          "evidence": "本轮实算diff SHA256=7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049；未跟踪列表SHA256=1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e，均保持冻结值。"
+        },
+        {
+          "name": "C6及sort/parse来源oracle",
+          "status": "passed",
+          "evidence": "本轮重新执行：Formatter112项、排序80项、parse592项实际Java来源对照全部exit 0；临时编译目录已清理，窄适配限制保留。"
+        },
+        {
+          "name": "C7：产品验收",
+          "status": "passed",
+          "evidence": "核对当前基线、原命令、隔离副本及日志哈希后复用4394/4396端口E2E收据：exit 0，17 passed，12.3s，含format、非有限parse、排序及动态sheet。本轮未重新启动服务。"
+        },
+        {
+          "name": "C8：最终Review关闭差距",
+          "status": "not-run",
+          "evidence": "owner=gap-review。最终接纳及gap关闭属于下游职责；本节点不自批关闭。依本轮verificationDecisionScope，此项待下游不改变已通过的技术验证结论。"
+        },
+        {
+          "name": "C9：授权与lineage",
+          "status": "passed",
+          "evidence": "实际implement generation6、代码graph revision7及当前checkpoint revision8分别核实；目录授权限制、原baselineRef、反馈和前代收据保持。逐文件允许集从未冻结，不要求该制品。"
+        },
+        {
+          "name": "C10/G2：现状对账与范围保护",
+          "status": "passed",
+          "evidence": "本轮重读S12，当前字段诊断与已核验专项一致，旧反例明确在历史区；parse来源整改成立。保留其余兼容边界及下游核销职责，未声明全面兼容、扩企业平台或回写来源。"
+        }
+      ],
+      "evidenceRefs": [
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/verification.md",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/checks.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/final-baseline.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/static.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/preservation.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/evidence-hashes.json"
+      ]
+    },
+    "gap-review": {
+      "summary": "独立复核维持 complete。当前业务基线未变，新增Verify重跑及当前基线收据复用均有可核验证据。CANDIDATE-parse与G2具体整改通过，既有关闭结论保持，C1–C10满足当前合同，无未关闭的已接纳差距。结论覆盖已列能力及显式适配，不代表Java全库或任意来源工作簿全面兼容。本轮仅只读评审，未运行测试、修改文件或任务状态。",
+      "round": 4,
+      "changeRef": "未提交；HEAD=1e37adb6a8eccb5087348f2abd2cc2ccbba251fb；worktreeContentSHA256=917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f；businessSHA256=e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5；摘要范围与移动映射见 implement-6/final-worktree.json、preservation.json、sort-move.json。",
+      "verdict": "complete",
+      "criteriaCoverage": [
+        {
+          "criterion": "C1：MISSION/AT1、共享语义、精确值、诊断、输入不变及报表规则。",
+          "status": "met",
+          "evidence": [
+            "已重读parse-conversion.ts的非有限词法及q/e/n分支、来源Variant/FloatingDecimal和回归断言。修复保持在共享parse路径，未放宽通用scalar或JSON协议。",
+            "新增Verify原样重跑152项来源反例及四入口20项探针，均exit 0、零差异；确认number类型、NaN/正负Infinity及输入不变。当前parse592项、排序80项对照通过。"
+          ]
+        },
+        {
+          "criterion": "C2：最终业务基线规定五包相关切片通过。",
+          "status": "met",
+          "evidence": [
+            "本次Verify重新运行规定命令，exit 0，432 pass、1791 expects、74 files；命令及日志哈希已独立核对。"
+          ]
+        },
+        {
+          "criterion": "C3：最终业务基线全量回归及13包构建通过。",
+          "status": "met",
+          "evidence": [
+            "复用同一业务基线原始收据：479 pass、2099 expects、89 files，13包构建exit 0。已核对原日志哈希及reuse-audit中的完整文件、隔离副本一致性证据；本次Verify未重跑这两项。"
+          ]
+        },
+        {
+          "criterion": "C4：纯报表核心无隐藏IO/eval，AT1排除集有负向验证。",
+          "status": "met",
+          "evidence": [
+            "本轮按规定模式扫描report-logic/src无命中；当前回归及已核验收据覆盖精度、懒分支、字段遮蔽、输入不变、只读视图和非法patch。"
+          ]
+        },
+        {
+          "criterion": "C5：Codument保护哈希保持冻结值。",
+          "status": "met",
+          "evidence": [
+            "本轮实算diff SHA256=7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049；未跟踪列表SHA256=1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e。"
+          ]
+        },
+        {
+          "criterion": "C6：当前Formatter来源实值通过，临时资源清理。",
+          "status": "met",
+          "evidence": [
+            "新增Verify重新执行归档后Formatter oracle，exit 0，112项实际Java/ICU对照通过；日志哈希一致，无编译临时目录残留。"
+          ]
+        },
+        {
+          "criterion": "C7：规定端口17项产品验收，包含精确值format及当前parse整改。",
+          "status": "met",
+          "evidence": [
+            "已核验复用的4394/4396端口原始E2E收据：exit 0、17 passed，覆盖format、非有限parse显示、排序和动态sheet。本次Verify未重新启动服务；四入口内存探针另行确认数值类型。"
+          ]
+        },
+        {
+          "criterion": "C8：独立review无未关闭的已接纳gap。",
+          "status": "met",
+          "evidence": [
+            "本报告核销CANDIDATE-parse非有限词法差异及G2的S12现状漂移；formatting、排序及其他已关闭整改保持，无新增已确认阻断项。",
+            "Verify的C8 not-run属于职责分工，本次独立Review已提供最终关闭裁决。"
+          ]
+        },
+        {
+          "criterion": "C9：目录授权、接纳状态、基线及同run generation/feedback lineage可追溯。",
+          "status": "met",
+          "evidence": [
+            "原启动授权同值，目录级授权及限制保持；不存在逐文件冻结允许集要求。",
+            "实际command确认implement generation6、代码graph revision7；当前checkpoint revision8为编排状态，未混同代码代际。原baselineRef、反馈及前代收据保留。",
+            "当前22项实现收据、已列新旧Verify证据及排序/formatting移动内容哈希均无不符。"
+          ]
+        },
+        {
+          "criterion": "C10：来源与旧承诺兼容重评，保留dirty、准确边界及范围限制。",
+          "status": "met",
+          "evidence": [
+            "已重读当前对账：S12准确记录排序字段诊断，旧反例留在历史区；parse来源差异已有实际修复及复测，原SPL和RP/F重评结论保持。",
+            "完整Java运行、任意来源工作簿、完整locale及其他未验证能力继续保留准确限制，不由本次验收推导全面兼容。",
+            "完整工作树匹配冻结manifest，既有dirty及删除保持；未发现扩大企业平台、恢复domain/ORM或回写受保护来源的变更。"
+          ]
+        }
+      ],
+      "gaps": [],
+      "progress": "unchanged",
+      "evidenceRefs": [
+        "baselineRef.run_id=holarchy-0e32cd3d67d631730d42c305c551dfec1614; node_id=baseline-review; node_revision=3-output-contract; generation=3",
+        "baselineRef.output_ref=ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3; output_hash=483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae",
+        "本轮实算status-z SHA256=a3691c60665513b94a1b1655aa933b4f73216d3f5e1c9806a91a9d1cb2d41f56；tracked HEAD binary diff SHA256=258099b4ec526c4a586406dc4ffc1b2e36319dd9f474d039a66c53c6c010d4fe；工作树及业务摘要匹配changeRef。",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/parse-conversion.ts:43",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion/MISSION.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/run-context.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/checks.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/final-baseline.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/evidence-hashes.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md:35"
+      ],
+      "loopState": {
+        "consecutiveNoProgress": 1
+      }
+    },
+    "result": {
+      "summary": "独立复核维持 complete。当前业务基线未变，新增Verify重跑及当前基线收据复用均有可核验证据。CANDIDATE-parse与G2具体整改通过，既有关闭结论保持，C1–C10满足当前合同，无未关闭的已接纳差距。结论覆盖已列能力及显式适配，不代表Java全库或任意来源工作簿全面兼容。本轮仅只读评审，未运行测试、修改文件或任务状态。",
+      "round": 4,
+      "changeRef": "未提交；HEAD=1e37adb6a8eccb5087348f2abd2cc2ccbba251fb；worktreeContentSHA256=917ddce4d61e494117364a657d118107e9905228c401cef47562c12e471b4c4f；businessSHA256=e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5；摘要范围与移动映射见 implement-6/final-worktree.json、preservation.json、sort-move.json。",
+      "verdict": "complete",
+      "criteriaCoverage": [
+        {
+          "criterion": "C1：MISSION/AT1、共享语义、精确值、诊断、输入不变及报表规则。",
+          "status": "met",
+          "evidence": [
+            "已重读parse-conversion.ts的非有限词法及q/e/n分支、来源Variant/FloatingDecimal和回归断言。修复保持在共享parse路径，未放宽通用scalar或JSON协议。",
+            "新增Verify原样重跑152项来源反例及四入口20项探针，均exit 0、零差异；确认number类型、NaN/正负Infinity及输入不变。当前parse592项、排序80项对照通过。"
+          ]
+        },
+        {
+          "criterion": "C2：最终业务基线规定五包相关切片通过。",
+          "status": "met",
+          "evidence": [
+            "本次Verify重新运行规定命令，exit 0，432 pass、1791 expects、74 files；命令及日志哈希已独立核对。"
+          ]
+        },
+        {
+          "criterion": "C3：最终业务基线全量回归及13包构建通过。",
+          "status": "met",
+          "evidence": [
+            "复用同一业务基线原始收据：479 pass、2099 expects、89 files，13包构建exit 0。已核对原日志哈希及reuse-audit中的完整文件、隔离副本一致性证据；本次Verify未重跑这两项。"
+          ]
+        },
+        {
+          "criterion": "C4：纯报表核心无隐藏IO/eval，AT1排除集有负向验证。",
+          "status": "met",
+          "evidence": [
+            "本轮按规定模式扫描report-logic/src无命中；当前回归及已核验收据覆盖精度、懒分支、字段遮蔽、输入不变、只读视图和非法patch。"
+          ]
+        },
+        {
+          "criterion": "C5：Codument保护哈希保持冻结值。",
+          "status": "met",
+          "evidence": [
+            "本轮实算diff SHA256=7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049；未跟踪列表SHA256=1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e。"
+          ]
+        },
+        {
+          "criterion": "C6：当前Formatter来源实值通过，临时资源清理。",
+          "status": "met",
+          "evidence": [
+            "新增Verify重新执行归档后Formatter oracle，exit 0，112项实际Java/ICU对照通过；日志哈希一致，无编译临时目录残留。"
+          ]
+        },
+        {
+          "criterion": "C7：规定端口17项产品验收，包含精确值format及当前parse整改。",
+          "status": "met",
+          "evidence": [
+            "已核验复用的4394/4396端口原始E2E收据：exit 0、17 passed，覆盖format、非有限parse显示、排序和动态sheet。本次Verify未重新启动服务；四入口内存探针另行确认数值类型。"
+          ]
+        },
+        {
+          "criterion": "C8：独立review无未关闭的已接纳gap。",
+          "status": "met",
+          "evidence": [
+            "本报告核销CANDIDATE-parse非有限词法差异及G2的S12现状漂移；formatting、排序及其他已关闭整改保持，无新增已确认阻断项。",
+            "Verify的C8 not-run属于职责分工，本次独立Review已提供最终关闭裁决。"
+          ]
+        },
+        {
+          "criterion": "C9：目录授权、接纳状态、基线及同run generation/feedback lineage可追溯。",
+          "status": "met",
+          "evidence": [
+            "原启动授权同值，目录级授权及限制保持；不存在逐文件冻结允许集要求。",
+            "实际command确认implement generation6、代码graph revision7；当前checkpoint revision8为编排状态，未混同代码代际。原baselineRef、反馈及前代收据保留。",
+            "当前22项实现收据、已列新旧Verify证据及排序/formatting移动内容哈希均无不符。"
+          ]
+        },
+        {
+          "criterion": "C10：来源与旧承诺兼容重评，保留dirty、准确边界及范围限制。",
+          "status": "met",
+          "evidence": [
+            "已重读当前对账：S12准确记录排序字段诊断，旧反例留在历史区；parse来源差异已有实际修复及复测，原SPL和RP/F重评结论保持。",
+            "完整Java运行、任意来源工作簿、完整locale及其他未验证能力继续保留准确限制，不由本次验收推导全面兼容。",
+            "完整工作树匹配冻结manifest，既有dirty及删除保持；未发现扩大企业平台、恢复domain/ORM或回写受保护来源的变更。"
+          ]
+        }
+      ],
+      "gaps": [],
+      "progress": "unchanged",
+      "evidenceRefs": [
+        "baselineRef.run_id=holarchy-0e32cd3d67d631730d42c305c551dfec1614; node_id=baseline-review; node_revision=3-output-contract; generation=3",
+        "baselineRef.output_ref=ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3; output_hash=483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae",
+        "本轮实算status-z SHA256=a3691c60665513b94a1b1655aa933b4f73216d3f5e1c9806a91a9d1cb2d41f56；tracked HEAD binary diff SHA256=258099b4ec526c4a586406dc4ffc1b2e36319dd9f474d039a66c53c6c010d4fe；工作树及业务摘要匹配changeRef。",
+        "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/parse-conversion.ts:43",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion/MISSION.md",
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-6/run-context.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/checks.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/reuse-audit.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/final-baseline.json",
+        "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/evidence-hashes.json",
+        "/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md:35"
+      ],
+      "loopState": {
+        "consecutiveNoProgress": 1
+      }
+    }
+  },
+  "checkpoint": {
+    "kind": "AIDataWorkflowCheckpoint",
+    "schema_version": "ai-data-workflow/v2",
+    "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+    "graph_revision": 8,
+    "generations": [
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "baseline-review",
+        "node_revision": "1",
+        "generation": 0,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:output-contract-handoff-20261024|sha256:ad07a44d59b9fbc09d5f552a052b66d1c18c0311092f3c7fdf06509f09e3caf8",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "implement",
+        "node_revision": "1",
+        "generation": 0,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|69:hook-1fa0d370f5707abfb869d5b84eb69f3db4f6131a0f3df8f2817ad52437756854|sha256:fb79f0f4bcedbecf9939c89bd46b77fe6bbacc85c88dfcde14bb3ede0afd992e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "verify",
+        "node_revision": "1",
+        "generation": 0,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "gap-review",
+        "node_revision": "1",
+        "generation": 0,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "result",
+        "node_revision": "1",
+        "generation": 0,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "baseline-review",
+        "node_revision": "2-authorization-handoff",
+        "generation": 2,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:output-contract-handoff-20261024|sha256:ad07a44d59b9fbc09d5f552a052b66d1c18c0311092f3c7fdf06509f09e3caf8",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "implement",
+        "node_revision": "2-authorization-handoff",
+        "generation": 1,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|69:hook-1fa0d370f5707abfb869d5b84eb69f3db4f6131a0f3df8f2817ad52437756854|sha256:fb79f0f4bcedbecf9939c89bd46b77fe6bbacc85c88dfcde14bb3ede0afd992e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "verify",
+        "node_revision": "2-authorization-handoff",
+        "generation": 1,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "gap-review",
+        "node_revision": "2-authorization-handoff",
+        "generation": 1,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "result",
+        "node_revision": "1",
+        "generation": 1,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "result",
+        "node_revision": "1",
+        "generation": 2,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "baseline-review",
+        "node_revision": "3-output-contract",
+        "generation": 3,
+        "status": "succeeded",
+        "semantic_hash": "87980533063345bf9fb0681f5a3424a31efeb85d6af2b4750af62856d2c3dd6c",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "f01733d3a49a1f01b04a5f43d72ca9e6b69b0bff0edf1a21ea645b9656801e48",
+        "config_fingerprint": "e3c8d4baf6b6d45fa12afbfb64235a9cfb624381839dce4da65807599f16b758",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3",
+        "reused_from": null,
+        "invalidated_by_patch_id": null,
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|15:baseline-review|17:3-output-contract|3",
+          "graph_revision": 3,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|15:baseline-review|17:3-output-contract|3",
+          "output_hash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "implement",
+        "node_revision": "3-output-contract",
+        "generation": 2,
+        "status": "invalidated",
+        "semantic_hash": "5db201b0f1e2e4a835987cbb12d241a4b8db35d60e6fefcc730d351335316110",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "52d07d7a5d0a9d71fe95465b87cadedf88474fe4b40aadb8dc75d0bc1d1ec09c",
+        "config_fingerprint": "fc9e1718f3cd379cf4890665c32ea77e88b6e25f9581fc966bc07494e25a9ff7",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|9:implement|2",
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|69:hook-1fa0d370f5707abfb869d5b84eb69f3db4f6131a0f3df8f2817ad52437756854|sha256:fb79f0f4bcedbecf9939c89bd46b77fe6bbacc85c88dfcde14bb3ede0afd992e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|9:implement|17:3-output-contract|2",
+          "graph_revision": 3,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|9:implement|17:3-output-contract|2",
+          "output_hash": "10cec283f8a56d9c4e926ba652b815035f1e1bcd86ca84d4e56d4bcf8be241ae",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "verify",
+        "node_revision": "3-output-contract",
+        "generation": 2,
+        "status": "invalidated",
+        "semantic_hash": "c4886ad1f7a9a97744610acdd4b08ceb0980067e308102d21d95a96502e1cb93",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "831c3443efdbd99c5b3670fd9ed394a364de5d07a863c4b38ea4d993ab899ae7",
+        "config_fingerprint": "10eaeaf72395e4c5072e8ef49062651f33e9bb62a3769e54bc50ae1ecc5b217d",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6:verify|2",
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|6:verify|17:3-output-contract|2",
+          "graph_revision": 3,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|6:verify|17:3-output-contract|2",
+          "output_hash": "2a9132c9d4ad78cd9a73f744b16ab998a6bca56e90c51f6bfceac6ed29b6df1d",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "gap-review",
+        "node_revision": "3-output-contract",
+        "generation": 2,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|10:gap-review|17:3-output-contract|2",
+          "graph_revision": 3,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|3|10:gap-review|17:3-output-contract|2",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "result",
+        "node_revision": "1",
+        "generation": 3,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "implement",
+        "node_revision": "3-output-contract:hook:f935484ff1f5",
+        "generation": 3,
+        "status": "invalidated",
+        "semantic_hash": "5029e2db3803bbb77bfd47c615fe03b0c4f7a5b6ba3591f8a96c2a7005ef4949",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "cc8547a9fe6b62dd45baf0d604f7e44f0770b32d9f48e825bad17890a5381177",
+        "config_fingerprint": "d27a8e064c58a066bc21c55d51ef76878d8817d37bca312cf0ca387df4b6cc4e",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|9:implement|3",
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|69:hook-1fa0d370f5707abfb869d5b84eb69f3db4f6131a0f3df8f2817ad52437756854|sha256:fb79f0f4bcedbecf9939c89bd46b77fe6bbacc85c88dfcde14bb3ede0afd992e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|4|9:implement|35:3-output-contract:hook:f935484ff1f5|3",
+          "graph_revision": 4,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|4|9:implement|35:3-output-contract:hook:f935484ff1f5|3",
+          "output_hash": "6f801d5ccdcaa921214bc9b99a27aad45db1b1b255a7ad6e3f58302cf22b8524",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "verify",
+        "node_revision": "3-output-contract",
+        "generation": 3,
+        "status": "invalidated",
+        "semantic_hash": "d0b07b87ddfc4947f82aff5b39847fad84cbb398b1a142c94fb185ab6e6f631f",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "60dc35d930ce84495ff64a9fe43824ea2fcd49bba0edbf30e73f3617a7bcdcd5",
+        "config_fingerprint": "10eaeaf72395e4c5072e8ef49062651f33e9bb62a3769e54bc50ae1ecc5b217d",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6:verify|3",
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|4|6:verify|17:3-output-contract|3",
+          "graph_revision": 4,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|4|6:verify|17:3-output-contract|3",
+          "output_hash": "de5c58ee62fcc3e0954f7971d6a8f2e712f41f9b11e408acbd552239835d8a48",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "gap-review",
+        "node_revision": "3-output-contract",
+        "generation": 3,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|4|10:gap-review|17:3-output-contract|3",
+          "graph_revision": 4,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|4|10:gap-review|17:3-output-contract|3",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "implement",
+        "node_revision": "3-output-contract:hook:f935484ff1f5:hook:6af41d14b401",
+        "generation": 4,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|69:hook-1fa0d370f5707abfb869d5b84eb69f3db4f6131a0f3df8f2817ad52437756854|sha256:fb79f0f4bcedbecf9939c89bd46b77fe6bbacc85c88dfcde14bb3ede0afd992e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "verify",
+        "node_revision": "3-output-contract",
+        "generation": 4,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "gap-review",
+        "node_revision": "3-output-contract",
+        "generation": 4,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "result",
+        "node_revision": "1",
+        "generation": 4,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "result",
+        "node_revision": "1",
+        "generation": 5,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "implement",
+        "node_revision": "6-user-continuation-20261024",
+        "generation": 5,
+        "status": "invalidated",
+        "semantic_hash": "bb0009ea79b40cfcd9942df3df9d9ae5304366ef71000b56b2372d459b7d38b8",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "d9d16d942573bc570f7d4b30a3e3ae5dce1006acbe566cbc507d87bafcf6451d",
+        "config_fingerprint": "8a9dc00f3da69c527d5cd125b95ca0557d6814f3690095eb6bd1a217e61bf5d3",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|9:implement|5",
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|69:hook-1fa0d370f5707abfb869d5b84eb69f3db4f6131a0f3df8f2817ad52437756854|sha256:fb79f0f4bcedbecf9939c89bd46b77fe6bbacc85c88dfcde14bb3ede0afd992e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6|9:implement|28:6-user-continuation-20261024|5",
+          "graph_revision": 6,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6|9:implement|28:6-user-continuation-20261024|5",
+          "output_hash": "2f3924a6465d57e34385efad95ee57a4a89c79b74de21dcb03ea7236d1562ea7",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "verify",
+        "node_revision": "6-user-continuation-20261024",
+        "generation": 5,
+        "status": "invalidated",
+        "semantic_hash": "887686fc07f0d9045aec33ee7198afd42d27075bf6acab259d7b719900dc4772",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "7977af3a2c6a82036f1fe1f450ab798745b0e80a6b49d5e4d58a202c98477655",
+        "config_fingerprint": "6d10b41a553d9d5fcdfa63d3bb7b96a17d6cd04bb364c17602c6cb5bad292645",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6:verify|5",
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6|6:verify|28:6-user-continuation-20261024|5",
+          "graph_revision": 6,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6|6:verify|28:6-user-continuation-20261024|5",
+          "output_hash": "cf010242ededb8a90f01c3ebd53dee9470cadea8087d43ca6fb6829b99e10a9e",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "gap-review",
+        "node_revision": "6-user-continuation-20261024",
+        "generation": 5,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6|10:gap-review|28:6-user-continuation-20261024|5",
+          "graph_revision": 6,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6|10:gap-review|28:6-user-continuation-20261024|5",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "gap-review",
+        "node_revision": "6-user-continuation-20261024",
+        "generation": 6,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "result",
+        "node_revision": "1",
+        "generation": 6,
+        "status": "invalidated",
+        "semantic_hash": null,
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": null,
+        "config_fingerprint": null,
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": null,
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {}
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "implement",
+        "node_revision": "6-user-continuation-20261024:hook:1fa0d370f570",
+        "generation": 6,
+        "status": "succeeded",
+        "semantic_hash": "094bb0f8222f81a097581ae01c48ad0b51dc3034d9c111ad9443486c2703087e",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "71d42b7f474eb385e6e8b1a63d39bac03c5932305d7ceefd5a7143189ada84f8",
+        "config_fingerprint": "88a68089300415887850e45ba5e7594f8717398299a785c46cfceab4883f9624",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|9:implement|6",
+        "reused_from": null,
+        "invalidated_by_patch_id": null,
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|7|9:implement|46:6-user-continuation-20261024:hook:1fa0d370f570|6",
+          "graph_revision": 7,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|7|9:implement|46:6-user-continuation-20261024:hook:1fa0d370f570|6",
+          "output_hash": "b59e7549dc1125a23be7080978e38f52a3534777963dec046cad0a6f4a86f14b",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "verify",
+        "node_revision": "6-user-continuation-20261024",
+        "generation": 6,
+        "status": "invalidated",
+        "semantic_hash": "a9371d0a66a9062c00e17051a391fd98915d716984e5f911b1164b9cc4f04f6f",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "e90830abbbea16969284624263b587aecb953a7dcfec9ac0061a049986f65086",
+        "config_fingerprint": "6d10b41a553d9d5fcdfa63d3bb7b96a17d6cd04bb364c17602c6cb5bad292645",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6:verify|6",
+        "reused_from": null,
+        "invalidated_by_patch_id": "ai-data-workflow-patch|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|32:verification-role-scope-20261024|sha256:5f5ea9bb929c9eb0e259d3c25d60e987ba8f7a4fd442887c848a37df6240412e",
+        "lineage": {
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|7|6:verify|28:6-user-continuation-20261024|6",
+          "graph_revision": 7,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|7|6:verify|28:6-user-continuation-20261024|6",
+          "output_hash": "8cb18133872acb813df5d6f3a899b1f6edaba6131e2520b5ae31b267222185bf",
+          "receipt_error": null,
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt"
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "verify",
+        "node_revision": "8-verification-role-scope",
+        "generation": 7,
+        "status": "succeeded",
+        "semantic_hash": "310cff52cbe215f03971e23294a2a472e15c790bcbb9f86dc9b2177645528a1b",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "e90830abbbea16969284624263b587aecb953a7dcfec9ac0061a049986f65086",
+        "config_fingerprint": "04e3ebfb55aecfb8d62dbc8d0265f10c7e3e60cf4eeb94d691dcf9d6c95578ca",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6:verify|7",
+        "reused_from": null,
+        "invalidated_by_patch_id": null,
+        "lineage": {
+          "output_hash": "bf366b8d46fe9a6d1f6b69392a850c09d5782cdb89069a0b1ec3a4890aaaa820",
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|6:verify|25:8-verification-role-scope|7",
+          "graph_revision": 8,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|6:verify|25:8-verification-role-scope|7",
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt",
+          "receipt_error": null
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "gap-review",
+        "node_revision": "6-user-continuation-20261024",
+        "generation": 7,
+        "status": "succeeded",
+        "semantic_hash": "a21a98e39077751946db11c66088013fb390c60f95369be0c377836c8c8d190a",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "0731e8e84688acb1b4e68f6186d4a5199b0a2943cb005255d4e8f6035db3a4af",
+        "config_fingerprint": "63249b2b3ac5f227fa86de9f3c76286d4dd5525814a581cb6561083b971ca97d",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|10:gap-review|7",
+        "reused_from": null,
+        "invalidated_by_patch_id": null,
+        "lineage": {
+          "output_hash": "fca289d4ebbe1a31c35c86e8177328d294b1b87eff8f56ba8e7237881fd2be5d",
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|10:gap-review|28:6-user-continuation-20261024|7",
+          "graph_revision": 8,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|10:gap-review|28:6-user-continuation-20261024|7",
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt",
+          "receipt_error": null
+        }
+      },
+      {
+        "kind": "AIDataWorkflowNodeGeneration",
+        "schema_version": "ai-data-workflow/v2",
+        "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+        "node_id": "result",
+        "node_revision": "1",
+        "generation": 7,
+        "status": "succeeded",
+        "semantic_hash": "010a8c33ff7a80d7bfddbff4340a02b28a7c85585e1e626ea786972425f5ffde",
+        "effective_reuse_policy": {
+          "policy": "semantic_hash",
+          "source": "canonical_node_kind_default",
+          "source_revision": "1"
+        },
+        "input_fingerprint": "fca289d4ebbe1a31c35c86e8177328d294b1b87eff8f56ba8e7237881fd2be5d",
+        "config_fingerprint": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "initial_state_fingerprint": null,
+        "material_revision_fingerprint": null,
+        "output_ref": "ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6:result|7",
+        "reused_from": null,
+        "invalidated_by_patch_id": null,
+        "lineage": {
+          "output_hash": "fca289d4ebbe1a31c35c86e8177328d294b1b87eff8f56ba8e7237881fd2be5d",
+          "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|6:result|1:1|7",
+          "graph_revision": 8,
+          "idempotency_key": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|8|6:result|1:1|7",
+          "receipt_kind": "AIDataWorkflowNodeExecutionReceipt",
+          "receipt_error": null
+        }
+      }
+    ],
+    "ready_node_ids": [],
+    "blocked_node_ids": [],
+    "waiting_node_ids": [],
+    "pending_approval_ids": []
+  }
+}

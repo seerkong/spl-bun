@@ -1,0 +1,43 @@
+{
+  "identityObservedFromCommand": {
+    "command_id": "ai-data-workflow-node-execution|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|6|9:implement|28:6-user-continuation-20261024|5",
+    "run_id": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+    "node_id": "implement",
+    "node_revision": "6-user-continuation-20261024",
+    "generation": 5,
+    "graph_revision": 6
+  },
+  "commandRef": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/commands/89cd871c86eace99ecef82648c51d2070b0045303ca042ab42c296f04a53a040.json",
+  "checkpointRef": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614/checkpoint.json",
+  "checkpointSha256": "d3b64a071f0f342c9b94d798257d4a2046d3e583d5596041b8209689add6b98a",
+  "authorizationBoundary": {
+    "kind": "existing-directory-authorization",
+    "workspace": "/Users/kongweixian/infra-dev/spl-bun",
+    "originalProofRef": "/Users/kongweixian/.sparrow-app-support/sparrow-holarchy/workspace/.ace/app-data/sparrow-holarchy/5252046c67537c0d15b0fa397f2dd6b1/users/c69beec0772aa25a96d783f829d3b207/workflow-jobs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/input.json",
+    "perFileAllowlistWasNotFrozen": true,
+    "restrictions": [
+      "Preserve existing dirty changes and historical receipts",
+      "Do not modify source Java, old Codument, external libraries or restore enterprise/domain/ORM scope",
+      "Do not reset/clean/commit/push/publish",
+      "Never approve native Agent tool or human approvals"
+    ]
+  },
+  "authorityFileRef": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/.cdmt-lite/missions/active/desktop-owner-recovery/verification/user-resume-scope-20261024.json",
+  "authorityFileSha256": "dbd619fa93cfb548d12001363ab28ce32384c08ba1b970dc83307877c32af402",
+  "acceptedCandidates": [
+    "CANDIDATE-sort",
+    "CANDIDATE-parse"
+  ],
+  "feedback": {
+    "sourceNode": "gap-review",
+    "generation": 3,
+    "outputHash": "bd8521f450c40da6b0b56f028df4abbe1874f8e4f91b718ea6c987d0f0162515"
+  },
+  "baselineRef": {
+    "node": "baseline-review",
+    "generation": 3,
+    "outputHash": "483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae"
+  },
+  "supersededBlock": "Prior round3 candidate admission wait and per-file allowlist requirement superseded by direct human continuation. Historical failed invocation is not re-admitted.",
+  "note": "Existing directory authorization, no per-file Host allowlist existed. Observed changed files will be recorded separately. No native approvals self-approved."
+}

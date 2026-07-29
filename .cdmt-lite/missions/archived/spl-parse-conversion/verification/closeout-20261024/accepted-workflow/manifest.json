@@ -1,0 +1,370 @@
+{
+  "kind": "data",
+  "runId": "holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+  "backend": "codex-desktop",
+  "execution": {
+    "context": "fresh",
+    "cwd": "/Users/kongweixian/infra-dev/spl-bun"
+  },
+  "executionBinding": {
+    "schemaVersion": 1,
+    "backend": "codex-desktop",
+    "context": "fresh",
+    "workspace": {
+      "kind": "directory",
+      "path": "/Users/kongweixian/infra-dev/spl-bun"
+    }
+  },
+  "nodeExecutions": {
+    "schemaVersion": 1,
+    "nodes": {
+      "baseline-review": {
+        "binding": {
+          "schemaVersion": 1,
+          "backend": "codex-desktop",
+          "context": "reuse",
+          "target": {
+            "kind": "session",
+            "id": "01a1690f-5dc5-7851-9841-2b31f4a14429"
+          },
+          "providerScope": "codex-desktop:local:20a8f8d61c44dc9d02201d01949b747ff532454d8e398b8bbe48d59da81c07e0",
+          "selectedBy": {
+            "kind": "id",
+            "value": "01a1690f-5dc5-7851-9841-2b31f4a14429",
+            "displayNameAtSelection": "代码初审",
+            "observedAt": "2026-10-23T20:38:03.337Z"
+          },
+          "workspace": {
+            "kind": "directory",
+            "path": "/Users/kongweixian/infra-dev/spl-bun"
+          }
+        },
+        "sessionPolicy": "reuse-node-session"
+      },
+      "gap-review": {
+        "binding": {
+          "schemaVersion": 1,
+          "backend": "codex-desktop",
+          "context": "reuse",
+          "target": {
+            "kind": "session",
+            "id": "01a16910-6a96-7d33-8d62-5b4e99bf353d"
+          },
+          "providerScope": "codex-desktop:local:20a8f8d61c44dc9d02201d01949b747ff532454d8e398b8bbe48d59da81c07e0",
+          "selectedBy": {
+            "kind": "id",
+            "value": "01a16910-6a96-7d33-8d62-5b4e99bf353d",
+            "displayNameAtSelection": "差距评审",
+            "observedAt": "2026-10-23T20:38:03.337Z"
+          },
+          "workspace": {
+            "kind": "directory",
+            "path": "/Users/kongweixian/infra-dev/spl-bun"
+          }
+        },
+        "sessionPolicy": "reuse-node-session"
+      },
+      "implement": {
+        "binding": {
+          "schemaVersion": 1,
+          "backend": "codex-desktop",
+          "context": "reuse",
+          "target": {
+            "kind": "session",
+            "id": "01a1645b-d553-7f31-b149-4e777610e9e9"
+          },
+          "providerScope": "codex-desktop:local:20a8f8d61c44dc9d02201d01949b747ff532454d8e398b8bbe48d59da81c07e0",
+          "selectedBy": {
+            "kind": "id",
+            "value": "01a1645b-d553-7f31-b149-4e777610e9e9",
+            "displayNameAtSelection": "规划剩余功能移植任务",
+            "observedAt": "2026-10-23T20:38:03.337Z"
+          },
+          "workspace": {
+            "kind": "directory",
+            "path": "/Users/kongweixian/infra-dev/spl-bun"
+          }
+        },
+        "sessionPolicy": "reuse-node-session"
+      },
+      "verify": {
+        "binding": {
+          "schemaVersion": 1,
+          "backend": "codex-desktop",
+          "context": "reuse",
+          "target": {
+            "kind": "session",
+            "id": "01a1690f-f890-7bf3-9e9c-a6c95a47109d"
+          },
+          "providerScope": "codex-desktop:local:20a8f8d61c44dc9d02201d01949b747ff532454d8e398b8bbe48d59da81c07e0",
+          "selectedBy": {
+            "kind": "id",
+            "value": "01a1690f-f890-7bf3-9e9c-a6c95a47109d",
+            "displayNameAtSelection": "代码验证",
+            "observedAt": "2026-10-23T20:38:03.337Z"
+          },
+          "workspace": {
+            "kind": "directory",
+            "path": "/Users/kongweixian/infra-dev/spl-bun"
+          }
+        },
+        "sessionPolicy": "reuse-node-session"
+      }
+    }
+  },
+  "config": {
+    "reopen": {
+      "approvalMode": "preauthorized",
+      "authorizedTargets": [
+        "implement",
+        "verify",
+        "gap-review"
+      ]
+    },
+    "decisionProfiles": {
+      "gap-controller": {
+        "provider": "codex-cli",
+        "resultType": "structured-choice",
+        "mode": "execute",
+        "acceptStructuredChoice": true,
+        "model": "gpt-6-luna",
+        "reasoningEffort": "high"
+      }
+    }
+  },
+  "input": {
+    "taskId": "spl-migration-continuation",
+    "task": "继续完成 SPL Bun 迁移：先核对并收口 spl-text-formatting 的当前实现与最终验收，再对照 esProc、旧迁移承诺及 nop-report 重新评估范围内的剩余 gap。",
+    "workspace": "/Users/kongweixian/infra-dev/spl-bun",
+    "context": {
+      "preparedAt": "2026-10-23",
+      "sourceDocument": "context/migration-context.md",
+      "sourceDocumentSemantics": "context/migration-context.md为准备时事实快照。Host启动准入必须验证真实用户回执后冻结authorization；Agent不能自行改变授权。",
+      "activeMission": "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/MISSION.md",
+      "authoritativeSources": [
+        "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/",
+        "/Users/kongweixian/infra-dev/esProc",
+        "/Users/kongweixian/java/src/nop-entropy/nop-report",
+        "/Users/kongweixian/infra-dev/spl-bun/codument/"
+      ],
+      "implementationThreadId": "01a1645b-d553-7f31-b149-4e777610e9e9",
+      "initialObservation": {
+        "head": "1e37adb6a8eccb5087348f2abd2cc2ccbba251fb",
+        "status": "historical-read-only-snapshot-recheck-before-execution",
+        "workingTree": "dirty, preserve existing modifications/deletions/untracked files"
+      },
+      "acceptanceCriteria": [
+        "按当前迁移MISSION与attractor验收，不能以历史绿色替代当前基线",
+        "独立review没有未关闭的已接纳gap",
+        "同一run的回退保留generation/feedback lineage",
+        "不扩大企业平台范围，不覆写旧Codument或源Java"
+      ],
+      "historicalSnapshot": {
+        "asOf": "2026-10-23",
+        "markdown": "# SPL Bun 迁移共享上下文\n\n状态：准备稿，未启动 workflow。更新日期：2026-10-23。\n\n本文件为 Holarchy 代码开发团队的首个迁移频道准备共享上下文、审查入口和会话合同。当前用户只授权历史读取与配置/上下文/workflow/启动提示词准备；不得据历史迁移授权自动继续执行。此文件的编写未运行迁移、构建或测试，未修改 spl-bun 的代码或 mission 状态。\n\n用户最新选择：**所有节点都使用不同的 Codex Desktop session**。Implement 节点复用指定原会话；Review 及其余节点使用各自独立的 Codex Desktop session，目前尚未创建。早先 Codex CLI reviewer 设想已撤销。\n\n## 1. 任务身份与来源\n\n| 项目 | 值 |\n|---|---|\n| 目标工作区 | `/Users/kongweixian/infra-dev/spl-bun` |\n| Implement 原会话 | `01a1645b-d553-7f31-b149-4e777610e9e9` |\n| 已只读确认的原会话标题 | `规划剩余功能移植任务` |\n| 原会话 JSONL | `/Users/kongweixian/.codex/sessions/2026/10/22/rollout-2026-10-22T19-05-02-01a1645b-d553-7f31-b149-4e777610e9e9.jsonl` |\n| 原会话初始元信息 | JSONL 第 1 行：session ID 与 cwd 一致，timestamp 为 `2026-10-22T16:05:02.544Z` |\n| Session-insights 索引 | `/Users/kongweixian/.ace/app-data/session-insights/holarchy-engineering-loop-2026-10-23.sqlite3` |\n| 扩大读取窗口的迁移专库 | `/Users/kongweixian/.ace/app-data/session-insights/holarchy-migration-expanded-2026-10-23.sqlite3` |\n\n默认LocalFunction有界导入仅覆盖迁移文件1081个解析行、18条消息，“兼容边界”未命中。之后复用session-insights的数据面parser/importFile API，把本次指定文件的读取预算显式扩大到32 MiB，并写入独立迁移专库：实际读取24,053,051 bytes（整文件）、6210个解析行（含末尾空行）、118条消息、619个工具条目；二次导入因unchanged跳过，QuerySessions已命中最新用户“兼容边界”指令。仍有3条长消息按parser字段上限截断，因此“整文件被扫描”不等于“所有内容逐字入库”。本ContextPack同时从原文补读业务指令和执行回执。未修改源JSONL、默认库或之前旧索引。\n\n下文 `JSONL Lxxxx` 均指上述原文件的物理行号。assistant final 使用 `response_item/message` 原消息行号；工具执行与中止事件另外注明事件类型，避免把复制 final 的 `task_complete` 当成第二次回答。\n\n## 2. 用户目标与优先级\n\n1. 从 Java esProc 移植 SPL 查询计算能力到 TypeScript + Bun。来源仓库为 `/Users/kongweixian/infra-dev/esProc`。\n2. 产品形态是网页加载表格，使用计算 flow 和 `kon-spl-dsl`，后者基于 `/Users/kongweixian/lang/kunun.ts`；不恢复以 Excel 单元格自定义表达式作为主计算交互的旧产品形态。\n3. “数据 + Excel 模板 → 报表”的部分优先对照 `/Users/kongweixian/java/src/nop-entropy/nop-report`。\n4. 先完成表格、报表相关 gap，再继续 SPL 查询计算 gap；对于曾经称为“兼容边界”的能力，必须重新对照来源与旧迁移承诺，不把旧说明当成永久豁免。\n5. 采用 `depa-expert` 与 `cdmt-mission-lite`，拆为多个 mission 依次实现和验收。旧 `codument/` 是只读历史证据，不继续使用它作为新 spec coding 工作流。\n\n原始用户证据：\n\n| JSONL 行号 | 类型 | 内容要点 |\n|---|---|---|\n| L17 | `response_item/message`，user | 初始移植目标、TypeScript + Bun、网页表格/Kon、优先 nop-report、使用 depa-expert 和 cdmt-mission-lite、不再用 Codument |\n| L1506 | `response_item/message`，user | 优先补报表公式和动态 sheet，直至表格报表对齐，再补 SPL 查询计算；不扩企业平台 |\n| L5307 | `response_item/message`，user | 最新迁移业务要求：继续核查兼容边界，能补齐就拆 mission 实施验收，不停在说明或规划 |\n\n这些历史指令定义迁移目标。**本次准备阶段的“不要执行”优先于历史自动续作授权。**真正运行前必须另有明确启动指令。\n\n## 3. 范围与事实权威\n\n- 新执行真源：`/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/`。每个 MISSION 描述期望态，loop 记录执行图与状态，evidence 追加运行证据；Holarchy 不复制一套互相竞争的迁移完成状态。\n- 源 Java 是语义证据；旧 Codument 是历史承诺；当前代码、公开入口和当前运行回执决定实际状态。历史 final 或完成标记不能替代当前验证。\n- 输入表、schema、文本、模板与参数是计算输入事实；派生记录、索引、聚合、布局、HTML/XLSX 是单向投影，不得反写输入。\n- 各入口复用共享纯语义；Kon/flow 不复制另一套近似语义引擎。IO 由现有 host/support 承担，cursor 由既有资源 owner 管理。\n- 不支持的类型、选项和缺字段必须明确诊断，不能静默吞参数、静默丢精度或回退到错误外部同名值。\n- 不扩到 nop-entropy 企业平台，不恢复已经外迁的 domain/ORM。不回写源 Java、旧 Codument 或外部基础库。\n- 保留工作区已有 dirty 内容；不能把所有历史修改和外迁删除算成本 workflow 产出，也不能清理它们来制造干净工作树。\n- 不以 Java 全库函数数目、测试数量增长或“没有找到更多”独立证明全面兼容。完成声明必须对应具体能力、边界和可追溯证据。\n\n当前来源：\n\n- `/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/README.md:3`\n- `/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/manifest.md:3`\n- `/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/manifest.md:15`\n- `/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/MISSION.md:22`\n- `/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/attractors/source-parity.md:13`\n\n## 4. 已交付历史与当前可采信程度\n\n2026-10-23 只读现场观察到 18 个 archived mission、1 个 active mission、0 个 pending mission。以下是历史记录，不是本次新执行的验证结果。\n\n| 批次 | 记录中的交付 | 历史验证记录与来源 |\n|---|---|---|\n| 首批 5 个 mission | 来源盘点；网页导入→Kon→模板渲染→预览/XLSX；报表内核、分组交叉、typed key/window | JSONL L1496 为原 assistant `final_answer`；339 tests、14 E2E、13 包构建。交付文件 `.depa-analysis/porting-2026-10-22/report/delivery-2026-10-22.md:11` |\n| 第二批 9 个 mission | 报表公式、动态 sheet、布局、文档引用、图片图表、SPL 语义/表算子、真实 cursor 与资源/file IO | JSONL L5294 为原 assistant `final_answer`；426 tests、16 E2E、13 包构建、百万行验证。交付文件 `.depa-analysis/report-parity-2026-10-22/delivery.md:15` |\n| 后续 4 个 archived mission | scalar/long/decimal、calendar、member context、window values | 对应 loop/evidence 记录 completed；窗口阶段记录 450 tests、17 E2E、13 包构建与 1743 项 Java Move 对照。见 `spl-window-value-semantics/loop.md:28` |\n\n上表文件的绝对根为 `/Users/kongweixian/infra-dev/spl-bun/`；窗口 loop 的绝对路径为 `/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/archived/spl-window-value-semantics/loop.md`。\n\n证据类别必须保留：\n\n1. `historical_claim`：assistant final、交付报告或 loop 的完成声明。\n2. `historical_receipt`：原 JSONL 内确实存在的命令、退出码、stdout/stderr；可证明当时那次运行，不能自动证明之后的代码。\n3. `current_observation`：本次只读看到的文件、Git 状态和代码。\n4. `current_verification`：未来 workflow 对固定基线重新执行并取得的回执；当前准备阶段尚无这一类新增证据。\n\n`.cdmt-lite/README.md` 和两份交付报告落后于后续四个 mission；`.depa-analysis/spl-compatibility-2026-10-23/manifest.md` 只列前三项，也没有覆盖后来发现的窗口与 formatting。不得用这些导航文档作为最新停止点。\n\n## 5. 最新停点：已有 formatting 实现，最终验收未完成\n\n唯一 active mission：`/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/`。\n\n合同目标：原 esProc `format` 实际调用 Java `String.format(pattern,args...)`，此前 TS 实现仅提供 ISO 日期输出。补齐常用 Formatter 协议及 `string/number` 数字/日期模式、精确 long/decimal、fallback，保留 Date-first ISO 别名。JSONL L6008 的 assistant commentary 记录此差异。\n\n当前已能只读看到的实现与测试：\n\n| 路径 | 观察 |\n|---|---|\n| `/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/formatting.ts:1` | 已存在 formatting 实现 |\n| `/Users/kongweixian/infra-dev/spl-bun/packages/expression/__tests__/formatting.test.ts:3` | 已有格式协议、精确数值、fallback 与不支持输入测试 |\n| `/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/verification/formatter-oracle.ts:5` | Java Formatter / ICU DecimalFormat / SimpleDateFormat 实值对照；依赖本机 Java 与 esProc 的 ICU jar |\n| `/Users/kongweixian/infra-dev/spl-bun/packages/web-ide/__tests__/e2e/kon-execution.e2e.ts:117` | 已加入网页精确标识符与金额 format 断言 |\n| `/Users/kongweixian/infra-dev/spl-bun/packages/expression/README.md:23` | 已写支持协议与宿主适配边界 |\n\n原始执行回执的顺序：\n\n| JSONL 行号 | 类型 | 已确认事实 |\n|---|---|---|\n| L6141 | `response_item/custom_tool_call_output` | 42 项实际 Java Formatter / ICU / SimpleDateFormat 对照通过 |\n| L6151 | `response_item/custom_tool_call_output` | preflight 成功；相关切片 408 pass、0 fail、1315 expects、68 files |\n| L6161 | `response_item/custom_tool_call` | 随后又修改 scalar 安全整数运算，结果越过安全边界前提升为 bigint；修改晚于前两项回执 |\n| L6165 | `event_msg/item_completed`，内含 `CommandExecution` | 最新 scalar 与 formatting 两文件测试 9 pass、0 fail、86 expects，退出码 0 |\n| L6169 | `event_msg/task_complete` | 因 `server_overloaded` / Selected model is at capacity 结束；last_agent_message 为 null，无业务完成 final |\n| L6200 | `response_item/message`，assistant commentary | 回答 JSONL 路径后表示还要完成当前 mission 最终验收 |\n| L6204 | `event_msg/item_completed`，内含 `CommandExecution` | 只读检查再次显示 stale loop，并发现 `packages/core/src/gather.ts:219` EOF 空行 |\n| L6209 | `event_msg/turn_aborted` | 最后一个 turn 被用户 interrupted |\n\n相关切片日志末尾与原始回执一致：`/Users/kongweixian/infra-dev/spl-bun/.tmp-format-related.log:547`。\n\n结论：**42 项 oracle、408 项相关切片和旧 450 项全量验证不能覆盖最后 scalar 修改后的最终基线。**尾段没有新网页 format 断言成功的回执，也没有最终全量、13 包构建、完整 browser acceptance 的新回执。9 项单测通过不能替代它们。\n\n## 6. 状态漂移与工作树基线\n\n`/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/loop.md:28` 仍写“来源差异已观察，尚未写业务代码”“建立 harness”；`evidence.md:3` 只有 E1。这与实际代码和原始回执不符。\n\n首轮审查必须恢复真实状态与证据关系：既不能照 stale loop 从零重写，也不能凭现有代码和历史绿色直接归档。\n\n准备阶段的只读 Git 快照：\n\n- HEAD：`1e37adb6a8eccb5087348f2abd2cc2ccbba251fb`。\n- `git status --porcelain` 顶层条目 807：91 modified、650 deleted、66 untracked。untracked 目录折叠，此数字不是实际文件总数。\n- 大量 domain/ORM 删除属于既有外迁背景，不能归为当前 workflow 变更。\n\n真正启动时重新冻结 HEAD、已跟踪 diff、untracked 文件 manifest/内容哈希和允许修改集。仅锁 HEAD 不足以识别这个工作树。review 时若基线改变，应将结论标为 stale 并重新观察，不能把旧审查套到新内容。\n\n## 7. 第一轮 Review 任务\n\nReview 使用独立 Codex Desktop session，尚未创建。Implement 继续绑定原 session，当前不得派发。\n\n建议首轮只读产出以下 GapSet，不先修改任何文件或运行迁移：\n\n1. **G0-state-reconciliation**：重建 active mission 的真实进度，指出 loop/evidence、导航和交付记录的漂移；把 claim、receipt、current observation 分开。\n2. **G1-final-baseline-verification**：审查最后 scalar 提升逻辑与 formatting 公开入口，列出最终基线仍缺的验证。当前合同要求相关切片、全量、构建、42 oracle、17 browser cases、纯核心 IO/eval 负向与旧 Codument 两项基线哈希。准备阶段只生成 VerifyPlan，不执行。\n3. **G2-compatibility-reassessment**：在当前 mission 后续验收完成后，再对照源 Java、旧承诺和公开入口检查剩余兼容边界；旧矩阵的适配结论不可直接继承为完成证明。\n\nAcceptance 真源：`/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-text-formatting/MISSION.md:27`。Java oracle 会创建并清理临时编译目录，浏览器测试会启动服务，均不能误称纯只读操作；当前准备阶段不执行这些命令。\n\n每个 gap 至少包含：`gapId`、`priority`、`sourceEvidence`、`currentEvidence`、`expectedBehavior`、`reproducerOrVerification`、`affectedPaths`、`acceptance`、`evidenceClass`、`baselineRef`。区分已证实缺陷、未验证条件和待观察疑点，不把推测登记为已复现缺陷。\n\n## 8. 分阶段使用的共享合同\n\n以下准备约束只描述2026-10-23生成本材料的阶段，不是覆盖未来用户启动的永久禁令。工作流输入须将本文件作为历史事实快照保存，并另行携带由启动入口核验、冻结的 authorization。authorization.mode=prepared 时不执行业务；只有真实用户启动回执支持的 mode=run 才按节点职责行动。不能由Agent自己改一个布尔值授予权限。\n\n### 所有节点共同遵守\n\n你参与的是 SPL Bun 移植的 Holarchy 工程循环。任务工作区为 `/Users/kongweixian/infra-dev/spl-bun`。目标、来源、边界及最新停点以本 ContextPack、用户原始消息和对应 cdmt mission 合同共同确定；出现冲突先指出冲突，不擅自重定义用户目标。\n\n在材料准备阶段，只允许读取历史和准备配置/上下文/提示词；该阶段不触发workflow、创建执行会话、运行测试或修改spl-bun。未来用户明确启动后，实现和验证节点可以在冻结授权范围内实施及运行验收，独立评审仍不得改源码。所有节点使用不同的Codex Desktop session；Implement固定复用 `01a1645b-d553-7f31-b149-4e777610e9e9`。其余会话在本快照编写时尚未创建，启动时以真实绑定为准。不得降级到CLI或悄悄创建替代实现会话。\n\n任何结果都要带来源和基线。历史执行回执只证明其当时基线；实现者自述不能关闭 gap。保持未知结果为 unknown，先核对原任务/job，不重发副作用。权限或人工审批不得由其他 agent 自动批准。\n\n### Review 节点首次提示词\n\n当前只执行只读 gap review，不修改代码、文档或任务状态，不触发 Implement session，不运行测试或迁移。先读本 ContextPack、JSONL L17/L1506/L5307、active `spl-text-formatting` 的 MISSION/attractor/loop/evidence、实际代码和尾段执行回执。\n\n重点核对：loop/evidence 落后于真实实现；42 oracle 和 408 相关切片均发生在最后 scalar 修复之前；该修复后只有 9 项单测回执。请重建状态，审查公开入口和合同，输出 GapSet 与 VerifyPlan。每条都给 sourceEvidence、currentEvidence、expectedBehavior、affectedPaths、priority、acceptance、baselineRef。不得声称已运行准备阶段禁止的验证；不得把历史绿色当作当前绿色。保留 dirty tree 与外迁删除，不扩企业平台，不回写源 Java、旧 Codument或外部基础库。\n\n### Implement 节点未来启动提示词模板\n\n本段仅供未来明确启动后使用，当前不要发送。\n\n你是指定原 Codex Desktop 会话 `01a1645b-d553-7f31-b149-4e777610e9e9`，在 `/Users/kongweixian/infra-dev/spl-bun` 继续原迁移任务。先读共享 ContextPack、已接受 GapSet、冻结工作树基线和当前 cdmt mission。你是当前批次唯一代码写入者，不要从 stale loop 的“尚未实现”重新开始。每轮只处理已接受 GapSet 的有界批次，保留已有 dirty 内容，使用 depa-expert 与 cdmt-mission-lite 的相应合同；更新真实任务状态与追加证据。\n\n完成本批后返回实际修改、命令/退出码/日志、对应 acceptance、未决项和最终基线。不要自行判定 reviewer gap 关闭，不要擅自启动下一批迁移。将控制交回 workflow 的独立 Review 节点。未知执行结果先核对，不重复派发；遇到需要人工决定的事实冲突或审批就明确报告。\n\n### Review 节点后续验收提示词模板\n\n本段仅供未来明确启动后使用，当前不要发送。\n\n独立核对 Implement 回报的基线和变更，按 GapSet acceptance 与原始用户目标验收。确认实际命令回执绑定最终业务基线；若实现后又发生改动，按影响更新 VerifyPlan。输出 accepted / needs_changes / blocked / stale 及具体证据；不要仅复述实现者完成声明。完成当前 mission 后，只有目标范围内仍存在证据充分的新 gap，才建议下一批。全局结束必须覆盖用户目标、显式适配边界和未决项，而不是仅因某一轮测试通过。\n",
+        "interpretation": "历史与准备材料，不是当前节点命令；本轮执行权限仅由Host验证并冻结的authorization决定。"
+      },
+      "expandedSessionIndex": "/Users/kongweixian/.ace/app-data/session-insights/holarchy-migration-expanded-2026-10-23.sqlite3",
+      "controller": {
+        "kind": "after-reopen-hook",
+        "profile": "gap-controller",
+        "provider": "codex-cli",
+        "model": "gpt-6-luna",
+        "reasoningEffort": "high",
+        "businessNodes": "four original Codex Desktop reuse sessions",
+        "reopenTarget": "implement"
+      }
+    },
+    "constraints": [
+      "只有用户明确启动后才可派发；本文件本身不触发运行",
+      "四个AI节点分别绑定不同Codex Desktop会话；实现节点复用指定原Thread.id",
+      "实施者为唯一源码写入者；其他角色不修改代码，测试产物使用隔离目录",
+      "保留所有既有dirty工作树，不自动reset/clean/commit/push/publish",
+      "使用depa-expert和cdmt-mission-lite；每轮仅实施已接纳gap的有界批次",
+      "旧codument及源Java只读，不扩nop-entropy企业平台，不恢复已外迁领域/ORM",
+      "未知调用只观察原执行；不得重新派发或自动批准实际审批",
+      "节点回退不等于代码回滚；使用当前工作树修正gap"
+    ],
+    "policy": {
+      "implementNodeId": "implement",
+      "verifyNodeId": "verify",
+      "reviewNodeId": "gap-review",
+      "initialRound": 1,
+      "maxRounds": 5,
+      "maxNoProgressRounds": 2
+    },
+    "round": 1,
+    "authorization": {
+      "mode": "run",
+      "userStarted": true,
+      "receiptRef": "holarchy:082d4c9b3d20d7fdede36e6b563ff48ca84c",
+      "channelId": "org-topic-0a92332f2dc1a9b2c91f6764f9048e34b03d2d19",
+      "requestId": "3aa632cb-1a02-400f-bc15-645be100ed26",
+      "authorizedWorkspaces": [
+        "/Users/kongweixian/infra-dev/spl-bun"
+      ]
+    }
+  },
+  "storage_format": "ai-data-workflow-run/v2",
+  "source": {
+    "path": "source/definition.xml",
+    "assets": {
+      "contracts/baseline.json": "758f6170fdf21ff7d1ad8c263b42cdaedc267f2a51d6c54df251d2c098c2fa8c",
+      "config/baseline.json": "750d4f543f16871570a4051b6d54b90febb39c2100f977d78dfc19d52f50a761",
+      "adapters.js": "145edc77ce0ed0d21072fec26724cd1ece38a43609991de6cf4bb68563e26a47",
+      "contracts/implement.json": "127859cc1e609fe809b2fdc44003eef1ee598f4506e69023f7f21f2f1c500f82",
+      "config/implement.json": "c5162f5bd43b7bf2cc26a80a1b94332b9ea74cdb998072f0820537b956507999",
+      "contracts/published-implement.json": "095d1a698c22b5072db75c86f7c2470efc34954e13264d7972046b8e7b88c6dc",
+      "contracts/verify.json": "0ad79271f9e384a1a40b5c1ccfed20e7d35fc46248583750225883494d8b3573",
+      "config/verify.json": "750d4f543f16871570a4051b6d54b90febb39c2100f977d78dfc19d52f50a761",
+      "contracts/gap-review.json": "b272647f4147c3451168f960eb6aa64b8e714d073f4fe650da6270639128c551",
+      "config/gap-review.json": "750d4f543f16871570a4051b6d54b90febb39c2100f977d78dfc19d52f50a761",
+      "contracts/published-review.json": "870d37ca273e151eb8e776a456207432e4d8c6cfb89c7e7d39d5eea5b7e9b06c",
+      "contracts/result.json": "e75f0bcc8b3fb29b868ae6e315208f3314c22646f43ba48d881e92185ad0e07d",
+      "definition.xml": "5a01e96bc9f20601da1274b7bab83d6e75cb37621b73c4d2b3d159f11cb8107d",
+      "agents.json": "699f8768b0d03ce24b70deaee2824efae035d6e8c209ec7bf57418f970aafd45",
+      "registry.json": "bb511d1e2723214ac1c3710d939883722d57e31b0145d33d427d9628b209be38",
+      "task-trees.json": "bb511d1e2723214ac1c3710d939883722d57e31b0145d33d427d9628b209be38",
+      "material-bindings.json": "bb511d1e2723214ac1c3710d939883722d57e31b0145d33d427d9628b209be38"
+    }
+  },
+  "commit_revision": 24,
+  "graph_revision": 8,
+  "committed_files": {
+    "checkpoint.json": "e6f25b664a35978c72b350e5e38718146f17c749d9ca92833239fcc4e04ac2aa",
+    "run_graph.xml": "1fde50ee814bcbe37c5a66ec799bc48bab8de4432771f8f9bbdcf52bd69212c2",
+    "receipts/receipt-cc0f64a17408e2a22c14e745b1056dac72455d808b5a4d0bf0babeec00926c63.json": "1c5b6e441f0ede7e13c779fea0bae65a53543ab67f3060067330964f1c3fad59",
+    "receipts/receipt-0ffe7ac9be1388fd8afe224f9f6a6065514ff3af66e1b0580811cfe7fa34fe4e.json": "e785b1891eb6d7713229c0244f038bc205bb8af023f46401a6ad5325bbdc8a4d",
+    "receipts/receipt-ed018e3f629319f4d0a2bba0653128557830db3771c17011a1f844214efc53a8.json": "fb530967f900ffeb3e09cf3ba7c6a14bf926ff8eba05560f99514f28fd167039",
+    "receipts/receipt-6b04196e9b0c2b14e2b84402ee5714b79f9684ba998d5518c3063dde5ac7daed.json": "84cfc4aa6362a01a328c604b6ac33e6dd1df1101bc65fe0f5ccde97240a24749",
+    "receipts/receipt-b70f319c85dbeaf6a80634a50ebb0bf5a3ff49968fcd023b341c7e955763f0bc.json": "800fc5f8b847d77c33186ddc16612c36db1e870092970f84371759ee25bae5e2",
+    "receipts/receipt-1f42d89787a8782b17979efe68303de108c002bde35037aa22a89371830abc1c.json": "5ec27b7c35f3efbd1eacf35187c6ea74c2fb513ea502aa94ec61990a6a41df62",
+    "receipts/receipt-600d97fb98cd39fff35c17eb9de8b49df415e119bd097e631fe90788520487b4.json": "22a176cdb9f200b50e3eacc2ad516ac8a6bc8787f53a01fe0cc0ca676bb429cb",
+    "receipts/receipt-6d78ef2aabd1ae91b830762d83a8dfe07ad0609ff1fe7dd2553b11cc2a5f272d.json": "14570a99df2c85bf6f49b3e414285e4a0492347a427ca7a1587dc5e326b3de62",
+    "receipts/receipt-9fa140df7f1a3198cfa5a7bd318e8757f1f14991f5457252b03c20cc2bc3c81b.json": "5187f7869d8cb757f5fa356b53dd02f4f36bfde00daf1d922d21d21c59880305",
+    "receipts/receipt-161bb6f1b6a3eca8a3d860cfb6783986033c69b6465e09e4c05537b19ae20412.json": "74f5d8dd66f05e2d0d6e5afa3120109f2d30020725c77584ae9207cbcc0c0cd9",
+    "receipts/receipt-62bc70b0ddbe306c6fc4f113a083b7b1af200b1ef923cc714594504f32fedede.json": "47b85fb91461a10ce68bf88727b755814c238ed3b3686534072c748ad11344f0",
+    "receipts/receipt-d8b68608f0b98f00fd64cd3e77a9e9dba1c09e85aca0798997e24dc5aaacffe2.json": "a8719b1c2bf86ec6ec87ed550705058fda51e3ae6576bba59986a06446701c29",
+    "receipts/receipt-6f980ccf481bb315112a0e34728649dff1afc19819b82dd880b17c0ec8be3d32.json": "059e23050653df56126e4e32a958633dbe643c37a0d5eef79eee3b27f1b69920",
+    "receipts/receipt-299d6f2d665056e20e5a92bcaa414fe18b4a8e6f887ead57bee665290dc1bfef.json": "0d9f29a8e346ca96cb42822187e68a38131feb86af54159eb83201fc864945e2",
+    "receipts/receipt-986eaa248f56f9c1ca9c24c481708e67c0d2a5cece712bf02df67975c6c5fabc.json": "2e9edb33136cfe1033acdc5380fa9e9fcf17516f63cecbe51e75be40216477df"
+  },
+  "source_extension": {
+    "assets": {},
+    "registry": {},
+    "agents": {
+      "resource://CodeEngineering.Agent.BaselineReviewer": {
+        "ref": "resource://CodeEngineering.Agent.BaselineReviewer",
+        "content_identity": "b2bb4e77597814a592bfede191cf8ffed5c28b9408ae9c34c14cbe6fc037eb74",
+        "config": {
+          "canonical_agent": {
+            "definition": {
+              "kind": "AIAgentDefinition",
+              "fqn": "CodeEngineering.Agent.BaselineReviewer",
+              "spec": {
+                "description": "建立迁移验收基线并定位初始缺口",
+                "promptMode": "guidance",
+                "result": {
+                  "format": "json"
+                },
+                "messages": [
+                  {
+                    "role": "user",
+                    "contentRef": "vfs://@/prompt.md"
+                  }
+                ]
+              }
+            },
+            "contents": {
+              "vfs://@/prompt.md": "启动授权由 Holarchy 服务端在用户确认后冻结，并由执行适配器注入本轮 input.authorization；它不是 input.context.historicalSnapshot 中的历史声明。先检查 mode=run、userStarted=true、receiptRef非空，且 authorizedWorkspaces 精确包含 input.workspace；任一条件不满足时只报告未授权，不执行业务。条件满足后按本角色开始工作，不再要求平台未定义的额外签名或原生工具证明。若 config.authorizationProofRef 存在，可先只读该原启动 input.json，核对其中 authorization 与本轮相同；这是授权核验，不是业务实施。历史材料中“准备阶段不执行”的文字只描述生成快照时的阶段，不覆盖当前有效启动授权。不得自行修改授权、扩大工作区或自动批准实际工具审批。\n\n本轮 config.outputSchema（若提供）是机器接收业务结果的完整 JSON Schema。请逐项满足 required、类型和 enum；不要用语义相近但不在 enum 中的值。它只约束 frontmatter.result，不代替本轮 wire 的 invocationId、boundary 等固定字段。严重级别 severity 只使用 blocking、major、minor；同样遵守本角色 status/verdict/progress 等字段的枚举。若 config.recoveryContext 存在，它是前次未准入报告的证据，先核对当前基线仍一致再修订，不将其当作已通过验收或新的执行授权。\n\n你负责只读初始评审。阅读 input.context 的共同背景、当前裁决和验收条件，再观察授权工作区实际状态。列出逐条验收标准、已完成事实与仍需实现的 gaps，给出文件/提交/测试等证据。不要修改代码、发起下一节点或重新派发任务。输出 summary, criteria:string[], gaps:[{id,severity,criterion,evidence:string[],action}], evidenceRefs:string[]。\n\n业务结果按当次平台提供的结果协议返回。不要在业务结果中自行生成 invocation、nonce、requestId 或其他 wire 字段。simulation 标记的证据不是真实验收；缺少必需上下文时明确报告缺口。所有外部上下文由本轮 input 提供，不从资源定义目录推断代码工作区。\n\n"
+            }
+          }
+        }
+      },
+      "resource://CodeEngineering.Agent.Implementer": {
+        "ref": "resource://CodeEngineering.Agent.Implementer",
+        "content_identity": "b21fd6b98b4287c60c32a88b20cf68bcff72ce6a06ca18d22cea94b92a6595b7",
+        "config": {
+          "canonical_agent": {
+            "definition": {
+              "kind": "AIAgentDefinition",
+              "fqn": "CodeEngineering.Agent.Implementer",
+              "spec": {
+                "description": "在原迁移会话中按冻结差距实现代码",
+                "promptMode": "guidance",
+                "result": {
+                  "format": "json"
+                },
+                "messages": [
+                  {
+                    "role": "user",
+                    "contentRef": "vfs://@/prompt.md"
+                  }
+                ]
+              }
+            },
+            "contents": {
+              "vfs://@/prompt.md": "启动授权由 Holarchy 服务端在用户确认后冻结，并由执行适配器注入本轮 input.authorization；它不是 input.context.historicalSnapshot 中的历史声明。先检查 mode=run、userStarted=true、receiptRef非空，且 authorizedWorkspaces 精确包含 input.workspace；任一条件不满足时只报告未授权，不执行业务。条件满足后按本角色开始工作，不再要求平台未定义的额外签名或原生工具证明。若 config.authorizationProofRef 存在，可先只读该原启动 input.json，核对其中 authorization 与本轮相同；这是授权核验，不是业务实施。历史材料中“准备阶段不执行”的文字只描述生成快照时的阶段，不覆盖当前有效启动授权。不得自行修改授权、扩大工作区或自动批准实际工具审批。\n\n本轮 config.outputSchema（若提供）是机器接收业务结果的完整 JSON Schema。请逐项满足 required、类型和 enum；不要用语义相近但不在 enum 中的值。它只约束 frontmatter.result，不代替本轮 wire 的 invocationId、boundary 等固定字段。严重级别 severity 只使用 blocking、major、minor；同样遵守本角色 status/verdict/progress 等字段的枚举。若 config.recoveryContext 存在，它是前次未准入报告的证据，先核对当前基线仍一致再修订，不将其当作已通过验收或新的执行授权。\n\n你负责实现代码。input.context 是所有角色共享的显式上下文；即使原会话已有历史，也须按当前输入裁决。首轮处理 input.baselineReview；后续只处理 input.loopFeedback.report 的已准入差距，同时保留全部原验收要求。每轮在授权 workspace 完成一个可验证的差距集，避免顺手扩大范围；运行与变更相称的验证。不要自己批准流程patch、伪造审查通过、调用评审会话或新开工作流。输出 summary, round, status(implemented|blocked|no-change), changeRef(明确实际提交或工作树指纹), changedFiles:string[], checks:string[], remainingGaps:[{id,severity,criterion,evidence:string[],action}], evidenceRefs:string[]。若上一轮结果未知，不把重复操作当恢复。\n\n业务结果按当次平台提供的结果协议返回。不要在业务结果中自行生成 invocation、nonce、requestId 或其他 wire 字段。simulation 标记的证据不是真实验收；缺少必需上下文时明确报告缺口。所有外部上下文由本轮 input 提供，不从资源定义目录推断代码工作区。\n\n"
+            }
+          }
+        }
+      },
+      "resource://CodeEngineering.Agent.Verifier": {
+        "ref": "resource://CodeEngineering.Agent.Verifier",
+        "content_identity": "23ba5dba9f115aa6e7491f1ee91952db4307c8a427e63f82be43083fb4bcba9f",
+        "config": {
+          "canonical_agent": {
+            "definition": {
+              "kind": "AIAgentDefinition",
+              "fqn": "CodeEngineering.Agent.Verifier",
+              "spec": {
+                "description": "独立验证实现结果及对应工作树身份",
+                "promptMode": "guidance",
+                "result": {
+                  "format": "json"
+                },
+                "messages": [
+                  {
+                    "role": "user",
+                    "contentRef": "vfs://@/prompt.md"
+                  }
+                ]
+              }
+            },
+            "contents": {
+              "vfs://@/prompt.md": "启动授权由 Holarchy 服务端在用户确认后冻结，并由执行适配器注入本轮 input.authorization；它不是 input.context.historicalSnapshot 中的历史声明。先检查 mode=run、userStarted=true、receiptRef非空，且 authorizedWorkspaces 精确包含 input.workspace；任一条件不满足时只报告未授权，不执行业务。条件满足后按本角色开始工作，不再要求平台未定义的额外签名或原生工具证明。若 config.authorizationProofRef 存在，可先只读该原启动 input.json，核对其中 authorization 与本轮相同；这是授权核验，不是业务实施。历史材料中“准备阶段不执行”的文字只描述生成快照时的阶段，不覆盖当前有效启动授权。不得自行修改授权、扩大工作区或自动批准实际工具审批。\n\n本轮 config.outputSchema（若提供）是机器接收业务结果的完整 JSON Schema。请逐项满足 required、类型和 enum；不要用语义相近但不在 enum 中的值。它只约束 frontmatter.result，不代替本轮 wire 的 invocationId、boundary 等固定字段。严重级别 severity 只使用 blocking、major、minor；同样遵守本角色 status/verdict/progress 等字段的枚举。若 config.recoveryContext 存在，它是前次未准入报告的证据，先核对当前基线仍一致再修订，不将其当作已通过验收或新的执行授权。\n\n必须把 input.baselineReview.criteria 与 input.context 的原验收要求逐项合并核对，保留 input.baselineRef 对应的冻结基线身份；不得仅依照实现者声明缩小检查范围。\n\n职责边界：status 只判定本验证节点负责的技术验收，不代表工作流整体完成。C8 等“独立 Review 关闭差距/最终接纳裁决”由下游 gap-review 节点负责；请在 checks 中如实记录该项 not-run、说明下游 owner，不能代替 Review 关闭差距，也不要仅因尚待下游裁决而把全部技术检查通过的结果判为 inconclusive。仅当实际基线匹配、所有本节点必需的技术检查及证据均通过时才可返回 passed。任何本节点必需检查 failed 应返回 failed；未运行、证据不充分、权限不足或基线漂移仍返回 inconclusive。不要修改旧报告或直接沿用其 status；对当前代际独立核验事实并自行给出结论。\n\n你负责独立验证。先确认 input.implementation.changeRef 对应实际工作树；不匹配时输出 inconclusive。按 input.context 的验收要求运行可复现且已授权的检查，记录命令、结果、关键证据和未能执行的原因。不得修改业务源码或为让检查通过而改验收标准；必要临时测试输出必须显式留证。输出 summary, round, changeRef, status(passed|failed|inconclusive), checks:[{name,status(passed|failed|not-run),evidence}], evidenceRefs:string[]。\n\n业务结果按当次平台提供的结果协议返回。不要在业务结果中自行生成 invocation、nonce、requestId 或其他 wire 字段。simulation 标记的证据不是真实验收；缺少必需上下文时明确报告缺口。所有外部上下文由本轮 input 提供，不从资源定义目录推断代码工作区。\n\n"
+            }
+          }
+        }
+      },
+      "resource://CodeEngineering.Agent.GapReviewer": {
+        "ref": "resource://CodeEngineering.Agent.GapReviewer",
+        "content_identity": "a259cfdbd308e857aa27b7d96ab7270ac77b2a4c91e241bf9517b6c781435228",
+        "config": {
+          "canonical_agent": {
+            "definition": {
+              "kind": "AIAgentDefinition",
+              "fqn": "CodeEngineering.Agent.GapReviewer",
+              "spec": {
+                "description": "比较期望态与代码证据并提出下一轮差距",
+                "promptMode": "guidance",
+                "result": {
+                  "format": "json"
+                },
+                "messages": [
+                  {
+                    "role": "user",
+                    "contentRef": "vfs://@/prompt.md"
+                  }
+                ]
+              }
+            },
+            "contents": {
+              "vfs://@/prompt.md": "启动授权由 Holarchy 服务端在用户确认后冻结，并由执行适配器注入本轮 input.authorization；它不是 input.context.historicalSnapshot 中的历史声明。先检查 mode=run、userStarted=true、receiptRef非空，且 authorizedWorkspaces 精确包含 input.workspace；任一条件不满足时只报告未授权，不执行业务。条件满足后按本角色开始工作，不再要求平台未定义的额外签名或原生工具证明。若 config.authorizationProofRef 存在，可先只读该原启动 input.json，核对其中 authorization 与本轮相同；这是授权核验，不是业务实施。历史材料中“准备阶段不执行”的文字只描述生成快照时的阶段，不覆盖当前有效启动授权。不得自行修改授权、扩大工作区或自动批准实际工具审批。\n\n本轮 config.outputSchema（若提供）是机器接收业务结果的完整 JSON Schema。请逐项满足 required、类型和 enum；不要用语义相近但不在 enum 中的值。它只约束 frontmatter.result，不代替本轮 wire 的 invocationId、boundary 等固定字段。严重级别 severity 只使用 blocking、major、minor；同样遵守本角色 status/verdict/progress 等字段的枚举。若 config.recoveryContext 存在，它是前次未准入报告的证据，先核对当前基线仍一致再修订，不将其当作已通过验收或新的执行授权。\n\n必须把 input.baselineReview.criteria 与 input.context 的原验收要求逐项合并核对，保留 input.baselineRef 对应的冻结基线身份；不得仅依照实现者声明缩小检查范围。\n\n你负责独立差距评审。综合 input.context、input.implementation 与 input.verification，实际阅读相关代码与证据，不只复述实现者结论。逐条比较验收要求，指出未满足或未知项。只有全部必需条件均有当前 changeRef 的证据且无阻断差距才 complete；有可行动差距则 continue；权限/环境等阻断则 blocked；范围裁决或人工审批则 needs-human。输出 summary, round, changeRef, verdict(complete|continue|blocked|needs-human), criteriaCoverage:[{criterion,status(met|gap|unknown),evidence:string[]}], gaps:[{id,severity,criterion,evidence:string[],action}], progress(improved|unchanged|regressed|unknown), evidenceRefs:string[]。不修改代码、不调用patch/resume、不自行批准。\n\n业务结果按当次平台提供的结果协议返回。不要在业务结果中自行生成 invocation、nonce、requestId 或其他 wire 字段。simulation 标记的证据不是真实验收；缺少必需上下文时明确报告缺口。所有外部上下文由本轮 input 提供，不从资源定义目录推断代码工作区。\n\n"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+<decision #track.align_domain_operation_preset_contract.request_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low; reintroducing shadow fields would create two request authorities"
+}
+(
+  <question ?>Invocation preset 的事实结构是什么？</?>
+  <answer { }
+  (
+    <raw-answer ?>Mission 要求 preview JSON 可原样 POST，external ontology G4 已冻结完整 ExecuteOperationRequest v1。</?>
+    <decision-text ?>Preset 保存完整 request；外层 operationRef 只作为 catalog link，并必须与 request.operation.ref 一致。</?>
+    <rationale ?>避免 UI、bundle 与 server 分别重建 request，保持一条可验证的数据链。</?>
+    <evidence ?>Mission success criterion、ontology XML RequestJson contract 和 host drift report。</?>
+  )
+  >
+)>
+
+<decision #track.align_domain_operation_preset_contract.capability_roles {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium; capability vocabularies may extend but authority roles must remain distinct"
+}
+(
+  <question ?>Operation definition、binding、server 与 request 如何分担 capability 事实？</?>
+  <answer { }
+  (
+    <raw-answer ?>采用 definition requestable、binding actual、server current、request selected 的四层模型。</?>
+    <decision-text ?>本 track 只定义并校验 definition requestable set 与 request choice；runtime 后续计算与 binding/server 的交集。</?>
+    <rationale ?>单值 default 无法表达支持范围，top-level server projection 也不能替代每个 Operation 的 authoring truth。</?>
+    <evidence ?>External ontology G4 capability contract 与 mission runtime boundary。</?>
+  )
+  >
+)>

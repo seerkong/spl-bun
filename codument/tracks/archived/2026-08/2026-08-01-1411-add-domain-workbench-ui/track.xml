@@ -1,0 +1,139 @@
+<Track id="add-domain-workbench-ui" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>Provide a usable Domain Operation workbench in web-ide for catalog browsing, exact request preview/editing, execution, and observation.</Goal>
+    <Description>Add `/domain-workbench` over the verified Domain Operation HTTP API and reference bundles, preserving exact request-body authority and existing Kon IDE behavior.</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-08-01T08:15:27Z</CreatedAt>
+    <UpdatedAt>2026-08-01T11:11:23Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/depa-orm-domain-workbench/design/"/>
+    <MaterialBundle role="input" name="bundle-verification" domain="mission" path="vfs://@/codument/missions/active/depa-orm-domain-workbench/reports/verify-bundles.md"/>
+    <MaterialBundle role="input" name="contracts" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="output" name="response-contract-parser" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="input" name="server-api" domain="package" path="vfs://@/packages/web-server/"/>
+    <MaterialBundle role="output" name="web-ide" domain="package" path="vfs://@/packages/web-ide/"/>
+    <MaterialBundle role="output" name="web-shared" domain="package" path="vfs://@/packages/web-shared/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-domain-workbench-ui" name="add-domain-workbench-ui" version="1">
+    <Description>Implement and verify the domain operation workbench UI over the existing server API.</Description>
+    <SubNodes>
+      <TaskGroup id="P0" name="Workbench contract and RED browser tests" status="DONE" order="0">
+        <Description>Pin the user-visible contract before implementation.</Description>
+        <cdt:Gate><cdt:Criterion>P0 tasks are DONE</cdt:Criterion><cdt:Criterion>RED tests fail only because the workbench route/UI is missing</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T0.1" name="Write catalog and exact-preview RED E2E tests" status="DONE" order="0" priority="P0">
+            <Description>Add Playwright tests for `/domain-workbench` catalog load, bundle selector, read-only model source, operation filters, preset request preview, and existing `/` Kon route preservation. Do not implement the page.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.1-AC1" checked="true">RED tests require both reference bundle ids and at least one operation from each owner family</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC2" checked="true">RED tests assert preset preview contains a complete ExecuteOperationRequest with apiVersion/context/operation/invocation/execution</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC3" checked="true">Existing Kon IDE route remains covered</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T0.2" name="Write execution observation RED E2E tests" status="DONE" order="1" priority="P0">
+            <Description>Add Playwright tests for exact POST execution, network request body parity, successful write observations, partial batch item mapping, validation/catalog diagnostics, unexpected console errors, and desktop/mobile layout. Do not implement response views.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.2-AC1" checked="true">RED tests prove the request editor body is the submitted network request body</cdt:Criterion>
+              <cdt:Criterion id="T0.2-AC2" checked="true">RED tests require Outcome, Changes, Before/After, Operation Tree, Plan/SQL, and Diagnostics views including unavailable facts</cdt:Criterion>
+              <cdt:Criterion id="T0.2-AC3" checked="true">RED tests include mobile viewport assertions with no primary control overlap</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P1" name="Catalog browser and exact request preview" status="DONE" order="1">
+        <Description>Build the workbench shell, catalog loading, filters, and exact request editor.</Description>
+        <cdt:Gate><cdt:Criterion>P1 tasks are DONE</cdt:Criterion><cdt:Criterion>catalog and request-preview tests pass</cdt:Criterion><cdt:Criterion>no second hidden request model is introduced</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Implement route, catalog client, and bundle panels" status="DONE" order="0" priority="P0">
+            <Description>Add `/domain-workbench`, `depa-data-domain-operation-contracts` frontend dependency, encode-safe route builders, API client helpers, bundle selector, read-only model source tabs, semantic resource grouping, and operation filter controls using public routes and DTOs.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">The page loads both production reference contexts from the server</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">Parameterized catalog routes are built with encoded context ids, not fetched as raw `:contextId` templates</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">Model source content is visible and read-only with no compile/upload controls</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC4" checked="true">Operation filters use owner/behavior/subject/invocation/effect without mutating request JSON</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Implement preset selector and exact JSON editor" status="DONE" order="1" priority="P0">
+            <Description>Select presets into a formatted complete request JSON editor, parse local JSON errors, preserve edited body authority, and keep selected catalog facts visible for comparison.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">Preset preview includes complete request body and can be copied/edited as JSON</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">Local invalid JSON blocks execute with a visible editor diagnostic</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC3" checked="true">Changing presets replaces the editor body only from the selected preset request</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Execution and observation views" status="DONE" order="2">
+        <Description>Post exact requests and render response envelope projections.</Description>
+        <cdt:Gate><cdt:Criterion>P2 tasks are DONE</cdt:Criterion><cdt:Criterion>execution observation E2E cases pass</cdt:Criterion><cdt:Criterion>domain failures and partial responses are rendered truthfully</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Implement execute command and response state" status="DONE" order="0" priority="P0">
+            <Description>POST the parsed editor JSON unchanged to execute, track loading/domain status, and render HTTP/domain errors without treating HTTP 200 as success-only.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">Valid edited JSON is sent unchanged to the execute endpoint</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">success, partial, and failure response statuses are visually distinct</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">Catalog mismatch diagnostics remain visible with the edited request body</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="Implement observation tabs" status="DONE" order="1" priority="P0">
+            <Description>Render Outcome, Changes, Before/After, Operation Tree, Plan/SQL, and Diagnostics tabs, including mutation summaries, batch item mapping, probes, diff, child refs, stages, public plan, and SQL unavailable diagnostics.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">All response outcome variants render as readable structured data</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">Batch item keys and partial failure mapping are inspectable</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC3" checked="true">Plan/SQL view does not fabricate SQL when runtime reports SQL_TRACE_UNAVAILABLE</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Responsive quality and final verification" status="DONE" order="3">
+        <Description>Prove the workbench is usable, responsive, and does not regress existing surfaces.</Description>
+        <cdt:Gate><cdt:Criterion>P3 tasks are DONE</cdt:Criterion><cdt:Criterion>focused/full E2E, build, and strict Codument checks pass</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Polish responsive layout and accessibility hooks" status="DONE" order="0" priority="P1">
+            <Description>Ensure desktop/mobile layouts fit, controls are labelled for E2E/accessibility, tabs remain stable, and text does not overlap.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">Desktop and mobile viewport tests pass without incoherent overlap</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">Primary controls have stable accessible names or test ids</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC3" checked="true">Existing Kon IDE E2E tests remain green</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="Run final verification and archive-ready evidence" status="DONE" order="1" priority="P0">
+            <Description>Run web-ide E2E, web-server reference tests, package builds, root build, XML/strict Codument validation, diff check, and record findings for archive.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">Focused and full workbench/Kon E2E suites pass</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC2" checked="true">web-ide/web-shared/web-server/domain packages and root build pass</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC3" checked="true">behavior delta, track XML, strict Codument validation, and git diff checks pass</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.3" name="Correct coding attractor gaps" status="DONE" order="2" priority="P0">
+            <Description>Add contract-owned complete response parsing, race-safe latest-execution ownership, durable web-ide import guards, and real-browser proof of orthogonal filters plus selection-versus-batch semantics.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.3-AC1" checked="true">Only the newest execution may commit loading, response, or error state across preset/context changes and overlapping delayed requests</cdt:Criterion>
+              <cdt:Criterion id="T3.3-AC2" checked="true">A public contract parser rejects malformed or version-skewed complete response envelopes before UI projection</cdt:Criterion>
+              <cdt:Criterion id="T3.3-AC3" checked="true">Durable unit/import/browser tests prove all owner families, each independent filter, and rendered selection versus keyed batch semantics</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.4" name="Re-run final verification after attractor correction" status="DONE" order="3" priority="P0">
+            <Description>Repeat focused/full tests, package/root builds, integrity guards, strict Codument, screenshots, and diff checks after T3.3.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.4-AC1" checked="true">Corrected contract, race, import, browser, legacy, and server suites pass</cdt:Criterion>
+              <cdt:Criterion id="T3.4-AC2" checked="true">Focused and root builds plus capsule manifests remain green</cdt:Criterion>
+              <cdt:Criterion id="T3.4-AC3" checked="true">Strict Codument, XML, screenshots, and diff checks remain archive-ready</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook></Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

@@ -1,0 +1,10 @@
+# Archive Summary: add-depa-orm-domain-runtime
+
+- track.add_depa_orm_domain_runtime.public_bridge
+- track.add_depa_orm_domain_runtime.query_exports
+- track.add_depa_orm_domain_runtime.lifecycle_authority
+- track.add_depa_orm_domain_runtime.prerequisite_and_preflight_order
+- track.add_depa_orm_domain_runtime.preset_request_authority
+- track.add_depa_orm_domain_runtime.capability_authority_roles
+- track.add_depa_orm_domain_runtime.server_projection_ownership
+- track.add_depa_orm_domain_runtime.one_definition_batch

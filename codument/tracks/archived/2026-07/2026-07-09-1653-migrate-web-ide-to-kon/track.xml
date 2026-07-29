@@ -1,0 +1,70 @@
+<Track id="migrate-web-ide-to-kon" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>web-ide 切换 Kon 脚本主模式：KonIde 页面 + 33 demos Kon 化 + Kon E2E 双跑</Goal>
+    <Description>默认路由 / 换 KonIde；旧 SplIde 挪 /grid-legacy 行为不变；konDemos 全量映射；新旧 E2E 双跑全绿。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>light</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-04T21:40:00Z</CreatedAt>
+    <UpdatedAt>2026-07-09T13:53:31Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input"  name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_migrate-web-ide-to-kon" name="migrate-web-ide-to-kon" version="1">
+    <Description>前端 Kon 主模式切换</Description>
+    <SubNodes>
+
+      <TaskGroup id="P1" name="KonIde 页面与基础链路" status="DONE" order="0">
+        <Description>页面骨架 + 执行链 + 路由切换 + 首批代表性 demos + 基础 E2E</Description>
+        <cdt:Gate>
+          <cdt:Criterion>KonIde 可运行代表性 demos；旧 E2E（改路由后）与新基础 E2E 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="KonIde 页面与路由" status="DONE" order="0" priority="P0">
+            <Description>KonIde.vue（编辑区/demos 下拉/Run/status/ResultTable，DOM 类名沿用旧约定）+ router（/ → KonIde，/grid-legacy → SplIde）+ konDemos.ts 首批 5 个代表性 demo（states-base、sequence-select、data-pipeline、csv-import、flow-if）；旧 E2E goto 改 /grid-legacy；新增 kon-basic.e2e.ts（demo 加载 + run-script + error-status + legacy-route 四断言）。本地跑通 bun run test:e2e。</Description>
+            <SubNodes>
+              <Task id="T1.1.1" name="编写 E2E（先红）" status="DONE" order="0"/>
+              <Task id="T1.1.2" name="实现页面与路由" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">kon-ide-page 三个 case 有 E2E 且通过；旧 E2E 改路由后全绿</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="demos 全量 Kon 化与 E2E 全组" status="DONE" order="1">
+        <Description>33 个 demo 映射 + kon E2E 五组 + 双跑回归</Description>
+        <cdt:Gate>
+          <cdt:Criterion>coverage-mapping 清单完整；bun run test:e2e 全量（新旧双跑）通过；全仓 bun test 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="demos 全量映射" status="DONE" order="0" priority="P0">
+            <Description>konDemos 补全（对照 mission analysis/web-ide-surface.md 的 33 项清单：查询链/序列/文件多源/表达式/流控制 15 个）；goto/execute-only/result/end 等改写并注释；映射差异表写入 findings（coverage-mapping case 依据）。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">33 项映射清单完整且差异有记录</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="kon E2E 全组与双跑回归" status="DONE" order="1" priority="P0">
+            <Description>kon-execution/kon-flow-control/kon-error/kon-multi-datasource e2e（数值断言对齐 Kon 版语义）；bun run test:e2e 全量通过；全仓 bun test 通过。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">全量 E2E（旧五组+新组）与全仓 bun test 通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+    </SubNodes>
+  </TaskSpace>
+</Track>

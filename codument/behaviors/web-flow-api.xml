@@ -1,0 +1,22 @@
+<behaviors capability="web-flow-api" version="1">
+  <requirement id="execute-kon-endpoint">
+    <statement>web-server SHALL provide POST /api/execute-kon for Kon scripts: requests contain {source: string, scope?: object}; successful responses contain {status:&quot;ok&quot;, data?: QueryResultData, result?: unknown}, with table-shaped values normalized as data and other final values returned as result; failures contain {status:&quot;error&quot;, error: string}. Each request SHALL execute independently against the configured demo data sources. The legacy POST /api/execute FlowCell product endpoint SHALL NOT be provided.</statement>
+    <suite id="endpoint" name="Kon execution endpoint">
+      <case id="kon-query-roundtrip">
+        <given>the server has initialized its demo data</given>
+        <when>POST /api/execute-kon executes a Kon spl_connect plus spl_query script</when>
+        <then>the response SHALL be status=ok with the expected data.columns and data.rows</then>
+      </case>
+      <case id="kon-error-shape">
+        <given>source references an unknown data source or has invalid syntax</given>
+        <when>POST /api/execute-kon is called</when>
+        <then>the response SHALL be {status:&quot;error&quot;, error} with actionable detail</then>
+      </case>
+      <case id="legacy-endpoint-removed">
+        <given>a caller requests POST /api/execute</given>
+        <when>the web server receives the request</when>
+        <then>the server SHALL NOT expose a legacy FlowCell product endpoint</then>
+      </case>
+    </suite>
+  </requirement>
+</behaviors>

@@ -1,0 +1,31 @@
+<behavior-patch capability="kon-spl-dsl" version="1">
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/run-spl-kon-facade">
+    <requirement id="run-spl-kon-facade">
+      <statement>depa-data-kon-spl-dsl SHALL 提供门面 runSplKon(source, config)：config 含 workspaceRoot?、scope?、dataSources?（SplDataSourceConfig[]）、maxSourceBytes?；每次调用 SHALL 创建全新 kunun 运行时与 SplContext（无跨调用共享可变状态）、注册全部 spl_* word、同步执行 Kon 源码并返回 { value, bindings }；source 超过 maxSourceBytes SHALL 报错；宿主（如 web-server）SHALL 无需任何 kunun 直接依赖即可使用。系统 SHALL 同时提供 toQueryResult(value) 把 DataSet 或 {columns, rows} 形态归一为 QueryResultData，非表格值返回 null。</statement>
+      <suite id="facade" name="门面执行">
+        <case id="run-basic">
+          <given>source 为 `(spl_eval #v :{ expr = "1+41" })\n(v)`</given>
+          <when>runSplKon(source, {})</when>
+          <then>value SHALL 为 42 且 bindings.v 为 42</then>
+        </case>
+        <case id="run-with-datasource">
+          <given>config.dataSources 注册了一个 sqlite 数据源 db，source 用 spl_query 查询它</given>
+          <when>runSplKon 执行</when>
+          <then>value SHALL 为 DataSet 且 toQueryResult(value) 的 columns/rows 与直接查询一致</then>
+        </case>
+        <case id="fresh-per-call">
+          <given>前一次调用在脚本内定义了变量 x</given>
+          <when>再次 runSplKon 执行引用 x 的脚本</when>
+          <then>SHALL 报未定义错误（无状态泄漏）</then>
+        </case>
+        <case id="source-size-limit">
+          <given>source 长度超过 maxSourceBytes</given>
+          <when>runSplKon 执行</when>
+          <then>SHALL 抛出含大小限制说明的错误</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+</behavior-patch>

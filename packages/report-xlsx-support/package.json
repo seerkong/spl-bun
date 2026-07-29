@@ -1,0 +1,25 @@
+{
+  "name": "depa-data-report-xlsx-support",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "bwip-js": "4.11.4",
+    "depa-data-report-contract": "workspace:*",
+    "depa-data-report-logic": "workspace:*",
+    "fast-xml-parser": "5.10.1",
+    "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "depa-data-expression": "workspace:*"
+  }
+}

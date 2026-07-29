@@ -1,0 +1,9 @@
+{
+  "track_id": "add-like-regex-and-date-math-functions",
+  "type": "feature",
+  "status": "completed",
+  "commit_mode": "auto",
+  "created_at": "2026-01-22T03:31:00Z",
+  "updated_at": "2026-01-22T21:08:24Z",
+  "description": "Add Phase-2 style expression functions to TS (like/regex, exp/ln/sign/gcd/lcm, age/workday) and provide Web-IDE demos for the new capabilities."
+}

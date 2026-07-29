@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>update-spl-flow-execute-only-prefix</track_id>
+    <track_name>Update spl-flow execute-only '&gt;' prefix semantics</track_name>
+    <goal>Align '&gt;' prefixed expressions with SPL execute-only semantics, add tests, a Web-IDE demo, and documentation updates.</goal>
+    <created_at>2026-02-10T16:53:58Z</created_at>
+    <updated_at>2026-02-11T02:40:00Z</updated_at>
+    <status>in_progress</status>
+    <commit_mode>auto</commit_mode>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="Spec & Design Lock" status="DONE">
+      <description>Confirm execute-only semantics and scope of demo/docs updates.</description>
+      <tasks>
+        <task id="T1.1" name="Confirm execute-only requirements" priority="P1" status="DONE">
+          Validate the spec/proposal/design for execute-only behavior, demo naming, and docs location.
+          <changed-key-files>
+            <file>codument/tracks/update-spl-flow-execute-only-prefix/spec.md</file>
+            <file>codument/tracks/update-spl-flow-execute-only-prefix/proposal.md</file>
+            <file>codument/tracks/update-spl-flow-execute-only-prefix/design.md</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T1.1-AC1" checked="true">Spec describes execute-only semantics, result recording, and lastQuery behavior.</criterion>
+            <criterion id="T1.1-AC2" checked="true">Demo and documentation scope are confirmed.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="Flow Parsing + Execution" status="DONE">
+      <description>Add execute-only flag parsing and conditional assignment in spl-flow.</description>
+      <tasks>
+        <task id="T2.1" name="Preserve execute-only prefix in grid" priority="P1" status="DONE">
+          Update cell classification to retain execute-only markers for leading '&gt;' expressions.
+          <changed-key-files>
+            <file>packages/spl-flow/src/flow/grid.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T2.1-AC1" checked="true">Cells with leading '&gt;' are marked execute-only after normalization.</criterion>
+          </acceptance_criteria>
+        </task>
+        <task id="T2.2" name="Skip scope assignment for execute-only" priority="P1" status="DONE">
+          Ensure execute-only expressions record results but do not assign to scope; allow lastQuery updates.
+          <changed-key-files>
+            <file>packages/spl-flow/src/index.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T2.2-AC1" checked="true">Execute-only expressions do not write to scope.</criterion>
+            <criterion id="T2.2-AC2" checked="true">Execute-only expressions still record results and can update lastQuery.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="Tests" status="DONE">
+      <description>Add coverage for execute-only prefix behavior.</description>
+      <tasks>
+        <task id="T3.1" name="Update grid classification tests" priority="P1" status="DONE">
+          Add tests to verify execute-only prefix is recognized and preserved.
+          <changed-key-files>
+            <file>packages/spl-flow/__tests__/grid.test.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T3.1-AC1" checked="true">Grid tests assert execute-only metadata for '&gt;' prefixed expressions.</criterion>
+          </acceptance_criteria>
+        </task>
+        <task id="T3.2" name="Add execution behavior tests" priority="P1" status="DONE">
+          Cover execute-only evaluation (no scope assignment) and lastQuery updates.
+          <changed-key-files>
+            <file>packages/spl-flow/__tests__/dsl.test.ts</file>
+            <file>packages/spl-flow/__tests__/compat.test.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T3.2-AC1" checked="true">Execute-only expressions do not populate scope.</criterion>
+            <criterion id="T3.2-AC2" checked="true">Execute-only query expressions update lastQuery.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P4" name="Web-IDE Demo" status="DONE">
+      <description>Add a dedicated execute-only demo and ensure E2E coverage.</description>
+      <tasks>
+        <task id="T4.1" name="Add execute-only demo" priority="P2" status="DONE">
+          Add a "Flow Control: Execute-only (&gt;)" demo to the demo list.
+          <changed-key-files>
+            <file>packages/web-ide/src/pages/SplIde.vue</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T4.1-AC1" checked="true">Demo runs and demonstrates no scope assignment for '&gt;' expression.</criterion>
+          </acceptance_criteria>
+        </task>
+        <task id="T4.2" name="Update flow-control demo E2E list" priority="P2" status="DONE">
+          Extend Playwright flow-control demo coverage to include the new demo.
+          <changed-key-files>
+            <file>packages/web-ide/__tests__/e2e/flow-control-demos.e2e.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T4.2-AC1" checked="true">E2E test exercises the execute-only demo.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P5" name="Documentation" status="DONE">
+      <description>Document execute-only prefix semantics.</description>
+      <tasks>
+        <task id="T5.1" name="Update spl-flow docs" priority="P2" status="DONE">
+          Document the execute-only '&gt;' prefix semantics and example usage.
+          <changed-key-files>
+            <file>doc/ai/modules/spl-flow/introduce/flow-control.md</file>
+            <file>doc/usage/expression.md</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T5.1-AC1" checked="true">Docs explain that '&gt;' executes without assignment and still records results.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P6" name="Validation" status="DONE">
+      <description>Run tests and validate Codument track.</description>
+      <tasks>
+        <task id="T6.1" name="Run bun unit tests" priority="P1" status="DONE" />
+        <task id="T6.2" name="Run Playwright E2E" priority="P1" status="DONE" />
+        <task id="T6.3" name="Run bun test --coverage" priority="P2" status="DONE" />
+        <task id="T6.4" name="Run codument validate --strict" priority="P1" status="DONE" />
+      </tasks>
+    </phase>
+  </phases>
+</plan>

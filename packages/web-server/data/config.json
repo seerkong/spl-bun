@@ -1,0 +1,22 @@
+{
+  "app": "spl-bun",
+  "version": "1.0",
+  "settings": {
+    "database": {
+      "host": "localhost",
+      "port": 4176,
+      "name": "demo",
+      "pool": 8
+    },
+    "api": {
+      "baseUrl": "https://api.example.local",
+      "timeoutMs": 5000,
+      "retries": 2
+    },
+    "features": {
+      "enableCache": true,
+      "enableAudit": false,
+      "regions": ["North", "East", "South", "West"]
+    }
+  }
+}

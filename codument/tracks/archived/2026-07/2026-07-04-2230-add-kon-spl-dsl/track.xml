@@ -1,0 +1,123 @@
+<Track id="add-kon-spl-dsl" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>新增 depa-data-kon-spl-dsl：基于 kunun Kon 语言的 SPL 引擎封装调用方式（spl_* word 集）</Goal>
+    <Description>注册 spl_connect/spl_query/spl_execute/spl_eval/spl_flow 五个 prefix keyword word；Conf 配置、#name 命名、#opt/@糖 承载 SPL @选项、Next 链合并读取；spl-flow 新增 evaluateFlowSync；tsconfig paths 依赖 kunun 源码，kunun 零改动。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>light</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-04T18:05:00Z</CreatedAt>
+    <UpdatedAt>2026-07-04T19:30:00Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input"  name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input"  name="kunun-repo" domain="external" path="vfs://kunun.ts/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-kon-spl-dsl" name="add-kon-spl-dsl" version="1">
+    <Description>Kon spl_* DSL 桥接包实现</Description>
+    <SubNodes>
+
+      <TaskGroup id="P1" name="桥接基础" status="DONE" order="0">
+        <Description>package 骨架、kunun 依赖打通、knot 读取与选项映射纯函数</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 全部任务 DONE 且 bun test packages/kon-spl-dsl 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="package 骨架与 kunun 依赖打通" status="DONE" order="0" priority="P0">
+            <Description>创建 packages/kon-spl-dsl（package.json、tsconfig 含 kunun paths、README 前置条件）；冒烟测试：注册一个探针 prefix keyword 并在 Kon 源码中求值成功；kunun 仓库缺失时测试跳过并提示。</Description>
+            <SubNodes>
+              <Task id="T1.1.1" name="编写冒烟测试" status="DONE" order="0"/>
+              <Task id="T1.1.2" name="实现骨架与 tsconfig paths" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">bun test 冒烟用例通过；kunun 仓库零改动</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="knot-reader 与 options 纯函数" status="DONE" order="1" priority="P0">
+            <Description>readWordCall(knot)：Next 链合并 Conf/Metadata/Attr、#name、#opt 权威 + @糖 归一；applyOptions(expr, options)：最外层调用改写为 name@opts、冲突报错。</Description>
+            <SubNodes>
+              <Task id="T1.2.1" name="编写测试（含 Attr/Conf 分裂 Next 用例）" status="DONE" order="0"/>
+              <Task id="T1.2.2" name="实现 knot-reader 与 options" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">behavior knot-reading 与 spl-options 全部 case 有对应测试且通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="引擎 word 与同步 flow 入口" status="DONE" order="1">
+        <Description>SplContext、五个 spl_* word、evaluateFlowSync</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P2 全部任务 DONE 且全仓 bun test 通过（含 spl-flow 既有测试不回归）</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="SplContext 与同步数据源" status="DONE" order="0" priority="P0">
+            <Description>createSplContext；SyncDataSource（sqlite/csv/json 同步实现）；workspaceRoot 沙箱校验。</Description>
+            <SubNodes>
+              <Task id="T2.1.1" name="编写测试（含越界路径用例）" status="DONE" order="0"/>
+              <Task id="T2.1.2" name="实现 SplContext 与数据源" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">datasource-words 的 workspace-escape case 测试通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="spl_connect/spl_query/spl_execute/spl_eval word" status="DONE" order="1" priority="P0">
+            <Description>EnableSplDsl 注册四个 word；#name 结果绑定（确认 kunun env 定义 API，无公开 API 则按 decisions.md#5 退化并回写）；spl_eval scope 合并与 @选项改写。</Description>
+            <SubNodes>
+              <Task id="T2.2.1" name="编写测试（sqlite 往返、scope 合并、选项映射端到端）" status="DONE" order="0"/>
+              <Task id="T2.2.2" name="实现四个 word 与 EnableSplDsl" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">enable-spl-dsl / datasource-words / spl-eval-passthrough / spl-options 的测试全部通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.3" name="evaluateFlowSync 与 spl_flow word" status="DONE" order="2" priority="P1">
+            <Description>spl-flow 新增同步求值入口（async adapter 报错引导）；spl_flow word 消费；evaluateFlow 既有行为与测试不回归。</Description>
+            <SubNodes>
+              <Task id="T2.3.1" name="编写测试（grid-parity 同步/异步一致性）" status="DONE" order="0"/>
+              <Task id="T2.3.2" name="实现 evaluateFlowSync 与 spl_flow" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.3-AC1" checked="true">spl-flow-sync 的 grid-parity case 通过；spl-flow 既有测试全绿</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="端到端示例与收尾" status="DONE" order="2">
+        <Description>示例 Kon 脚本与等价网格脚本结果一致性验证、README、全量回归</Description>
+        <cdt:Gate>
+          <cdt:Criterion>示例 e2e 通过且全仓 bun test 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="示例脚本与一致性 e2e" status="DONE" order="0" priority="P0">
+            <Description>examples/basic.kon（connect→query→derive→select→输出）；e2e 断言与等价 FlowCell 网格脚本结果一致（behavior spl-flow-sync/kon-grid-parity）。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">kon-grid-parity 测试通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="README 与全量回归" status="DONE" order="1" priority="P1">
+            <Description>README（前置条件、五个 word 语法、@选项写法、示例）；全仓 bun test；回写 decisions.md#5 实现结论。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">全仓 bun test 通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+    </SubNodes>
+  </TaskSpace>
+</Track>

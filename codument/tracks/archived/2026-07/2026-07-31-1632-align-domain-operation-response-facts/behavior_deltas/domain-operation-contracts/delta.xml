@@ -1,0 +1,39 @@
+<behavior-patch capability="domain-operation-contracts" version="1">
+  <upsert selector="behavior://domain-operation-contracts/requirements/execute-response">
+    <requirement id="execute-response">
+      <statement>Execute response SHALL 统一表达 success、partial、failure，支持 table、entity、collection、scalar、graph、tree、composite outcome，并携带 effects、observations、trace 与 diagnostics；缺失的 atomic composition、cross-datasource atomicity、batch mapping 或 SQL trace capability SHALL 使用稳定 diagnostic code 如实表达；exact request 未建立时，request-derived context、operationRef、requested atomicity 与 execution-derived operation tree SHALL 可明确表示 unavailable，且 contract-owned pure projection SHALL 只保留 unknown input 中独立有效的 request facts。</statement>
+      <suite id="responses" name="Execute response contract">
+        <case id="outcome-union-roundtrip">
+          <given>每一种 OperationOutcome variant 的代表性 JSON-safe fixture</given>
+          <when>通过 response contract JSON roundtrip</when>
+          <then>discriminant 与 payload 均稳定保留</then>
+        </case>
+        <case id="batch-mapping-unavailable">
+          <given>adapter 无法提供稳定 row-level item mapping</given>
+          <when>表达 effects 和 diagnostics</when>
+          <then>itemMapping 为 unavailable 且包含 BATCH_ITEM_MAPPING_UNAVAILABLE，不伪造 item outcome</then>
+        </case>
+        <case id="sql-trace-unavailable">
+          <given>公开 capability 不提供 SQL trace</given>
+          <when>表达 trace 和 diagnostics</when>
+          <then>SQL 字段不被伪造且包含 SQL_TRACE_UNAVAILABLE</then>
+        </case>
+        <case id="request-facts-unavailable">
+          <given>unknown input 未提供有效 context、operation.ref 或 execution.atomicity，且 operation 未被 admission</given>
+          <when>投影 request facts 并构造 validation failure response</when>
+          <then>context、operationRef、requested atomicity 与 operation tree SHALL 为 null，不得使用 bundle identity、空字符串或默认 atomicity</then>
+        </case>
+        <case id="partial-request-facts">
+          <given>unknown input 的完整 request 仍因其他字段失败，但 context、operation.ref 或 execution.atomicity 中部分事实独立有效</given>
+          <when>运行 contract-owned request fact projection</when>
+          <then>每个有效事实 SHALL 原样保留，每个无效或缺失事实 SHALL 独立为 null，且不得把投影结果当作 executable request</then>
+        </case>
+        <case id="admitted-response-facts">
+          <given>一个通过 exact parser 和 admission 的合法请求</given>
+          <when>构造成功、partial 或业务失败 response</when>
+          <then>context、operationRef、requested atomicity 与 operation tree SHALL 保持 non-null 并可 JSON roundtrip</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

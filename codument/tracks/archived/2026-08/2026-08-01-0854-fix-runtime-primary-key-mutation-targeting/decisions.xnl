@@ -1,0 +1,18 @@
+<decision #track.fix_runtime_primary_key_mutation_targeting.owner {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>Who owns update/delete targeting for RuntimeMutation?</?>
+  <answer { }
+  (
+    <raw-answer ?>The domain runtime adapter, using compiled model primary-key facts.</?>
+    <decision-text ?>Keep bundle handlers storage-neutral and derive the public Writer equality predicate inside the runtime from the entity primary key and mutation values.</?>
+    <rationale ?>The runtime owns public Writer adaptation; exposing SQL or arbitrary predicates to bundles would duplicate storage authority and expand the API unnecessarily.</?>
+    <evidence ?>G7 multi-row failure, public Writer where contract, SQLite unscoped mutation semantics, and fresh coding AttractorCheck PASS.</?>
+  )
+  >
+)>

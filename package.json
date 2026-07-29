@@ -1,0 +1,30 @@
+{
+  "name": "spl-bun",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "bun test",
+    "build": "bun run --filter depa-data-expression build && bun run --filter depa-data-core build && bun run --filter depa-data-sqlite-adapter build && bun run --filter depa-data-spl-flow build && bun run --filter depa-data-test-utils build && bun run --filter depa-data-kon-spl-dsl build && bun run --filter depa-data-report-contract build && bun run --filter depa-data-report-logic build && bun run --filter depa-data-report-xlsx-support build && bun run --filter depa-data-web-shared build && bun run --filter depa-data-composer build && bun run --filter depa-data-web-ide build && bun run --filter depa-data-web-server build",
+    "cleanup": "bun run scripts/cleanup-dev-ports.ts",
+    "cleanup:frontend": "bun run scripts/cleanup-dev-ports.ts 4174 4175",
+    "cleanup:backend": "bun run scripts/cleanup-dev-ports.ts 4176",
+    "web-ide:dev": "bun run scripts/web-ide-dev.ts",
+    "dev:frontend": "bun run cleanup:frontend && bun run --filter depa-data-web-ide dev",
+    "dev:backend": "bun run cleanup:backend && bun run --filter depa-data-web-server dev",
+    "dev": "bun run cleanup && bun run dev:backend & bun run dev:frontend",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "bun-types": "latest",
+    "typescript": "5.4.5"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.1",
+    "elysia": "^1.4.21"
+  }
+}

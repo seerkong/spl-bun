@@ -1,0 +1,9 @@
+{
+  "track_id": "update-spl-flow-execute-only-prefix",
+  "type": "feature",
+  "status": "in_progress",
+  "commit_mode": "auto",
+  "created_at": "2026-02-10T16:53:58Z",
+  "updated_at": "2026-02-11T02:40:00Z",
+  "description": "Update spl-flow to treat leading '>' expressions as execute-only (no scope assignment) while still recording results, plus add tests, a Web-IDE demo, and docs updates."
+}

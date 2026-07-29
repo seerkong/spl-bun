@@ -1,0 +1,16 @@
+{
+  "name": "depa-data-web-shared",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "depa-data-core": "workspace:*"
+  },
+  "scripts": {
+    "build": "bun x tsc -p tsconfig.json"
+  }
+}

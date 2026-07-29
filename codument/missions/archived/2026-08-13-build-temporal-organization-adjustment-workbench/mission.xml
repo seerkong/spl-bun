@@ -1,0 +1,120 @@
+<Mission id="build-temporal-organization-adjustment-workbench" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>基于 depa ORM、标准 DomainContext app bundle、统一 Operation API 和 Domain Workbench，建立一个以天级时间轴为顶层概念的组织管理与组织调整系统。</Goal>
+    <Description>先冻结双时间关系模型和 authority，再依次扩展时间契约/运行时、实现组织域 bundle、接入 server/workbench，最终用关系型时间查询、调整状态机、原子应用、批量调动和浏览器场景证明目标。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <Revision>3</Revision>
+    <GapRound>1</GapRound>
+    <CreatedAt>2026-08-12T18:00:54Z</CreatedAt>
+    <UpdatedAt>2026-08-12T22:17:54Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="mission">
+    <MaterialBundle role="state" name="analysis" domain="mission" path="vfs://./analysis/"/>
+    <MaterialBundle role="state" name="reports" domain="mission" path="vfs://./reports/"/>
+    <MaterialBundle role="output" name="tracks" domain="codument" path="vfs://@/codument/tracks/"/>
+  </Ports>
+
+  <cdt:ProjectRefs>
+    <cdt:ProjectRef id="spl-bun" kind="host"/>
+  </cdt:ProjectRefs>
+
+  <cdt:ActorSets default="temporal-organization-loop">
+    <cdt:ActorSet id="temporal-organization-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="spl-bun"><Description>维护双时间 authority、组织调整状态机、三条实现 track 的串行 DAG 和最终验收矩阵；只有代码证据、验证失败或用户新决策才允许重规划。</Description></cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="spl-bun"><Description>观察 contract/runtime/bundle/server/workbench 的真实源码、行为登记、track 状态、测试、HTTP body、SQLite 事务证据与浏览器结果，区分定义、运行事实、审计和派生投影。</Description></cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="spl-bun"><Description>逐项比较天级 timeline contract、半开双时间区间、Property-first 关系、唯一调整写者、状态机、原子回滚、批量语义、fresh isolation 和 UI 闭环的 desired/actual state。</Description></cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="spl-bun"><Description>创建、绑定、执行、验证和归档真实 track；动作内验证通过且无 drift 时连续推进，发现偏差时写 report 并受控修订 mission。</Description></cdt:Actor>
+    </cdt:ActorSet>
+  </cdt:ActorSets>
+
+  <TaskSpace id="space_build-temporal-organization-adjustment-workbench" name="build-temporal-organization-adjustment-workbench" version="1" cdt:child-mode="dag">
+    <Description>以标准 app bundle 和 Operation API 驱动的天级组织管理与组织调整 mission。</Description>
+    <SubNodes>
+      <TaskGroup id="G1" name="Evidence And Authority Freeze" status="DONE" order="0">
+        <Description>冻结现有工作台约束、Cozo/depa-ontology 参考边界、双时间关系模型、唯一写者和可判定验收。</Description>
+        <SubNodes>
+          <Task id="G1-T1" name="Freeze host baseline and reference evidence" status="DONE" order="0">
+            <Description>记录现有五维 Operation、完整 preset request、每请求 fresh SQLite、property-first relation、server registry 与 workbench 单一请求 authority；参考项目只作为 evidence，不修改。</Description>
+          </Task>
+          <Task id="G1-T2" name="Freeze temporal authority and adjustment lifecycle" status="DONE" order="1">
+            <Description>确认 temporal facts 是已应用组织事实的唯一查询 authority，adjustment 是未应用命令 authority，change event 只作 audit；冻结双时间区间、状态迁移、单写者与事务边界。</Description>
+          </Task>
+          <Task id="G1-T3" name="Freeze operation and verification matrix" status="DONE" order="2">
+            <Description>将 snapshot/history/diff/preview/validate/approve/apply/batch transfer 与 malformed/rollback/fresh/HTTP/UI 证据逐项映射到 design 和后续 tracks。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G2" name="Day Timeline Contracts And Runtime" status="DONE" order="1">
+        <Description>扩展通用 Operation contract 与 depa ORM domain runtime，使时间上下文和关系型时间查询成为标准能力而非组织域特例。</Description>
+        <SubNodes>
+          <Task id="G2-T1" name="Execute day timeline contract track" status="DONE" order="0">
+            <Description>创建并执行 timeline DTO、strict parser/catalog match、runtime predicate query、system recordedAt、read-only effect guard 与相关测试。</Description>
+            <cdt:TrackLink state="bound" id="add-day-timeline-operation-contracts" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G2-T2" name="Verify temporal preflight and runtime boundaries" status="DONE" order="1">
+            <Description>独立验证非法日期、未知 mode、缺失 required timeline 在 allocation 前失败，双时间 predicate 正确，read-only handler 不能写，现有非时间 requests 保持通过。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3" name="Temporal Organization Domain Bundle" status="DONE" order="2">
+        <Description>用 Property-first Kon 模型和 depa ORM 关系表实现组织事实、人员分配、调整单、审计和完整 Operation/preset 矩阵。</Description>
+        <SubNodes>
+          <Task id="G3-T1" name="Execute temporal organization bundle track" status="DONE" order="0">
+            <Description>创建并执行组织模型、确定性历史 seed、catalog/resources、handlers、唯一 OrganizationAdjustmentWriter、probes 与 operation matrix tests。</Description>
+            <cdt:TrackLink state="bound" id="add-temporal-organization-context-bundle" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G3-T2" name="Verify organization timeline and adjustment semantics" status="DONE" order="1">
+            <Description>验证两个日期快照、history/range diff、preview、合法状态迁移、apply 重验、事务回滚、树环/区间重叠拒绝、atomic/best-effort batch 与 fresh isolation。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4" name="Server And Workbench Integration" status="DONE" order="3">
+        <Description>通过现有生产 registration 和统一 API 暴露组织域，并让时间轴在通用 Workbench 中可见、可编辑、可执行。</Description>
+        <SubNodes>
+          <Task id="G4-T1" name="Execute organization timeline workbench track" status="DONE" order="0">
+            <Description>创建并执行 production registration、HTTP integration、timeline-aware request control、结果展示和 desktop/mobile Playwright；完整 preset request 仍是唯一编辑 authority。</Description>
+            <cdt:TrackLink state="bound" id="add-organization-timeline-workbench" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G4-T2" name="Verify standardized API and browser workflow" status="DONE" order="1">
+            <Description>验证 catalog preset 与 POST body 深相等、path-aware failure、context/date 切换、snapshot/apply/invalid 场景、响应视图和响应式布局。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G5" name="Mission Convergence" status="DONE" order="4">
+        <Description>从 mission design/decisions 反向核对实际代码、已归档 tracks 和 fresh evidence，只有所有目标成立才完成 mission。</Description>
+        <SubNodes>
+          <Task id="G5-T1" name="Run full engineering and boundary verification" status="DONE" order="0">
+            <Description>运行 contract/runtime/bundle/server/web tests、typecheck/build、import-boundary、residue scan 与 production API smoke。</Description>
+          </Task>
+          <Task id="G5-T2" name="Run independent mission gap loop" status="DONE" order="1">
+            <Description>fresh 对比 proposal/design/decisions 与实现，发现 gap 则修复并复检，形成逐项 PASS/FAIL 证据。</Description>
+          </Task>
+          <Task id="G5-T3" name="Close and archive mission" status="DONE" order="2">
+            <Description>确认三条 TrackLink 已完成并归档、无 pending decision、成功判据均有证据，再设置 completed 并执行 mission archive。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_build-temporal-organization-adjustment-workbench">
+      <Node id="G2"><After ref="G1"/></Node>
+      <Node id="G3"><After ref="G2"/></Node>
+      <Node id="G4"><After ref="G3"/></Node>
+      <Node id="G5"><After ref="G4"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+
+  <Hooks>
+    <Hook on="mission:after-node"><cdt:MissionReconcile max-tracks="10" on-limit="checkpoint" on-drift="replan-or-block"/></Hook>
+  </Hooks>
+</Mission>

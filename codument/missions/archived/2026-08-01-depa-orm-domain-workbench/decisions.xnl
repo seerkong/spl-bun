@@ -1,0 +1,227 @@
+<decision #mission.depa_orm_domain_workbench.bundle_policy {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium; v2 can add an explicit authoring mode without changing v1 execution semantics"
+}
+(
+  <question ?>Kon bundle 是否允许在线编辑并重新编译，运行数据状态如何管理？</?>
+  <answer { }
+  (
+    <raw-answer ?>采用 A：Kon bundle 只读；每次执行从 seed 创建隔离数据库，执行后返回快照并销毁。</?>
+    <decision-text ?>v1 不在线编辑或重新编译 Kon；每个 execute request 使用 fresh seeded SQLite，结束后销毁。</?>
+    <rationale ?>保证预制模型可复现，避免页面状态和数据库状态成为第二事实源，同时把在线 authoring 留给后续独立能力。</?>
+    <evidence ?>用户明确选择两个问题的 A；当前 SPL 与 Cozo 工作台都提供 fresh execution 可借鉴，但本 mission 进一步要求数据库也按请求隔离。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.runtime_primary_key_mutation_targeting {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>How should storage-neutral RuntimeMutation update/delete acquire an exact public Writer target?</?>
+  <answer { }
+  (
+    <raw-answer ?>The host runtime derives equality targeting from the compiled entity primary key carried in mutation values.</?>
+    <decision-text ?>Preserve RuntimeMutation shape; create forwards unchanged, update/delete receive model-derived primary-key where, and missing/invalid keys fail before Writer IO.</?>
+    <rationale ?>Runtime owns public Writer adaptation. Bundle-owned predicates, hard-coded id, or changed SQLite unscoped semantics would violate authority and mechanism boundaries.</?>
+    <evidence ?>G7 multi-row duplicate-key reproduction, public Writer/SQLite contracts, and fresh plan-track coding AttractorCheck PASS.</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.operation_scope {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low; narrowing back to BO Action would break the accepted operation surface"
+}
+(
+  <question ?>工作台中的可执行 Operation 是否只包含 BO Action？</?>
+  <answer { }
+  (
+    <raw-answer ?>否；还包括 BO Mutation、BO 批量操作、非 BO 原始操作、自定义组合 API，以及 Association、Lifecycle、Constraint、BusinessProcess 等概念的操作。</?>
+    <decision-text ?>Operation 是跨 owner 的统一调用模型，不能收缩为 BO Action。</?>
+    <rationale ?>兄弟项目证据同时存在 Action、Mutation、BusinessProcess、Association、Lifecycle、Constraint 和 raw/analytics operation。</?>
+    <evidence ?>framework-dsl、ontology v5 与 Cozo OM 的实际资源和执行 API。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.operation_dimensions {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium; individual value sets may evolve while the orthogonal dimensions remain stable"
+}
+(
+  <question ?>如何避免 Operation kind 枚举随能力增长而不断膨胀？</?>
+  <answer { }
+  (
+    <raw-answer ?>采用 owner、behavior、subject、effect 的正交拆分，并在 selection/batch 讨论后把 invocation 独立为第五维。</?>
+    <decision-text ?>Operation 使用 owner、behavior、subject、invocation、effect 五个正交维度；atomicity 不属于 identity，由 definition capability 与 request execution 独立表达。</?>
+    <rationale ?>owner、行为类型、主语形状、调用数量和事实影响是不同问题，分列后可以组合而不制造大量复合 kind；事务能力与本次选择又是另一组事实。</?>
+    <evidence ?>用户明确同意四维模型，并接受把 batch 从 subject 中拆为 invocation 维度的设计。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.selection_semantics {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium; wire aliases can be migrated but the semantic distinction must remain"
+}
+(
+  <question ?>原 collection subject 应如何命名并与 batch 区分？</?>
+  <answer { }
+  (
+    <raw-answer ?>collection 类似用 selector 圈定一批 subject，应改名避免与 batch 歧义；selection 设计已确认。</?>
+    <decision-text ?>subject 使用 none、single、selection；selection 由 all/filter/ids selector 圈定一个逻辑主语集合，batch 表示多个独立 invocation。</?>
+    <rationale ?>selection 回答对谁做，batch 回答一次请求做多少个独立调用；每个 batch item 拥有独立 subject value、payload、key 和结果，但 subject shape 与 verb 由同一个 Operation definition 约束。</?>
+    <evidence ?>用户对 selection 命名和语义明确表示满意。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.contract_boundary {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium; package naming can change while the independent ownership boundary remains"
+}
+(
+  <question ?>HTTP API 和共享 DTO 应由哪个 package 拥有？</?>
+  <answer { }
+  (
+    <raw-answer ?>希望关系数据库方案与兄弟项目在思想上趋同，并尽可能使用一套标准 HTTP API。</?>
+    <decision-text ?>Domain Operation catalog/execute DTO 由独立 transport-neutral contract capsule 拥有，不放入 SPL 专属 web-shared。</?>
+    <rationale ?>标准 contract 需要被 server、IDE 和未来其他 runtime 复用，不能被当前 SPL 页面或 Elysia implementation 绑定。</?>
+    <evidence ?>DEPA capsule/owner 边界和当前 workspace 的 shared DTO 模式。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.runtime_boundary {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low; bypassing public APIs or capability checks would invalidate correctness claims"
+}
+(
+  <question ?>工作台如何使用 depa-orm 并表达事务与可观测能力？</?>
+  <answer { }
+  (
+    <raw-answer ?>基于 depa-orm 管理关系数据库和本体语义，执行后能够直观看到效果。</?>
+    <decision-text ?>只依赖 depa-orm 公共入口；每请求独立 runtime；atomic、batch item mapping 和 SQL trace 先做 capability audit，不支持时显式 diagnostic，禁止静默降级。</?>
+    <rationale ?>当前公开 API 的单 mutation、transaction capability 和 trace 边界需要事实验证；以公开能力为真源可避免工作台依赖 tests 或 internals。</?>
+    <evidence ?>depa-orm public Reader/Writer/storage contracts 与 capsule architecture tests。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.v1_scope {
+  priority = "P1"
+  status = "superseded"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "high; a later mission may expand scope after v1 validates the mechanism"
+}
+(
+  <question ?>首版是通用本体执行引擎，还是用于验证统一机制的关系数据库工作台？</?>
+  <answer { }
+  (
+    <raw-answer ?>希望传统数据库方案与兄弟项目思想趋同，并通过多套预制 bundle 和 actions/operations 直观验证。</?>
+    <decision-text ?>v1 用代表性 DomainContextBundle 和 Operation matrix 验证机制，不实现通用 ontology engine，也不直接依赖兄弟 XML grammar。</?>
+    <rationale ?>可以覆盖已确认概念，同时避免把规范差异、任意代码执行和跨 runtime portability 一次性引入。</?>
+    <evidence ?>ontology v5 与 ontology-xml-dsl 当前 grammar 存在差异；用户核心目标是关系数据库原型工作台。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.ontology_xml_superset {
+  priority = "P0"
+  status = "superseded"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low; reintroducing upper/lower ownership mixing would create duplicate structural truth"
+}
+(
+  <question ?>ontology-xml-dsl 如何同时覆盖现有类型机制、v5 业务概念和 Domain Operation 定义？</?>
+  <answer { }
+  (
+    <raw-answer ?>只要最新版本；保留不与 v5 重叠的 Module 能力，但类型系统必须独立，BusinessObject 只是其支持的一个上层功能，未来还可能有 PageObject，坚决不允许混杂上层和底层。</?>
+    <decision-text ?>采用单一 latest-only Resources grammar。TypeModule、RelationModule、RuleModule、LifecycleModule 保持底层 authority；BusinessObject、Association、DomainPolicy、BusinessProcess、Capability 等 profile 只引用底层声明；Operation catalog 在更上层引用 owner 和类型并表达 selection/batch preset。移除旧 Ontology/Modules 装配入口。</?>
+    <rationale ?>类型系统的表达能力决定整个体系上限。把 BO 属性、Association 端点或 Policy 条件重新定义在上层会锁死扩展并制造双重真源；分层引用允许未来 PageObject 等新 profile 复用同一内核。</?>
+    <evidence ?>用户明确接受除类型混合外的大部分梳理，并进一步确认按 lower-kernel / upper-profile / operation-definition 分层实施。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.fs_native_ontology_manifest_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low; restoring Resources or Modules would recreate a second assembly authority"
+}
+(
+  <question ?>G4 目标升级后，哪套 ontology XML grammar 和 workspace 承担 latest authority？</?>
+  <answer { }
+  (
+    <raw-answer ?>Replan 009 已把目标改为 FS-native manifest 和 depa-ontology.ts authority；mission gap-loop round 1 证明历史 Cozo archive 仍是 Resources grammar，而 depa-knowledge-base.cs 已存在目标实现但缺少真实 track。</?>
+    <decision-text ?>FS-native KindDefinition 声明的精确 manifest entry 是唯一 latest assembly；当前 `Ontology` 入口为 `Manifest.xml`，并明确拒绝大小写别名、`Resources`、`Modules` 和 per-resource `href`；`depa-knowledge-base.cs` 中的 ontology-exchange-xml-standard 是本 mission 的 latest definition workspace，depa-ontology.ts 是 Bun OM capability authority，历史 Cozo Resources track 仅保留为 legacy evidence。</?>
+    <rationale ?>当前 proposal/design 已要求 manifest grammar；继续把历史 Resources archive 当作 latest evidence 会使 completed gate 虚假通过。为现有 latest workspace 建立 correction track 可恢复真实 ownership，同时保留历史可追溯性。</?>
+    <evidence ?>reports/replan-009-ontology-ts-source-authority.md、reports/mission-gap-loop-report-1.md，以及 depa-knowledge-base.cs 的 FS-native validator 58/58 证据。</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.depa_orm_library_gap {
+  priority = "P0"
+  status = "resolved"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium; a future public capability regression or new requirement may justify a separate library track"
+}
+(
+  <question ?>已确认的 v1 语义是否需要先修改 depa-orm 公共 API？</?>
+  <answer { }
+  (
+    <raw-answer ?>G2 public capability audit completed without a correctness-blocking library gap.</?>
+    <decision-text ?>不创建 depa-orm external track；同 datasource composed atomic 由 host adapter 使用 public outer transaction 实现，跨 datasource atomic 拒绝，row-level mapping 与 SQL trace 不可用时返回 diagnostics。</?>
+    <rationale ?>Public storage transactions can compose nested Writer calls atomically and return invocation-level results. Missing SQL observability and row-level mapping do not block the accepted v1 response contract because they are explicitly capability-gated.</?>
+    <evidence ?>Public entrypoint/storage/pipeline tests passed, cross-call composition tests passed, and an independent public-API in-memory probe verified rollback and commit behavior.</?>
+  )
+  >
+)>
+
+<decision #mission.depa_orm_domain_workbench.preset_request_authority {
+  priority = "P0"
+  status = "resolved"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low; restoring shadow request fields would recreate split authority"
+}
+(
+  <question ?>Operation preset、definition、binding、server 与 request 如何共享一套标准 HTTP 语义？</?>
+  <answer { }
+  (
+    <raw-answer ?>External ontology G4 的完整 RequestJson 与 host drift spot-check 已冻结：preview 必须原样 POST，capability 事实按层分离。</?>
+    <decision-text ?>Preset 保存完整 ExecuteOperationRequest v1；definition 拥有五维、静态 verb 与 requestable capabilities；binding 拥有 actual capabilities；server 拥有 current projection；request 拥有本次 execution choice。runtime 只验证交集，不重建 request 或推导隐藏默认。</?>
+    <rationale ?>一份完整 request 消除 UI/bundle/server 的影子模型；分层 capability authority 防止 definition default、binding support 与环境状态互相冒充。</?>
+    <evidence ?>Ontology XML canonical presets/validator、host preset-contract drift report 与 correction track attractor review。</?>
+  )
+  >
+)>

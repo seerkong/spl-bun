@@ -1,0 +1,308 @@
+<Mission id="depa-orm-domain-workbench" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>基于 depa-orm 建立由 DomainContextBundle 驱动、可预览标准请求并观察关系数据库执行效果的领域操作工作台。</Goal>
+    <Description>先冻结跨项目语义与 public capability，建立 latest-only 分层 ontology XML 定义超集；runtime 硬门若发现真实通用库或共享 contract 缺口，则先经有界 correction track 收敛，再按 contracts、runtime、server、reference bundles、IDE 主链落地，最终以代表性 Operation matrix 和请求隔离证据验收。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>light</QuestionSeverity>
+    <Revision>16</Revision>
+    <GapRound>4</GapRound>
+    <CreatedAt>2026-07-30T16:58:26Z</CreatedAt>
+    <UpdatedAt>2026-08-01T16:03:26Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="mission">
+    <MaterialBundle role="state" name="analysis" domain="mission" path="vfs://./analysis/"/>
+    <MaterialBundle role="state" name="reports" domain="mission" path="vfs://./reports/"/>
+    <MaterialBundle role="output" name="tracks" domain="codument" path="vfs://@/codument/tracks/"/>
+  </Ports>
+
+  <cdt:ProjectRefs>
+    <cdt:ProjectRef id="spl-bun" kind="host"/>
+    <cdt:ProjectRef id="depa-orm" kind="external"/>
+    <cdt:ProjectRef id="ontology-exchange-xml-standard" kind="external"/>
+    <cdt:ProjectRef id="ontology-xml-dsl-legacy" kind="external"/>
+  </cdt:ProjectRefs>
+
+  <cdt:ActorSets default="workbench-loop">
+    <cdt:ActorSet id="workbench-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="spl-bun">
+        <Description>根据 Operation 设计、host evidence 和验证结果维护六个产品 track 的期望 DAG；只有能力审计证明需要时才插入库侧 track。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="spl-bun">
+        <Description>读取 mission/track 状态、package boundaries、contract/runtime/server/browser tests、bundle matrix 和 reports，投影工作台实际态。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="spl-bun">
+        <Description>比较五维 Operation、完整 preset request、隔离生命周期、标准 HTTP contract 和工作台体验的目标与实际态，选择 ready track、验证、replan 或 block。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="spl-bun">
+        <Description>连续创建、执行、验证和归档 host track，并在动作内完成检查；验证明确且无 drift 时直接推进下一 ready 节点。</Description>
+      </cdt:Actor>
+    </cdt:ActorSet>
+
+    <cdt:ActorSet id="depa-orm-capability-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="depa-orm">
+        <Description>围绕 public transaction、batch mapping、selection write 与 trace 缺口规划最小库侧改变，避免为工作台加入业务特例。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="depa-orm">
+        <Description>读取 depa-orm 公共 exports、contract tests、storage capabilities、transaction tests 和当前 track/archive，形成能力证据。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="depa-orm">
+        <Description>判断 host adapter 能否使用现有 public API 达成语义，或是否必须通过受控 replan 增加独立 external track。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="depa-orm">
+        <Description>执行能力审计；若后续 mission revision 绑定真实库侧 track，则运行并验证该 track，再把公开能力证据回传 host。</Description>
+      </cdt:Actor>
+    </cdt:ActorSet>
+
+    <cdt:ActorSet id="ontology-definition-loop">
+      <cdt:Actor role="MissionPlanner" project-ref="ontology-exchange-xml-standard">
+        <Description>把类型与机制内核、上层语义 profile、Operation 定义和治理资源组织为单一 latest-only FS-native XML grammar，并以 depa-ontology.ts 作为 Bun OM 能力真源。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionObserver" project-ref="ontology-exchange-xml-standard">
+        <Description>读取 ontology v5、FS-native skill 规范、validator、examples、depa-ontology.ts cozo-om API/测试和 target track 状态，投影概念覆盖、分层约束与导入导出边界的实际态。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionReconciler" project-ref="ontology-exchange-xml-standard">
+        <Description>比较最新分层模型与实际 grammar，拒绝 BusinessObject 等上层 profile 重复拥有 Type、Relation、Rule 或 StateMachine 的底层事实。</Description>
+      </cdt:Actor>
+      <cdt:Actor role="MissionApplier" project-ref="ontology-exchange-xml-standard">
+        <Description>修订并执行既有 align-skills-with-bo-first-ontology-xml track，重写规范、示例和 validator，再把定义证据回传 host。</Description>
+      </cdt:Actor>
+    </cdt:ActorSet>
+  </cdt:ActorSets>
+
+  <TaskSpace id="space_depa-orm-domain-workbench" name="depa-orm-domain-workbench" version="1" cdt:child-mode="dag">
+    <Description>通过语义冻结、能力审计、一个 external ontology definition track、六个 host 实现 track 和最终独立验证收敛领域操作工作台。</Description>
+    <SubNodes>
+      <TaskGroup id="G1" name="语义与证据基线" status="DONE" order="0">
+        <Description>把当前 workspace、depa-orm 和兄弟项目的稳定概念收敛为可验证设计基线。</Description>
+        <SubNodes>
+          <Task id="G1-T1" name="复核设计素材与逻辑证据引用" status="DONE" order="0">
+            <Description>复核 design/ 中 framework-dsl、ontology v5、ontology-xml-dsl、Cozo OM、SPL 与 depa-orm 的 evidence；更新失效引用和已知规范差异，不直接依赖外部 grammar。</Description>
+          </Task>
+          <Task id="G1-T2" name="冻结 Operation glossary 与 representative matrix" status="DONE" order="1">
+            <Description>确认五维词汇、selection/batch 判据、DomainContextBundle 事实源和 operation examples；若用户目标变化，先记录 decision 再 replan。</Description>
+          </Task>
+          <Task id="G1-T3" name="确认 host track 边界与验收映射" status="DONE" order="2">
+            <Description>把 proposal 成功判据逐项映射到 contracts、runtime、server、bundles、IDE 和 final verify；写 analysis/acceptance-map.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G2" name="depa-orm 公共能力审计" status="DONE" order="1" cdt:actor-set="depa-orm-capability-loop">
+        <Description>以公开 API 和测试查证事务、batch mapping、selection write、trace 与 cleanup 能力，不从 capsule fixture 推断生产契约。</Description>
+        <SubNodes>
+          <Task id="G2-T1" name="建立 public capability matrix" status="DONE" order="0">
+            <Description>验证 single/multi mutation atomicity、datasource 边界、batch item mapping、query DTO adapter、relation write、SQL/plan trace 和 cleanup；写 analysis/depa-orm-capabilities.md。</Description>
+          </Task>
+          <Task id="G2-T2" name="裁决 host adapter 与 library gap" status="DONE" order="1">
+            <Description>现有 public API 足够则记录 adapter 约束并继续；确有通用库缺口则写 replan report、递增 Revision 并插入唯一 external TrackLink；跨 datasource atomic 保持拒绝。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G3" name="统一 Operation Contract" status="DONE" order="2">
+        <Description>建立独立、transport-neutral 的 catalog/execute request/response 契约。</Description>
+        <SubNodes>
+          <Task id="G3-T1" name="创建并执行 add-domain-operation-contracts track" status="DONE" order="0">
+            <Description>实现五维 definition、single/selection/batch DTO、outcome/effects/observations/trace/diagnostics、schema 和 compatibility tests；不得放入 SPL web-shared。</Description>
+            <cdt:TrackLink state="bound" id="add-domain-operation-contracts" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G3-T2" name="独立验证 contract 语义" status="DONE" order="1">
+            <Description>验证 JSON roundtrip、catalog mismatch、selection/batch 消歧、atomicity diagnostics 和 outcome union；写 reports/verify-contracts.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4" name="Latest Ontology XML Definition Superset" status="DONE" order="3" cdt:actor-set="ontology-definition-loop">
+        <Description>建立单一 latest-only FS-native XML grammar：底层 Type/Relation/Rule/Lifecycle 内核独立拥有结构事实，BO-first profile 和 Operation definition 只通过引用叠加语义，并面向 depa-ontology.ts Bun OM 提供可读建模与机器导入导出表示。</Description>
+        <SubNodes>
+          <Task id="G4-T1" name="修订并执行 ontology XML superset track" status="DONE" order="0">
+            <Description>续跑目标项目既有 align-skills-with-bo-first-ontology-xml track；覆盖 v5 概念、类型系统独立性、未来 PageObject 等 profile 扩展、五维 Operation、selection/batch preset、evidence/binding/evolution，并移除旧 Resources/Modules 装配入口。</Description>
+            <cdt:TrackLink state="bound" id="align-skills-with-bo-first-ontology-xml" project-ref="ontology-xml-dsl-legacy"/>
+          </Task>
+          <Task id="G4-T2" name="独立验证 ontology XML 分层超集" status="DONE" order="1">
+            <Description>验证最新完整 fixture、v5 概念覆盖矩阵、旧 Modules root 被拒绝、上层 inline type/relation/rule/lifecycle 被拒绝、Operation selection/batch preset 语义闭合；写 reports/verify-ontology-xml-superset.md。</Description>
+          </Task>
+          <Task id="G4-T3" name="校正 depa-ontology.ts OM 真源与导入导出边界" status="DONE" order="2">
+            <Description>用户确认 depa-ontology.ts 为 TypeScript/Bun OM 真源；ontology XML skill 已更新为 FS-native XML 可读建模与机器导入/导出表示，导出时不得从 runtime rows 发明 BusinessObject、Operation、Evidence、policy 或 lifecycle 等 profile-only facts；验证与决策写入 reports/replan-009-ontology-ts-source-authority.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4C" name="Preset And Request Contract Alignment" status="DONE" order="4">
+        <Description>修正 host contract 与已验证 ontology definition authority 的偏差：preset 保存完整 ExecuteOperationRequest v1，definition 拥有静态 verb 与 requestable capability set，request 和 catalog/preset parity 可机械验证。</Description>
+        <SubNodes>
+          <Task id="G4C-T1" name="执行 align-domain-operation-preset-contract track" status="DONE" order="0">
+            <Description>以测试先行修正 exact request parser、ownerRef、duplicate observations、完整 preset DTO、definition verb/capabilities、batch 同构和 catalog/preset matcher。</Description>
+            <cdt:TrackLink state="bound" id="align-domain-operation-preset-contract" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G4C-T2" name="独立验证 preset/request contract alignment" status="DONE" order="1">
+            <Description>验证完整 request roundtrip、递归 exact keys、ownerRef 条件、verb 与 subject 同构、capability subset 和 preset/catalog parity；写 reports/verify-preset-contract-alignment.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4D" name="Public Read Query Boundary Correction" status="DONE" order="5" cdt:actor-set="depa-orm-capability-loop">
+        <Description>修复 runtime P0 实证发现的通用 depa-orm public read gap：query value 跨 linked package artifact 仍可被公开 Reader 接纳，多字段 equality AND 可进入 storage-neutral plan 并由 SQLite 执行。</Description>
+        <SubNodes>
+          <Task id="G4D-T1" name="创建并执行 fix-public-read-query-boundary track" status="DONE" order="0">
+            <Description>用外部 consumer fixture 复现 source/dist class identity 分裂；以稳定 discriminant/structural admission 或等价公共机制消除跨包 instanceof 假设，并为 Logical AND 投影和 SQLite conjunction 执行建立公共契约。</Description>
+            <cdt:TrackLink state="bound" id="fix-public-read-query-boundary" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G4D-T2" name="独立验证 public Reader package boundary" status="DONE" order="1">
+            <Description>验证外部 consumer 使用公开 exports 构造两条件 query，可经公开 Reader 写入后读回；package builds、boundary fixture、单条件兼容和 SQLite conformance 全部通过，写 reports/verify-public-read-query-boundary.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4E" name="SQLite Caller Primary-Key DDL Correction" status="DONE" order="6" cdt:actor-set="depa-orm-capability-loop">
+        <Description>修复 runtime P2 实证发现的通用 SQLite storage gap：`SqliteFieldRegistration.primaryKey=true` 对 caller/host supplied 非 INTEGER 主键也必须生成真实数据库约束，不能要求 consumer 把 DDL clause 塞进 declaredType。</Description>
+        <SubNodes>
+          <Task id="G4E-T1" name="创建并执行 fix-sqlite-caller-primary-key-ddl track" status="DONE" order="0">
+            <Description>为 SQLite registration 建立 caller-supplied TEXT primary key DDL 与 duplicate rejection；保留 INTEGER generated autoincrement、type affinity、nullable 和 transaction rollback 兼容，不增加 workbench 特例。</Description>
+            <cdt:TrackLink state="bound" id="fix-sqlite-caller-primary-key-ddl" project-ref="depa-orm"/>
+          </Task>
+          <Task id="G4E-T2" name="独立验证 SQLite primary-key storage contract" status="DONE" order="1">
+            <Description>验证 TEXT/caller key 的 PRAGMA metadata 与 duplicate write rejection、INTEGER generated regression、transaction rollback、clean package build 和 host consumer 无 DDL workaround；写 reports/verify-sqlite-caller-primary-key-ddl.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4F" name="Failure Response Fact Availability Alignment" status="DONE" order="7">
+        <Description>修正 P3 coding attractor 实证发现的共享 response contract 缺口：请求未成功解析时，context、operationRef、requested atomicity 与 operation tree 必须能明确表示 unavailable，runtime 不得以 bundle 或隐藏默认补值。</Description>
+        <SubNodes>
+          <Task id="G4F-T1" name="创建并执行 align-domain-operation-response-facts track" status="DONE" order="0">
+            <Description>为 parse-failure envelope 建立 contract-owned request fact availability 与投影 helper，保持合法执行 response 的完整类型和 JSON roundtrip，并让 runtime 可移除编造默认。</Description>
+            <cdt:TrackLink state="bound" id="align-domain-operation-response-facts" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G4F-T2" name="独立验证 failure response fact honesty" status="DONE" order="1">
+            <Description>验证完整、部分和不可解析 request facts 的 available/unavailable 投影、既有成功/业务失败 response 类型兼容和 root consumer build；runtime 对该契约的消费由后继 G5 验证，写 reports/verify-response-facts.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G5" name="Depa ORM Domain Runtime" status="DONE" order="8">
+        <Description>建立 bundle loader、targets/invocation normalization、operation registry、per-execution SQLite 和 observations。</Description>
+        <SubNodes>
+          <Task id="G5-T1" name="创建并执行 add-depa-orm-domain-runtime track" status="DONE" order="0">
+            <Description>实现 create-initialize-seed-execute-observe-destroy 生命周期、公开 depa-orm adapter、capability gate、operation tree 和 package-boundary guards。</Description>
+            <cdt:TrackLink state="bound" id="add-depa-orm-domain-runtime" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G5-T2" name="独立验证 runtime 隔离与能力" status="DONE" order="1">
+            <Description>连续/并发执行无状态泄漏，失败路径 cleanup，registry 分发无五维 switch，unsupported atomic/mapping/trace 明确报告；写 reports/verify-runtime.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G6" name="Domain Operation Server API" status="DONE" order="9">
+        <Description>在 web-server 组合 bundle catalog、execute endpoint 和请求级资源生命周期。</Description>
+        <SubNodes>
+          <Task id="G6-T1" name="创建并执行 add-domain-operation-server-api track" status="DONE" order="0">
+            <Description>实现 context/catalog/preset routes 与统一 execute route；request validation、versioning、structured errors、cleanup 和 integration tests。</Description>
+            <cdt:TrackLink state="bound" id="add-domain-operation-server-api" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G6-T2" name="独立验证 HTTP 标准契约" status="DONE" order="1">
+            <Description>验证 preview body 可直接执行、未知 id/version、业务失败 envelope、请求隔离和 capability diagnostics；写 reports/verify-server.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G6C" name="Runtime Primary-Key Mutation Targeting Correction" status="DONE" order="10">
+        <Description>Correct the host runtime adapter so update/delete derive an exact Writer target from compiled primary-key facts and never degrade to an unscoped mutation.</Description>
+        <SubNodes>
+          <Task id="G6C-T1" name="Execute fix-runtime-primary-key-mutation-targeting track" status="DONE" order="0">
+            <Description>Create, execute, verify, and archive a host correction track covering multi-row update/delete, non-id primary keys, fail-closed missing keys, and consumer compatibility.</Description>
+            <cdt:TrackLink state="bound" id="fix-runtime-primary-key-mutation-targeting" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G6C-T2" name="Independently verify runtime mutation targeting" status="DONE" order="1">
+            <Description>Independently rerun exact target, sibling invariance, invalid-key, create/seed, rollback, batch, boundary, build, and G7 consumer evidence; write reports/verify-runtime-primary-key-mutation-targeting.md.</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G7" name="Reference Domain Context Bundles" status="DONE" order="11">
+        <Description>用多套预制关系模型证明机制覆盖真实领域形状而非单一 BO Action demo。</Description>
+        <SubNodes>
+          <Task id="G7-T1" name="创建并执行 add-domain-context-reference-bundles track" status="DONE" order="0">
+            <Description>实现至少两套只读 Kon bundles、deterministic seed、semantic catalog、operation definitions、presets 和 probes，覆盖 design/operation-examples.md。</Description>
+            <cdt:TrackLink state="bound" id="add-domain-context-reference-bundles" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G7-T2" name="验证 representative operation matrix" status="DONE" order="1">
+            <Description>逐项执行 domain-context 全局 Operation、raw、BO Action/Mutation、selection、batch、association、lifecycle、constraint、process/capability composed，并核对 before/after/diff/trace；写 reports/verify-bundles.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G8" name="Domain Workbench UI" status="DONE" order="12">
+        <Description>在 web-ide 提供 bundle、只读模型、Operation、请求预览编辑、执行和多视图观察。</Description>
+        <SubNodes>
+          <Task id="G8-T1" name="创建并执行 add-domain-workbench-ui track" status="DONE" order="0">
+            <Description>实现 /domain-workbench、catalog filters、preset request editor、Execute、Outcome/Changes/Before-After/Operation Tree/Plan-SQL/Diagnostics tabs 和 E2E。</Description>
+            <cdt:TrackLink state="bound" id="add-domain-workbench-ui" project-ref="spl-bun"/>
+          </Task>
+          <Task id="G8-T2" name="独立验证完整用户闭环" status="DONE" order="1">
+            <Description>用 Playwright 在 desktop/mobile 验证 bundle 选择、只读 Kon、selection/batch、编辑后原样 POST、结果视图、错误与 capability diagnostics；写 reports/verify-ui.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G4M" name="FS-Native Ontology Manifest Authority Correction" status="DONE" order="13" cdt:actor-set="ontology-definition-loop">
+        <Description>用真实 external track 收口 replan-009 已引入但未被 track 拥有的 FS-native manifest grammar、depa-ontology.ts authority 和旧 assembly rejection。</Description>
+        <SubNodes>
+          <Task id="G4M-T1" name="创建并执行 FS-native ontology authority correction track" status="DONE" order="0">
+            <Description>在 latest ontology-exchange-xml-standard workspace 接管现有 manifest implementation，建立行为、validator、fixtures、authority docs 与 migration evidence 的真实 track lifecycle。</Description>
+            <cdt:TrackLink state="bound" id="align-fs-native-ontology-manifest-authority" project-ref="ontology-exchange-xml-standard"/>
+          </Task>
+          <Task id="G4M-T1B" name="修正 ontology modeling authority 路径" status="DONE" order="1">
+            <Description>通过后续 correction track 把不存在的 semantic-profile-resource.md 修正为真实 domain-semantics-resource.md；保留旧 archive 为历史 evidence。</Description>
+            <cdt:TrackLink state="bound" id="fix-ontology-modeling-resource-path" project-ref="ontology-exchange-xml-standard"/>
+          </Task>
+          <Task id="G4M-T2" name="独立验证 FS-native ontology authority" status="DONE" order="2">
+            <Description>验证 manifest grammar、28 KindDefinitions、legacy Resources/Modules/href rejection、Operation preset、security、depa-ontology.ts import/export boundary 和 archive；写 reports/verify-fs-native-ontology-authority.md。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="G9" name="Mission 总验收" status="DONE" order="14">
+        <Description>从实际代码、track archive 和运行证据判断 mission 是否真正达到目标。</Description>
+        <SubNodes>
+          <Task id="G9-T1" name="运行全量工程与边界验证" status="DONE" order="0">
+            <Description>运行 package tests、typecheck/build、server integration、Playwright、public import guards 和请求隔离测试；记录完整命令与结果。</Description>
+          </Task>
+          <Task id="G9-T2" name="执行 mission gap loop 与独立 verify" status="DONE" order="1">
+            <Description>对 proposal/design/decisions 与实现做 fresh 目标对比；修复后复检直至 NO_GAP 或明确 BLOCKED；写 reports/verify-final.md。</Description>
+          </Task>
+          <Task id="G9-T3" name="判定终态并准备归档" status="DONE" order="2">
+            <Description>确认所有 TrackLink 已完成并归档、无 pending decision、成功判据逐项有 evidence；设置 completed 或真实 blocked/cancelled/superseded 状态。</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_depa-orm-domain-workbench">
+      <Node id="G2"><After ref="G1"/></Node>
+      <Node id="G3"><After ref="G2"/></Node>
+      <Node id="G4"><After ref="G3"/></Node>
+      <Node id="G4C"><After ref="G4"/></Node>
+      <Node id="G4D"><After ref="G4C"/></Node>
+      <Node id="G4E"><After ref="G4D"/></Node>
+      <Node id="G4F"><After ref="G4E"/></Node>
+      <Node id="G5"><After ref="G4F"/></Node>
+      <Node id="G6"><After ref="G5"/></Node>
+      <Node id="G6C"><After ref="G6"/></Node>
+      <Node id="G7"><After ref="G4C"/><After ref="G5"/><After ref="G6C"/></Node>
+      <Node id="G8"><After ref="G6"/><After ref="G7"/></Node>
+      <Node id="G4M"><After ref="G4"/></Node>
+      <Node id="G9"><After ref="G8"/><After ref="G4M"/></Node>
+    </Dag>
+  </Schedule>
+
+  <Hooks>
+    <Hook on="mission:after-node">
+      <cdt:MissionReconcile max-tracks="10" on-limit="checkpoint" on-drift="replan-or-block"/>
+    </Hook>
+  </Hooks>
+</Mission>

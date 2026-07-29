@@ -1,0 +1,53 @@
+<Track id="fix-runtime-primary-key-mutation-targeting" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>Make runtime update/delete mutations target exactly the compiled primary-key row and fail closed when targeting facts are unavailable.</Goal>
+    <Description>Add runtime-owned regression tests and a model-derived public Writer adapter without changing RuntimeMutation shape.</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-31T23:41:32Z</CreatedAt>
+    <UpdatedAt>2026-08-01T05:54:14Z</UpdatedAt>
+  </Metadata>
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="input" name="reference-consumer" domain="package" path="vfs://@/packages/domain-context-bundles/"/>
+    <MaterialBundle role="output" name="runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+  <TaskSpace id="space_fix-runtime-primary-key-mutation-targeting" name="fix-runtime-primary-key-mutation-targeting" version="1">
+    <Description>Freeze the unsafe multi-row behavior in RED tests, implement model-derived targeting, and run runtime plus consumer compatibility gates.</Description>
+    <SubNodes>
+      <TaskGroup id="P0" name="Primary-key targeting RED contract" status="DONE" order="0">
+        <Description>Prove the current adapter performs an unsafe unscoped mutation and define fail-closed target semantics.</Description>
+        <cdt:Gate><cdt:Criterion>P0 task is DONE</cdt:Criterion><cdt:Criterion>RED failures arise from missing runtime-owned Writer targeting</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T0.1" name="Write keyed update and delete RED tests" status="DONE" order="0" priority="P0">
+            <Description>Add multi-row runtime tests for exact update/delete targeting, sibling invariance, a non-id primary key, invalid/missing key rejection before IO, and create compatibility. Do not implement the adapter.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T0.1-AC1" checked="true">Update and delete RED cases prove only one compiled-primary-key target is legal on multi-row state</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC2" checked="true">A non-id key and missing/invalid key failure are executable without weakening storage constraints</cdt:Criterion>
+              <cdt:Criterion id="T0.1-AC3" checked="true">Existing create/seed and transaction tests remain green outside the intentional RED cases</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+      <TaskGroup id="P1" name="Runtime Writer target adapter" status="DONE" order="1">
+        <Description>Project create unchanged and update/delete with model-derived exact targeting, then verify consumers and boundaries.</Description>
+        <cdt:Gate><cdt:Criterion>P1 task is DONE</cdt:Criterion><cdt:Criterion>runtime and G7 focused suites pass</cdt:Criterion><cdt:Criterion>builds, boundaries, rollback and batch compatibility pass</cdt:Criterion></cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Implement fail-closed primary-key mutation targeting" status="DONE" order="0" priority="P0">
+            <Description>Add an internal pure RuntimeMutation-to-Writer adapter using the compiled entity primary key. Preserve create, target update/delete by equality, reject unavailable keys before Writer IO, and run runtime/bundle tests and builds.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">Update/delete target only the requested row for id and non-id primary keys while siblings stay unchanged</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">Missing/invalid targeting fails closed and create/seed, rollback, best-effort batch and cleanup semantics do not regress</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">Runtime suite, G7 IT matrix, bundle suite, builds, import guards and protected capsule manifests pass</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding" status="PASS" note="Fresh review found no direction gaps: compiled model authority, pure adapter, explicit Writer effect boundary, fail-closed targeting, runtime 83/83 and G7 IT 14/14 pass. Report: reports/attractor-check-report.md."/></Hook></Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

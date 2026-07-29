@@ -1,0 +1,24 @@
+<behavior-patch capability="domain-operation-contracts" version="1">
+  <upsert selector="behavior://domain-operation-contracts/requirements/day-timeline-context">
+    <requirement id="day-timeline-context">
+      <statement>ExecuteOperationRequest SHALL support an optional closed top-level timeline union for day-granularity as-of, effective-on, and range contexts, while OperationDefinition MAY declare requestable timeline modes and requiredness without changing the five Operation identity dimensions; parser and catalog validation SHALL reject invalid calendar days, non-UTC recorded instants, reversed ranges, unknown fields, missing required context, unsupported modes, or timeline supplied to a non-temporal definition with path-aware issues before runtime allocation.</statement>
+      <suite id="timeline-request" name="Day timeline request and catalog contract">
+        <case id="timeline-json-roundtrip">
+          <given>as-of, effective-on, and range requests with canonical day values and optional UTC recordedAt</given>
+          <when>the public exact parser and JSON roundtrip run</when>
+          <then>the timeline discriminant and values SHALL remain exact and legacy requests without timeline SHALL remain valid</then>
+        </case>
+        <case id="strict-calendar-and-closed-shape">
+          <given>a nonexistent date, non-zero-padded date, timestamp in a day field, reversed range, non-UTC recordedAt, or unknown timeline key</given>
+          <when>unknown input is parsed</when>
+          <then>the request SHALL be rejected at the exact timeline path</then>
+        </case>
+        <case id="definition-timeline-match">
+          <given>a definition with optional or required day timeline modes and a parsed request</given>
+          <when>catalog consistency validation runs</when>
+          <then>requiredness, mode, and granularity SHALL match; a definition without timeline SHALL reject a request timeline; no runtime work SHALL run on mismatch</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

@@ -1,0 +1,143 @@
+{
+  "source": {
+    "sourceNode": "gap-review",
+    "sourceGeneration": 5,
+    "outputHash": "3704820b20202e14ccc16e1f5adca2f5dfb45664b50693dc5e808dc540517de3"
+  },
+  "report": {
+    "changeRef": "未提交；HEAD=1e37adb6a8eccb5087348f2abd2cc2ccbba251fb；worktreeContentSHA256=4b2346b63283ed3fc6d98a80a28905c750de9b9ca59d7cf0af387c57a7875410；businessSHA256=cea9bf2cdda2a0e72edcc09c95b2d9066f27a7e07e6a2f03eba15d801841fb9c；摘要范围和目录移动映射见 final-worktree.json、preservation.json、formatting-move.json。",
+    "criteriaCoverage": [
+      {
+        "criterion": "C1：原formatting合同及本轮排序、parse MISSION/AT1；共享语义、精确值、显式诊断和输入不变。",
+        "evidence": [
+          "已读sorting.ts、sortMember、parser/binding及三入口测试；行表达式、多键方向、z/0/u、字段诊断和输入不变有代码及80项来源对照支持，原CANDIDATE-sort整改通过。",
+          "parse已有默认类型和q/e/n实现，但parse-conversion.ts:43–52调用scalar.ts:78–88后，五种合法非有限数字写法仍回退为文本；补充Java实值及四入口证据确认差异。",
+          "formatting原G3/G4/G6/G7修复保持，当前业务基线112项实值通过；不将其扩大为完整Java协议兼容声明。"
+        ],
+        "status": "gap"
+      },
+      {
+        "criterion": "C2：最终业务基线规定五包相关切片通过。",
+        "evidence": [
+          "已核对Verify checks.json、日志及哈希：规定命令exit 0，429 pass、1538 expects、74 files；原工作区运行，前后基线一致。"
+        ],
+        "status": "met"
+      },
+      {
+        "criterion": "C3：最终业务基线全量回归及13包构建通过。",
+        "evidence": [
+          "Verify snapshot.json记录2833个文件复制无差异、删除保持缺失；隔离副本full.log为476 pass、1846 expects、89 files，构建13包exit 0。"
+        ],
+        "status": "met"
+      },
+      {
+        "criterion": "C4：report-logic无隐藏IO/eval，AT1排除集有负向验证。",
+        "evidence": [
+          "本轮按MISSION规定模式扫描report-logic/src，无命中。",
+          "当前回归收据覆盖精度、懒分支、稀疏字段遮蔽、输入不变、只读视图及非法patch；排序和parse另有非法协议及资源限制断言。"
+        ],
+        "status": "met"
+      },
+      {
+        "criterion": "C5：Codument两项保护哈希保持冻结值。",
+        "evidence": [
+          "本轮实算diff SHA256=7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049；未跟踪列表SHA256=1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e。"
+        ],
+        "status": "met"
+      },
+      {
+        "criterion": "C6：当前Formatter oracle通过，归档映射及临时资源清理可核验。",
+        "evidence": [
+          "当前基线运行归档后的Formatter脚本，Verify收据exit 0、112项通过。",
+          "本轮复核formatting-move.json的43项内容哈希均匹配；旧active目录不存在，archived状态为completed，历史收据保留，Verify记录无oracle编译目录残留。"
+        ],
+        "status": "met"
+      },
+      {
+        "criterion": "C7：4394/4396端口17项产品验收，含网页精确值format及新排序/parse。",
+        "evidence": [
+          "Verify checks.json记录规定端口、隔离副本及exit 0；e2e.log为17 passed，包含精确parse、数字前缀、降序网格和动态sheet。"
+        ],
+        "status": "met"
+      },
+      {
+        "criterion": "C8：独立review不存在未关闭的已接纳gap。",
+        "evidence": [
+          "本报告支持关闭原CANDIDATE-sort及G5；formatting具体整改结论保持。",
+          "CANDIDATE-parse已接纳，但新增来源实值证明其数值转换仍不满足期望-1；不能核销parse mission或宣告全部接纳项完成。"
+        ],
+        "status": "gap"
+      },
+      {
+        "criterion": "C9：实际授权边界、接纳决定、基线及同run generation/feedback lineage可追溯。",
+        "evidence": [
+          "已只读核对authorityFileRef和原启动授权：现有spl-bun目录级授权及限制明确接纳sort/parse；逐文件允许集从未冻结，不再要求该制品。",
+          "原始command和当前checkpoint均确认implement generation=5、node_revision=6-user-continuation-20261024、graph_revision=6；关联原baselineRef及gap-review generation3/outputHash=bd8521f450c40da6b0b56f028df4abbe1874f8e4f91b718ea6c987d0f0162515。",
+          "采用原run的新generation，既有收据和目录移动映射保留；未把历史rejected invocation当作重新准入。"
+        ],
+        "status": "met"
+      },
+      {
+        "criterion": "C10：先收口formatting，再按来源及旧承诺重评剩余迁移，保持范围和dirty保护。",
+        "evidence": [
+          "formatting已收口，排序及parse按新接纳范围实施并复核；parse仍有具体来源差距，对账表S12还保留已失效的排序现状描述。",
+          "已读来源排序/Parse/Variant分支和旧承诺；保留nop-report已列fixture及完整Java运行限制，不以测试数或未发现更多问题证明全面兼容。",
+          "当前工作树摘要匹配，已列22项实现收据和全部Verify证据哈希无不符；旧Codument保护值保持，未见恢复企业/domain/ORM范围。"
+        ],
+        "status": "gap"
+      }
+    ],
+    "evidenceRefs": [
+      "baselineRef.run_id=holarchy-0e32cd3d67d631730d42c305c551dfec1614; node_id=baseline-review; node_revision=3-output-contract; generation=3",
+      "baselineRef.output_ref=ai-data-workflow-output|45:holarchy-0e32cd3d67d631730d42c305c551dfec1614|15:baseline-review|3; output_hash=483fa617806a4548ad0d4aa14dfef2dbd61fb7d0f2c4e4afd47a9833267501ae",
+      "评审前后实算工作树摘要=4b2346b63283ed3fc6d98a80a28905c750de9b9ca59d7cf0af387c57a7875410；业务摘要=cea9bf2cdda2a0e72edcc09c95b2d9066f27a7e07e6a2f03eba15d801841fb9c；排除规则沿用implement-5/final-worktree.json，收据另行核验。",
+      "status-z SHA256=a3691c60665513b94a1b1655aa933b4f73216d3f5e1c9806a91a9d1cb2d41f56；tracked HEAD binary diff SHA256=4b35d806871935c32f996612e51be855c8a9cf21f4a4c647c0aaa5d0b8553b2c。",
+      "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/parse-conversion.ts:43",
+      "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/scalar.ts:78",
+      "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/sorting.ts:30",
+      "/Users/kongweixian/infra-dev/spl-bun/packages/expression/src/memberRegistry.ts:589",
+      "/Users/kongweixian/infra-dev/esProc/src/main/java/com/scudata/util/Variant.java:1723",
+      "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion/MISSION.md",
+      "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-5/run-context.json",
+      "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/runs/holarchy-0e32cd3d67d631730d42c305c551dfec1614/implement-5/formatting-move.json",
+      "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/checks.json",
+      "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/extended-parse-oracle.ts",
+      "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/extended-parse-results.json",
+      "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/parse-entry-probes.log",
+      "/private/tmp/spl-verify-8ffa399e-cd0f-44ea-8f58-3d1516ec68a8/evidence-hashes.json",
+      "/Users/kongweixian/infra-dev/spl-bun/.depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md:34"
+    ],
+    "gaps": [
+      {
+        "action": "在现有parse mission内补齐共享转换路径的非有限数值词法；加入五种写法、选项优先级及四入口的真实来源回归。保持真正溢出拒绝、精确整数、资源限制、安全JSON和输入不变契约；修复后冻结新基线，重跑专项、源码oracle、相关/全量、构建、Formatter和产品验收，再交独立Review核销。该差距属于已授权原范围，无需再次等待同一范围接纳。",
+        "criterion": "C1、C8、C10；已接纳parse mission期望-1及AT1来源数值转换。",
+        "evidence": [
+          "当前parse-conversion.ts:49调用parsedNumber；scalar.ts:80仅显式接受NaN和无百分号的Infinity，:86–88的普通数字规则不接受+NaN、-NaN、NaN%、Infinity%、-Infinity%。失败后parse-conversion.ts:77–82返回原文本。",
+          "来源Variant.java:1723–1733将完整数值或百分号前文本交给FloatingDecimal；其readJavaFormatString在符号处理后识别NaN/Infinity。已读补充harness，其真实运行来源方法及原FloatingDecimal类。",
+          "extended-parse-results.json：152项中30项类型不同，涉及上述五种文本在default/q/e/qe/en/qen下的转换；n/qn控制分支一致。原504项oracle未覆盖这些写法。",
+          "parse-entry-probes.log：Expression、Kon、Flow、regex @p共20项均返回原文本，来源预期为数值NaN或正负Infinity；显式type/value编码排除了JSON将非有限数值写成null造成的歧义。两个补充检查均因实际差异exit 1。"
+        ],
+        "id": "CANDIDATE-parse",
+        "severity": "major"
+      },
+      {
+        "action": "校正S12为当前排序诊断结果，将旧反例明确留在历史区；追加本轮独立parse差异及后续修复证据。继续按具体来源和输入重评剩余边界，保留未验证限制，不把它们写成永久豁免或已证明缺陷。",
+        "criterion": "C10；当前对账索引必须区分历史反例与现状。",
+        "evidence": [
+          "acceptance-matrix.md:19声明S01–S22表为本轮现状，但:34的S12仍写sort('missing')实测静默返回。",
+          "当前sortMember通过rowExpression进行schema绑定，sort-semantics.test.ts:37–43及Verify专项已验证未知字段在非空/空表均报错；矩阵:63也记录了新的诊断实现，与S12冲突。"
+        ],
+        "id": "G2-compatibility-reassessment",
+        "severity": "minor"
+      }
+    ],
+    "loopState": {
+      "consecutiveNoProgress": 0
+    },
+    "progress": "improved",
+    "round": 3,
+    "summary": "独立评审为 continue。当前基线和收据匹配；formatting收口证据保持，CANDIDATE-sort整改通过，可关闭原排序差距；目录级授权及实际generation关联已核实，G5可关闭。CANDIDATE-parse仍有已复现的非有限数字类型错误，对账表另有一处现状漂移。现有绿色验收不能关闭这些差距。本轮仅只读审查，未运行测试、修改文件或派发节点。",
+    "verdict": "continue"
+  },
+  "interpretation": "Admitted independent Review closes original CANDIDATE-sort and G5; only CANDIDATE-parse and G2 remain for this implementation round. This is imported Review evidence, not self-approval."
+}

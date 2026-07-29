@@ -1,0 +1,151 @@
+<decision #track.add_depa_orm_domain_runtime.public_bridge {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>如何连接 public Kon compiler 的 transitional schema 与当前 public assemble facade？</?>
+  <answer { }
+  (
+    <raw-answer ?>使用显式字段投影与硬 P0 smoke gate，不使用 halfcode import 或 cast。</?>
+    <decision-text ?>compiler 只从 depa-orm-dsl-kon root 导入；host adapter 将公开 result 属性投影成 contract root 的 storage-neutral schema 和 SQLite registration。无法真实 compile/assemble/write/read 时停止并重规划 library track。</?>
+    <rationale ?>这样旧 schema 对象不会进入新 runtime，同时把过渡兼容集中在一个可删除、可验证的 adapter。</?>
+    <evidence ?>两轮 plan-track coding attractor review；公共入口内存 probe 已完成 Kon compile、Writer write 与 Reader read。</?>
+  )
+  >
+)>
+
+<decision #track.add_depa_orm_domain_runtime.query_exports {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "high"
+}
+(
+  <question ?>当前 Reader 实际需要的 query value 如何构造而不暴露内部 AST？</?>
+  <answer { }
+  (
+    <raw-answer ?>只在 runtime adapter 内 allowlist package export map 明确公开且实跑通过的 query value/AST constructor subpaths。</?>
+    <decision-text ?>HTTP/handler 使用 JSON RuntimeQuery；adapter 内部使用 allowlisted public subpaths构造 immutable query value。其他 subpath 全部由 import guard 拒绝。</?>
+    <rationale ?>contract root 的新 SelectQuery 与当前 Reader runtime 不兼容；正式 export-map subpath 是可验证的公共入口，且不会泄漏到 transport DTO。</?>
+    <evidence ?>public Reader probe 使用 allowlisted SelectQuery/FromClause/SelectClause/QueryField 实际读回写入行。</?>
+  )
+  >
+)>
+
+<decision #track.add_depa_orm_domain_runtime.lifecycle_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>运行数据与数据库生命周期由谁拥有？</?>
+  <answer { }
+  (
+    <raw-answer ?>采用 mission 已接受的每次执行 fresh seeded SQLite，并在返回前销毁。</?>
+    <decision-text ?>execute function 是 create-initialize-seed-execute-observe-destroy 的唯一 lifecycle owner；bundle、server 和 UI 不持有 live database。</?>
+    <rationale ?>保证连续和并发请求可复现，避免 seed、页面状态或 module global 成为第二事实源。</?>
+    <evidence ?>mission bundle_policy 与 runtime_boundary decisions。</?>
+  )
+  >
+)>
+
+<decision #track.add_depa_orm_domain_runtime.prerequisite_and_preflight_order {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>完整 request 契约校验与 SQLite lifecycle 的先后顺序是什么？</?>
+  <answer { }
+  (
+    <raw-answer ?>G4C 已归档并成为硬前置；exact、preset/catalog、batch 与 capability preflight 必须先完成。</?>
+    <decision-text ?>Runtime 只在 request 与全部静态/动态 capability preflight 通过后分配 SQLite、seed 或运行 handler。</?>
+    <rationale ?>无效请求不应产生数据库或业务副作用，也不应要求 cleanup 去弥补本可避免的分配。</?>
+    <evidence ?>Mission Revision 4、verify-preset-contract-alignment 与 fresh runtime plan attractor GAP。</?>
+  )
+  >
+)>
+
+<decision #track.add_depa_orm_domain_runtime.preset_request_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>Runtime loader 是否拆解或重建 preset request？</?>
+  <answer { }
+  (
+    <raw-answer ?>不；复用已提升的 request authority 决策。</?>
+    <decision-text ?>Loader 使用 exact parser 与 preset/catalog matcher 验证完整 request，并冻结原结构和值；load、preview、execute 共用同一对象语义。</?>
+    <rationale ?>避免 runtime 成为第二 request authority。</?>
+    <evidence ?>decision://track.align_domain_operation_preset_contract.request_authority</?>
+  )
+  >
+)>
+
+<decision #track.add_depa_orm_domain_runtime.capability_authority_roles {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>Runtime 如何解释 definition、binding、server 与 request capability？</?>
+  <answer { }
+  (
+    <raw-answer ?>四层事实分别拥有 requestable、actual、current 与 selected。</?>
+    <decision-text ?>Effective support 仅由 definition requestable ∩ binding actual ∩ server current 计算；request choice 必须属于交集，任何层不得替代其他层。</?>
+    <rationale ?>保持 authoring、实现、部署与调用事实的 authority 边界。</?>
+    <evidence ?>decision://track.align_domain_operation_preset_contract.capability_roles</?>
+  )
+  >
+)>
+
+<decision #track.add_depa_orm_domain_runtime.server_projection_ownership {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>Server current capability projection 是否属于 bundle catalog？</?>
+  <answer { }
+  (
+    <raw-answer ?>不属于；bundle 只拥有静态 authoring catalog。</?>
+    <decision-text ?>DomainContextBundle 使用不含 top-level current capabilities 的静态 catalog；server composition 在每次执行或 catalog projection 时注入 current capability。</?>
+    <rationale ?>部署态变化不能改写定义真源，也不能让同一 bundle 在不同 server 上产生隐藏持久差异。</?>
+    <evidence ?>Mission domain-context-bundle 与 runtime-and-workbench design。</?>
+  )
+  >
+)>
+
+<decision #track.add_depa_orm_domain_runtime.one_definition_batch {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>Batch item 哪些事实可独立，哪些必须同构？</?>
+  <answer { }
+  (
+    <raw-answer ?>key、subject value 与 payload 独立；verb 与 subject kind 由一个 Operation definition 约束。</?>
+    <decision-text ?>Mixed verb 或 subject shape 在资源分配前拒绝；通过同构 preflight 的 best-effort items 才可独立执行和提交。</?>
+    <rationale ?>Batch 是多个独立 invocation，不是混合多个 Operation definition 的组合容器。</?>
+    <evidence ?>decision://track.add_domain_operation_contracts.selection_batch 与 corrected catalog matcher。</?>
+  )
+  >
+)>

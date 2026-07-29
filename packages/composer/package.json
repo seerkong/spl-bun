@@ -1,0 +1,20 @@
+{
+  "name": "depa-data-composer",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "depa-data-core": "workspace:*",
+    "depa-data-expression": "workspace:*",
+    "depa-data-spl-flow": "workspace:*",
+    "depa-data-sqlite-adapter": "workspace:*",
+    "depa-data-test-utils": "workspace:*"
+  },
+  "scripts": {
+    "build": "bun x tsc -p tsconfig.json"
+  }
+}

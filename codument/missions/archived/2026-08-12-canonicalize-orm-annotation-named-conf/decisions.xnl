@@ -1,0 +1,107 @@
+<decision #mission.canonicalize_orm_annotation_named_conf.transport {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low; accepting two transports would recreate competing annotation authorities"
+}
+(
+  <question ?>ORM profile kind and payload should be represented by marker name plus Conf, target-internal configuration, or KnKnot.NamedConf on a prefix annotation?</?>
+  <answer { }
+  (
+    <raw-answer ?>ORM must remain an annotation attached to class, field, prop, or datasource, and these profiles must use KnKnot.NamedConf.</?>
+    <decision-text ?>Use prefix annotations with one NamedConf profile: `:entity` on class, `:field` on Field, `:relation` on typed Property, and `:datasource` on datasource declaration. NamedConf is transport only; the Kunun public type-system model remains semantic authority.</?>
+    <rationale ?>The mapping uses the language's native named-configuration capability without embedding ORM configuration inside modeled declarations or creating a second type model.</?>
+    <evidence ?>User corrected the target-internal proposal and explicitly confirmed the prefix-annotation NamedConf design.</?>
+  )>
+)>
+
+<decision #mission.canonicalize_orm_annotation_named_conf.property_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>After changing annotation transport, where does relationship semantic and physical mapping authority remain?</?>
+  <answer { }
+  (
+    <raw-answer ?>Relationships must be modeled on properties such as Order.shop and Shop.orders, never on foreign-key fields or a detached relation primitive.</?>
+    <decision-text ?>Typed Kunun navigation Property remains the sole relation authority. The owner Property owns ordered join tuples, through topology, physical join mapping, and write policy; an inverse Property only references the stable owner Property identity.</?>
+    <rationale ?>This preserves the completed property-first mission and supports composite joins without coupling a relationship to one foreign-key Field.</?>
+    <evidence ?>Explicit user constraint and the archived property-first durable decisions.</?>
+  )>
+)>
+
+<decision #mission.canonicalize_orm_annotation_named_conf.field_shape {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>Should the Field ORM profile retain a nested `storage` object and may it contain relationship storage information?</?>
+  <answer { }
+  (
+    <raw-answer ?>Remove the storage nesting, but do not leave any relationship definition on a Field.</?>
+    <decision-text ?>The `:field` NamedConf and `OrmKununMetadata.field(...)` use one flat profile limited to scalar/column persistence, index, and validation. Relation role, tuples, through topology, inverse, and write authority are invalid on Fields.</?>
+    <rationale ?>Flattening removes unnecessary transport nesting while a strict allowlist prevents the earlier field-owned relation drift from returning under a new shape.</?>
+    <evidence ?>User explicitly requested removal of `storage` and zero residual field relation configuration.</?>
+  )>
+)>
+
+<decision #mission.canonicalize_orm_annotation_named_conf.datasource_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>How should `(datasource #main)` and `orm :datasource` divide responsibility?</?>
+  <answer { }
+  (
+    <raw-answer ?>Use `#(orm :datasource={ kind, env_conn, options })(datasource #main)` as the canonical model.</?>
+    <decision-text ?>The datasource declaration name is the sole identity/reference authority. The `:datasource` NamedConf is the sole ORM provider, environment connection, and options authority. Annotation `key`/`name`, direct datasource Conf, missing ORM configuration, and fallback projection are rejected.</?>
+    <rationale ?>The declaration and annotation remain complementary while eliminating the current annotation-versus-direct-Conf dual path and duplicated identity.</?>
+    <evidence ?>User explicitly accepted the recommended datasource form and hard-cut semantics.</?>
+  )>
+)>
+
+<decision #mission.canonicalize_orm_annotation_named_conf.compatibility {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "low"
+}
+(
+  <question ?>Should production readers retain old syntax compatibility during migration?</?>
+  <answer { }
+  (
+    <raw-answer ?>This must be a complete migration with no compatibility residue.</?>
+    <decision-text ?>Remove old readers, fallbacks, and dual emitters. Live source, positive fixtures, current docs, app bundles, generated artifacts, and package tarballs must contain zero accepted old syntax; only explicit negative tests and immutable Codument archives are exempt.</?>
+    <rationale ?>A controlled three-project migration can move atomically, while compatibility would preserve exactly the authority drift this mission is intended to remove.</?>
+    <evidence ?>User confirmed the recommended no-compatibility scope and requested a residue scan including web IDE application bundles.</?>
+  )>
+)>
+
+<decision #mission.canonicalize_orm_annotation_named_conf.release_boundary {
+  priority = "P1"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>What versioning and publication boundary applies to the cross-project breaking change?</?>
+  <answer { }
+  (
+    <raw-answer ?>Include the Kunun change in 1.0.4, perform a breaking depa ORM bump, and prepare packages without publishing.</?>
+    <decision-text ?>Keep the already-unreleased Kunun package family at 1.0.4, bump affected depa ORM public packages to the next breaking line determined by the 0.1.x dependency graph, update spl-bun consumers, and run build/pack/publish dry runs only. Actual publication is excluded.</?>
+    <rationale ?>This gives consumers an honest package boundary while keeping registry publication under a later explicit user action.</?>
+    <evidence ?>User confirmed the recommended release handling; current package evidence shows Kunun at 1.0.4 and depa ORM public packages on 0.1.x.</?>
+  )>
+)>

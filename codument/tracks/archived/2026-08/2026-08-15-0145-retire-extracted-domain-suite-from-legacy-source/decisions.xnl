@@ -1,0 +1,15 @@
+<decision #track.retire_extracted_domain_suite_from_legacy_source.owner_transfer {
+  priority = "P0"
+  status = "accepted"
+  confidence = "high"
+}
+(
+  <question ?>提取完成后，旧仓是否保留 Domain Suite 兼容实现或反向依赖新仓？</?>
+  <answer { }
+  (
+    <raw-answer ?>用户要求把 protocol/runtime/server/demo 独立到 depa-domain-suite.ts，并继续推进旧 owner 清理。</?>
+    <decision-text ?>旧仓物理删除四个 Domain packages、reference contexts、Domain server/Web composition 与当前 owner 文档；不保留 facade，不在生产中反向消费新包，只保留 source-language/data 能力。</?>
+    <rationale ?>双实现或兼容 facade 会恢复双 owner；旧仓的长期职责是语言、数据与 Kon/SPL execution，而不是通用 Domain Suite。</?>
+    <evidence ?>Depa Domain Suite G2-G6 已发布并验证，Holon G7 已完成 registry cutover。</?>
+  )>
+)>

@@ -1,0 +1,80 @@
+<behavior-patch capability="kon-spl-dsl" version="1">
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/native-words-common">
+    <requirement id="native-words-common">
+      <statement>系统 SHALL 在 EnableSplDsl 中额外注册原生数据运算 word：spl_derive、spl_select、spl_groups、spl_sort、spl_join、spl_top；它们 SHALL 遵循既有 knot 约定（配置在 Conf、#name 命名绑定、Next 链合并读取）；输入数据集经 Conf 的 in（join 为 left/right）键给出，值为 Kon 变量名或 DataSet 值；原生 word SHALL NOT 接受 #opt/@ 选项（其模式经 Conf 键表达），误用时 SHALL 报错提示改用 Conf 键或 spl_eval。</statement>
+      <suite id="common" name="共同约定">
+        <case id="in-resolution">
+          <given>Kon 变量 orders 为 DataSet</given>
+          <when>`(spl_select #big :{ in = orders where = "amount > 10" })`</when>
+          <then>in SHALL 按名解析到该 DataSet；big 绑定过滤结果</then>
+        </case>
+        <case id="opt-rejected">
+          <given>`(spl_sort :{ in = t by = ["amount"] } #opt = z)`</given>
+          <when>求值</when>
+          <then>SHALL 报错并提示原生 word 用 Conf 键表达模式</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/native-derive-select">
+    <requirement id="native-derive-select">
+      <statement>spl_derive SHALL 按 Conf{in, cols = {列名 = 行表达式}, with?} 为每行计算新列（行字段优先于 with/env scope）；spl_select SHALL 按 Conf{in, where = 谓词表达式, with?} 过滤行；两者 SHALL 消除字符串透传的 `:alias` 与内层 scope 限制（列表达式可直接引用 with/env 变量）。</statement>
+      <suite id="derive-select" name="derive 与 select">
+        <case id="derive-with-scope">
+          <given>orders 为 DataSet 且 with 提供 rate=1.1</given>
+          <when>`(spl_derive #priced :{ in = orders cols = {gross = "amount*rate"} with = {rate = 1.1} })`</when>
+          <then>priced SHALL 为带 gross 列的 DataSet，gross = amount*1.1（列表达式直接引用 rate，无需字符串拼接）</then>
+        </case>
+        <case id="select-where">
+          <given>priced 为上例结果</given>
+          <when>`(spl_select #big :{ in = priced where = "gross > 150" })`</when>
+          <then>big SHALL 仅含 gross 大于 150 的行</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/native-groups">
+    <requirement id="native-groups">
+      <statement>spl_groups SHALL 按 Conf{in, keys = [分组列], agg = {输出列 = 聚合表达式}} 分组聚合，对应 SPL `A.groups(K;expr:Name)` 的 `;` 角色分组与 `:` 配对映射；keys 为空时 SHALL 做全表聚合。</statement>
+      <suite id="groups" name="分组聚合">
+        <case id="groups-basic">
+          <given>orders 含 region 与 amount 列</given>
+          <when>`(spl_groups #byRegion :{ in = orders keys = [region] agg = {total = "sum(amount)" cnt = "count(id)"} })`</when>
+          <then>byRegion SHALL 每 region 一行且 total/cnt 正确</then>
+        </case>
+        <case id="groups-whole-table">
+          <given>keys 为空数组或缺省</given>
+          <when>求值</when>
+          <then>SHALL 返回单行全表聚合</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://kon-spl-dsl/requirements/native-sort-join-top">
+    <requirement id="native-sort-join-top">
+      <statement>spl_sort SHALL 按 Conf{in, by = [列名或 {col, desc}]} 多键排序；spl_join SHALL 按 Conf{left, right, type = "inner"|"left", on = [键] 或 leftOn/rightOn, rightPrefix?} 连接两个 DataSet；spl_top SHALL 按 Conf{in, n, by, desc?} 返回排序后的前 n 行（对应 SPL A.top 的语义，n 为正取头部；desc 控制方向）。</statement>
+      <suite id="sort-join-top" name="sort/join/top">
+        <case id="sort-multi-key">
+          <given>t 含 region 与 amount</given>
+          <when>`(spl_sort #s :{ in = t by = [{col = amount desc = true} "id"] })`</when>
+          <then>s SHALL 按 amount 降序、id 升序排列</then>
+        </case>
+        <case id="join-left">
+          <given>员工表与部门表按 dept 关联</given>
+          <when>`(spl_join #j :{ left = emp right = dept type = "left" on = [dept] })`</when>
+          <then>j SHALL 含右表列且未匹配行为空值</then>
+        </case>
+        <case id="top-n">
+          <given>t 含 amount</given>
+          <when>`(spl_top #t5 :{ in = t n = 2 by = "amount" desc = true })`</when>
+          <then>t5 SHALL 为 amount 最大的 2 行</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+</behavior-patch>

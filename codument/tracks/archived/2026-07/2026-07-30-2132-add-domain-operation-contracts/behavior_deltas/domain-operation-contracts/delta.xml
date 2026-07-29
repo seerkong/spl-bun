@@ -1,0 +1,70 @@
+<behavior-patch capability="domain-operation-contracts" version="1">
+  <upsert selector="behavior://domain-operation-contracts/requirements/operation-catalog">
+    <requirement id="operation-catalog">
+      <statement>depa-data-domain-operation-contracts SHALL 提供 JSON-compatible、transport-neutral 的 DomainContext catalog、model source、semantic resource、Operation definition、preset 与 capability DTO；Operation definition SHALL 以 owner、behavior、subject、invocation、effect 五个正交维度表达，atomicity SHALL 独立于 Operation identity。</statement>
+      <suite id="catalog" name="Operation catalog contract">
+        <case id="five-dimensions">
+          <given>一个包含所有已接受 owner、behavior、subject、invocation 和 effect 值的 catalog</given>
+          <when>通过 package 公共入口构造并 JSON roundtrip</when>
+          <then>所有 literal value 稳定保留，且不需要 framework 或 database 类型</then>
+        </case>
+        <case id="version-separation">
+          <given>apiVersion 为 1 且 DomainContext bundle version 为独立字符串</given>
+          <when>构造 catalog 和 execute request</when>
+          <then>envelope version 与 bundle version 分别存在且不得互相替代</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-operation-contracts/requirements/execute-request">
+    <requirement id="execute-request">
+      <statement>Execute request SHALL 支持 none、single、selection subject 与 single、batch invocation；selection SHALL 是一个 mode=single 的逻辑调用，batch SHALL 包含一个或多个带唯一 key 的独立 item；unknown JSON validation SHALL 返回 path-aware structured issues，并提供 request/catalog 纯一致性检查。</statement>
+      <suite id="requests" name="Execute request contract">
+        <case id="single-roundtrip">
+          <given>一个 single subject 的 single invocation request</given>
+          <when>序列化为 JSON 并从 unknown input 解析</when>
+          <then>得到语义等价的 typed request</then>
+        </case>
+        <case id="selection-is-single">
+          <given>一个 filter 或 ids selector 圈定多个 subject</given>
+          <when>构造 execute request</when>
+          <then>invocation.mode 仍为 single 且 subject.kind 为 selection</then>
+        </case>
+        <case id="batch-items-are-independent">
+          <given>多个带唯一 key、各自 subject、verb 和 payload 的 invocation item</given>
+          <when>构造 batch request</when>
+          <then>每个 item 可独立关联结果，且 duplicate key 或空 items 被拒绝</then>
+        </case>
+        <case id="catalog-mismatch">
+          <given>request 的五维声明、context version 或 invocation shape 与 catalog definition 不一致</given>
+          <when>运行纯 catalog consistency validation</when>
+          <then>返回 code=OPERATION_CATALOG_MISMATCH 且包含可定位 path，不执行 runtime 行为</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://domain-operation-contracts/requirements/execute-response">
+    <requirement id="execute-response">
+      <statement>Execute response SHALL 统一表达 success、partial、failure，支持 table、entity、collection、scalar、graph、tree、composite outcome，并携带 effects、observations、trace 与 diagnostics；缺失的 atomic composition、cross-datasource atomicity、batch mapping 或 SQL trace capability SHALL 使用稳定 diagnostic code 如实表达。</statement>
+      <suite id="responses" name="Execute response contract">
+        <case id="outcome-union-roundtrip">
+          <given>每一种 OperationOutcome variant 的代表性 JSON-safe fixture</given>
+          <when>通过 response contract JSON roundtrip</when>
+          <then>discriminant 与 payload 均稳定保留</then>
+        </case>
+        <case id="batch-mapping-unavailable">
+          <given>adapter 无法提供稳定 row-level item mapping</given>
+          <when>表达 effects 和 diagnostics</when>
+          <then>itemMapping 为 unavailable 且包含 BATCH_ITEM_MAPPING_UNAVAILABLE，不伪造 item outcome</then>
+        </case>
+        <case id="sql-trace-unavailable">
+          <given>公开 capability 不提供 SQL trace</given>
+          <when>表达 trace 和 diagnostics</when>
+          <then>SQL 字段不被伪造且包含 SQL_TRACE_UNAVAILABLE</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

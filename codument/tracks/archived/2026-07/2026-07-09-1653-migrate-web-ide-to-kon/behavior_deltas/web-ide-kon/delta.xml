@@ -1,0 +1,57 @@
+<behavior-patch capability="web-ide-kon" version="1">
+
+  <upsert selector="behavior://web-ide-kon/requirements/kon-ide-page">
+    <requirement id="kon-ide-page">
+      <statement>web-ide SHALL 提供 Kon 脚本主模式页面（默认路由 /）：脚本文本编辑区、demos 下拉与加载、Run Script 按钮与状态栏、结果表格；运行时 SHALL POST /api/execute-kon 并把响应 data 显示为表格（columns/rows），错误时状态栏 SHALL 显示 Error: 前缀的可读消息；旧网格页面迁移期 SHALL 保留在 /grid-legacy 且行为不变。</statement>
+      <suite id="page" name="Kon IDE 页面">
+        <case id="run-script">
+          <given>编辑区含合法 Kon 脚本（spl_query demo 数据）</given>
+          <when>点击 Run Script</when>
+          <then>状态 SHALL 变为 Done 且结果表显示非空 rows</then>
+        </case>
+        <case id="error-status">
+          <given>脚本引用未知数据源</given>
+          <when>运行</when>
+          <then>状态 SHALL 显示 Error: 且含可定位信息</then>
+        </case>
+        <case id="legacy-route">
+          <given>迁移期</given>
+          <when>访问 /grid-legacy</when>
+          <then>旧网格 IDE SHALL 照常工作（旧 E2E 全绿）</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://web-ide-kon/requirements/kon-demos">
+    <requirement id="kon-demos">
+      <statement>web-ide SHALL 内置 Kon 版 demos 集合，覆盖既有 33 个网格 demo 的能力面（数据库查询链、序列运算、文件/多数据源、表达式、控制流）；网格特有语义（goto、execute-only、result/end 提前终止等）无 Kon 对应者 SHALL 改写为等价 Kon 结构或合并，并在 demo 注释与 track findings 中记录清单差异；每个 demo SHALL 可加载到编辑区并运行出与其断言一致的结果。</statement>
+      <suite id="demos" name="Kon demos">
+        <case id="demo-load-run">
+          <given>demos 下拉任选一项</given>
+          <when>Load 后 Run</when>
+          <then>SHALL 得到该 demo 预期的结果（E2E 数值断言）</then>
+        </case>
+        <case id="coverage-mapping">
+          <given>既有 33 个网格 demo 清单</given>
+          <when>对照 Kon demos 集合</when>
+          <then>每个旧 demo SHALL 有映射（一对一/合并/裁减）且差异有记录</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://web-ide-kon/requirements/kon-e2e">
+    <requirement id="kon-e2e">
+      <statement>web-ide SHALL 提供 Kon 路径的 Playwright E2E 用例组（demo 加载切换、查询/文件/多源执行、控制流数值断言、错误处理），与旧网格 E2E 并存双跑；全量 E2E SHALL 通过。</statement>
+      <suite id="e2e" name="Kon E2E">
+        <case id="full-suite-green">
+          <given>bun run test:e2e</given>
+          <when>执行全部（旧五组 + 新 kon 组）</when>
+          <then>SHALL 全部通过</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+</behavior-patch>

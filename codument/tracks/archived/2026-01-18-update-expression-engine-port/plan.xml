@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>update-expression-engine-port</track_id>
+    <track_name>继续迁移 Expression 引擎（聚合生命周期 + IO/表函数）</track_name>
+    <goal>补齐聚合生命周期与 IO/表函数缺口，并完善测试与差异追踪</goal>
+    <created_at>2026-01-17</created_at>
+    <status>archived</status>
+    <commit_mode>auto</commit_mode>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="聚合生命周期与高级聚合">
+      <goal>补齐 regather/finish 与高级聚合缺口</goal>
+      <tasks>
+        <task id="T1.1" name="梳理 Java 聚合生命周期与缺口清单" commit="6e9c199f8">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.1.1" name="定位 Java regather/finish 语义与触发条件" status="DONE" />
+            <subtask id="T1.1.2" name="列出高级聚合缺口与对应用例" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T1.2" name="实现 regather/finish 生命周期" commit="f957f8cc2">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.2.1" name="编写失败测试（聚合多阶段）" status="DONE" />
+            <subtask id="T1.2.2" name="实现 regather/finish 逻辑" status="DONE" />
+            <subtask id="T1.2.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T1.3" name="实现高级聚合缺口" commit="f957f8cc2">
+          <priority>P1</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T1.3.1" name="编写失败测试（高级聚合）" status="DONE" />
+            <subtask id="T1.3.2" name="实现高级聚合函数/行为" status="DONE" />
+            <subtask id="T1.3.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="IO 与表/记录函数">
+      <goal>补齐 IO（DB/File/Cursor）与表/记录成员函数缺口</goal>
+      <tasks>
+        <task id="T2.1" name="梳理 Java FunctionLib/MemberFunction 缺口">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <acceptance_criteria>
+            <criterion id="T2.1-AC1" checked="true">IO gaps mapped: global connect; DB members query/execute/commit/rollback/proc/error/update/isolate/savepoint; file members read/write/export/import/name/exists/size/date/property/iselect; cursor members cursor/mcursor/fetch/skip/groupx/sortx/joinx/mergex/total; vdb members begin/commit/rollback/home/path/lock/list/load/date/save/move/read/write/update/saveblob/retrieve/archive/purge/copy.</criterion>
+            <criterion id="T2.1-AC2" checked="true">Table/record gaps mapped: record members field/fname/fno/key/record; table members keys/row/icursor/ifind/memory/paste/rename/alter/dup; sequence field/record variants noted for later parity.</criterion>
+            <criterion id="T2.1-AC3" checked="true">Minimal scope set for this track: implement connect + db.query/execute/commit/rollback and record field/fname/fno/key/record + table keys/row; remaining IO/table/cursor/vdb/file members deferred to later gaps list.</criterion>
+          </acceptance_criteria>
+          <references>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/FunctionLib.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/record/FieldValue.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/record/FieldName.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/record/FieldNo.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/record/RecordValue.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/record/Key.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/table/Keys.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/TableRow.java</ref>
+            <ref>migrate-esproc-dsl-syntax/java-analysis.md</ref>
+            <ref>packages/expression/src/memberRegistry.ts</ref>
+            <ref>packages/expression/src/functions.ts</ref>
+            <ref>packages/spl-flow/src/index.ts</ref>
+          </references>
+          <subtasks>
+            <subtask id="T2.1.1" name="从 FunctionLib 映射 IO 函数缺口" status="DONE" />
+            <subtask id="T2.1.2" name="从 MemberFunction 映射表/记录函数缺口" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T2.2" name="实现 IO 相关函数" commit="22663db34">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <acceptance_criteria>
+            <criterion id="T2.2-AC1" checked="true">Expression builtins include connect() for name or driver/url, returning DB handles.</criterion>
+            <criterion id="T2.2-AC2" checked="true">DB member functions query/execute/commit/rollback resolve on DB handles with tests.</criterion>
+            <criterion id="T2.2-AC3" checked="true">IO tests added and passing for connect + db member functions.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T2.2.1" name="编写失败测试（IO 函数）" status="DONE" />
+            <subtask id="T2.2.2" name="实现 IO 函数与类型支持" status="DONE" />
+            <subtask id="T2.2.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T2.3" name="实现表/记录成员函数" commit="b90312dc3">
+          <priority>P1</priority>
+          <status>DONE</status>
+          <acceptance_criteria>
+            <criterion id="T2.3-AC1" checked="true">Record members field/fname/fno/key/record implemented with index semantics parity.</criterion>
+            <criterion id="T2.3-AC2" checked="true">Table members keys/row implemented with dataset keys and schema fallback.</criterion>
+            <criterion id="T2.3-AC3" checked="true">Expression tests cover record/table member functions.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T2.3.1" name="编写失败测试（表/记录函数）" status="DONE" />
+            <subtask id="T2.3.2" name="实现表/记录成员函数" status="DONE" />
+            <subtask id="T2.3.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="验证与差异追踪">
+      <goal>补充测试与更新差异文档，追加新缺口</goal>
+      <tasks>
+        <task id="T3.1" name="补充单元与集成测试" commit="b90312dc3">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <acceptance_criteria>
+            <criterion id="T3.1-AC1" checked="true">Expression tests cover IO and table/record member functions.</criterion>
+            <criterion id="T3.1-AC2" checked="true">Core integration tests adjusted for current sample data.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T3.1.1" name="完善 expression 单元测试" status="DONE" />
+            <subtask id="T3.1.2" name="完善 core 集成测试" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T3.2" name="运行测试与覆盖率" commit="7fb951da4">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <acceptance_criteria>
+            <criterion id="T3.2-AC1" checked="true">bun test --coverage completed (see log for web-server integration error output).</criterion>
+            <criterion id="T3.2-AC2" checked="true">Coverage report generated; failures limited to known web-server test error logging.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T3.2.1" name="运行 bun test 与覆盖率" status="DONE" />
+            <subtask id="T3.2.2" name="修复失败用例" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T3.3" name="差异文档与新缺口" commit="7fb951da4">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <acceptance_criteria>
+            <criterion id="T3.3-AC1" checked="true">act_2 diff document created: doc/brainstorm/port-expression-engine/act_2/feature-diff-20260117_2135.md.</criterion>
+            <criterion id="T3.3-AC2" checked="true">act_2 summary document created: doc/brainstorm/port-expression-engine/act_2/summary_20260117_2135.md.</criterion>
+            <criterion id="T3.3-AC3" checked="true">New gaps appended to plan.xml (see below).</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T3.3.1" name="生成 act_2 diff 文档（yyyyMMdd_HHmm）" status="DONE" />
+            <subtask id="T3.3.2" name="生成 act_2 summary 文档（yyyyMMdd_HHmm）" status="DONE" />
+            <subtask id="T3.3.3" name="将新缺口追加到 plan.xml" status="DONE" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+  </phases>
+
+  <notes>
+    <note id="GAP-1">IO gaps remaining: file/cursor/vdb member functions beyond query/execute/commit/rollback (read/write/export/import/name/exists/size/date/property/iselect; cursor/mcursor/fetch/skip/groupx/sortx/joinx/mergex/total; vdb begin/commit/rollback/home/path/lock/list/load/date/save/move/read/write/update/saveblob/retrieve/archive/purge/copy).</note>
+    <note id="GAP-2">Table/record member gaps remaining: table icursor/ifind/memory/paste/rename/alter/dup; record/sequence variants with full DataStruct semantics.</note>
+    <note id="GAP-3">Other gaps: conversion/algebra functions (json/xml/algebra), dynamic function loading/overload resolution, richer diagnostics/type checks parity.</note>
+  </notes>
+</plan>

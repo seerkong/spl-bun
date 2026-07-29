@@ -1,0 +1,119 @@
+<Track id="prepare-domain-platform-for-external-consumers" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>让 Domain Operation contracts、runtime 与 HTTP server capsule 能被独立 Bun workspace 通过稳定 package identity 消费。</Goal>
+    <Description>新增通用 server capsule，冻结三个公共包的可打包入口与依赖，并用真实外部 consumer harness 验证 clean install、typecheck、catalog、preset 与 execute；不引入任何具体业务域或运行态工作分发。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-08-13T17:39:02Z</CreatedAt>
+    <UpdatedAt>2026-08-13T18:00:12Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="mission-design" domain="mission" path="vfs://@/codument/missions/active/build-temporal-holon-member-workbench/"/>
+    <MaterialBundle role="output" name="operation-contracts" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="output" name="domain-runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="domain-server" domain="package" path="vfs://@/packages/domain-operation-server/"/>
+    <MaterialBundle role="output" name="external-consumer" domain="test" path="vfs://@/fixtures/domain-platform-consumer/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_prepare-domain-platform-for-external-consumers" name="prepare-domain-platform-for-external-consumers" version="1" cdt:child-mode="dag">
+    <Description>Package-safe platform capsules and reproducible external-consumer proof.</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Package And Consumer Characterization" status="DONE" order="0">
+        <Description>先用 packaging 与独立 consumer tests 冻结当前 workspace-only gap、公共入口和应用组合根边界。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>三个公共 package identity、入口与依赖集合被精确测试</cdt:Criterion>
+          <cdt:Criterion>外部 consumer 不通过 source copy、deep import 或机器绝对路径解析</cdt:Criterion>
+          <cdt:Criterion>现有 private web-server 的 demo/Kon 职责不得进入公共 server capsule</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Write package and external consumer red tests" status="DONE" order="0" priority="P0">
+            <Description>增加 package manifest/pack assertions 与独立 consumer harness，先证明 workspace protocol、source exports、private web-server 和缺失 server artifact 的现状不能满足 G2。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">测试检查非零一致版本、dist root exports、files 白名单与无 workspace protocol</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">fixture 仅按 package root import，并为相对 tarball identity clean install 提供可执行入口</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="Freeze generic server composition boundary" status="DONE" order="1" priority="P0">
+            <Description>用测试冻结 catalog/execute adapter 的显式 registration 注入与错误行为，并证明公共 capsule 不拥有 demo DB、Kon、reference bundle 或业务 bundle。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">server tests 覆盖 empty/duplicate/catalog/preset/execute/fresh execution</cdt:Criterion>
+              <cdt:Criterion id="T1.2-AC2" checked="true">import boundary 拒绝具体 domain-context bundle、demo/Kon 与源码跨包路径</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Public Platform Capsules" status="DONE" order="1">
+        <Description>实现最小公共 server capsule 和可打包 contracts/runtime/server manifests；private web-server 只组合通用 capsule 与应用专属 routes。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>contracts/runtime/server 只通过稳定 package root 形成单向依赖</cdt:Criterion>
+          <cdt:Criterion>pack artifacts 只包含运行与类型消费所需文件</cdt:Criterion>
+          <cdt:Criterion>现有 web-server API 行为和 reference bundle composition 保持兼容</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Create the generic Domain Operation server capsule" status="DONE" order="0" priority="P0">
+            <Description>从 web-server 中提取 transport projection、registry 与 catalog/execute routes 到新的公开 package；依赖显式注入，internals 不暴露。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">公共 root 导出 create function、registration/options/types 和稳定 routes</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">server capsule 不 import web-server、web-shared、domain-context-bundles 或任一具体业务</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="Harden public package manifests and artifacts" status="DONE" order="1" priority="P0">
+            <Description>统一非零版本、dist main/types/exports、files 与 build；将发布 artifact 内部依赖改为稳定 semver，保留 monorepo 本地解析。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">三个 package build 后 dist root 可被 Node/Bun 和 TypeScript 消费</cdt:Criterion>
+              <cdt:Criterion id="T2.2-AC2" checked="true">pack manifest 不含 workspace:*，tarball 不包含 tests、demo data 或无关 source</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.3" name="Compose the private application server from the capsule" status="DONE" order="2" priority="P0">
+            <Description>让现有 web-server 复用通用 adapter，同时保留 health、execute-kon、demo datasource 与 production reference registrations 的应用 owner。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.3-AC1" checked="true">现有 server focused tests 与 production import boundary 全绿</cdt:Criterion>
+              <cdt:Criterion id="T2.3-AC2" checked="true">通用 catalog/execute 语义只有一个实现 owner</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="External Proof And Convergence" status="DONE" order="2">
+        <Description>以打包产物和 fresh 临时目录做完整消费验证，再运行受影响回归与独立方向审查。</Description>
+        <cdt:Gate>
+          <cdt:Criterion>pack → clean install → typecheck → catalog/preset/execute 全部通过</cdt:Criterion>
+          <cdt:Criterion>删除 node_modules 后按 lockfile 重装仍可复现</cdt:Criterion>
+          <cdt:Criterion>公共包与 fixture 均不含 Holon/organization 或工作分发运行态语义</cdt:Criterion>
+          <cdt:Criterion>fresh coding AttractorCheck PASS</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Run reproducible external consumer verification" status="DONE" order="0" priority="P0">
+            <Description>pack 三包，在独立临时 Bun workspace 通过相对 file tarballs clean install；执行自有中性 bundle 的 catalog、complete preset、operation，并验证 clean reinstall。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">fixture typecheck 与 runtime smoke 只使用三个 package root</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">install evidence 无 source copy、deep import、绝对依赖或 workspace protocol</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T3.2" name="Run regressions and audit track evidence" status="DONE" order="1" priority="P0">
+            <Description>运行相关 package tests/build、root build、XML/XNL validation、forbidden-term/import scans 与 fresh direction review，并修复 completion-critical gap。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.2-AC1" checked="true">contracts/runtime/server/web-server tests 与 builds 通过，失败数为零</cdt:Criterion>
+              <cdt:Criterion id="T3.2-AC2" checked="true">fresh reviewer 对 package authority、capsule 依赖和 scope 给出 PASS</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks><Hook on="phase:after"><cdt:AttractorCheck use="coding" status="PASS"/></Hook></Hooks>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+
+  <Schedule>
+    <Dag for="space_prepare-domain-platform-for-external-consumers">
+      <Node id="P2"><After ref="P1"/></Node>
+      <Node id="P3"><After ref="P2"/></Node>
+    </Dag>
+    <Parallel max-concurrent="1" spot-check="true"/>
+  </Schedule>
+</Track>

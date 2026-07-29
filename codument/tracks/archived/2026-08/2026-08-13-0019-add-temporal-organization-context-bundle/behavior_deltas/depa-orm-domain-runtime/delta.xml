@@ -1,0 +1,19 @@
+<behavior-patch capability="depa-orm-domain-runtime" version="1">
+  <upsert selector="behavior://depa-orm-domain-runtime/requirements/trusted-handler-diagnostics">
+    <requirement id="trusted-handler-diagnostics">
+      <statement>The runtime SHALL expose a transport-neutral DomainOperationExecutionError for trusted handlers to carry one or more structured OperationDiagnostic facts; atomic execution SHALL preserve their code, category, severity, and path while rolling back writes, and best-effort scheduling SHALL retain the diagnostic identity while remapping a singleton handler item path to the original batch item index.</statement>
+      <suite id="trusted-handler-diagnostics" name="Trusted handler domain diagnostics">
+        <case id="atomic-domain-diagnostic-rollback">
+          <given>a trusted handler writes inside an atomic transaction and then throws a structured domain diagnostic</given>
+          <when>the runtime builds the failure response</when>
+          <then>the write SHALL roll back, mutation facts SHALL be empty, before and after probes SHALL match, and the supplied diagnostic code and path SHALL remain unchanged</then>
+        </case>
+        <case id="best-effort-domain-diagnostic-mapping">
+          <given>a best-effort batch singleton handler throws one or more structured diagnostics for its local item zero</given>
+          <when>the scheduler maps the failure to the original request</when>
+          <then>every diagnostic code SHALL remain unchanged, every path SHALL identify the original batch item index, and the item mapping SHALL reference all corresponding response diagnostic paths</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

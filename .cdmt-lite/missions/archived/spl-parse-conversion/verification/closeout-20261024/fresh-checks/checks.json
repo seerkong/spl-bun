@@ -1,0 +1,90 @@
+[
+  {
+    "name": "parse-focused",
+    "command": [
+      "bun",
+      "test",
+      "packages/expression/__tests__/parse-conversion.test.ts",
+      "packages/kon-spl-dsl",
+      "packages/spl-flow"
+    ],
+    "env": {},
+    "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+    "startedAt": "2026-10-24T05:24:20.927753+00:00",
+    "elapsedSeconds": 0.451,
+    "exitCode": 0,
+    "expectedSignal": "232 pass",
+    "signalPresent": true,
+    "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/parse-focused.log",
+    "sha256": "b9250ef95662027369fc8cac31cb0be93bd19a4f46e996451df76f79827726ab"
+  },
+  {
+    "name": "parse-oracle",
+    "command": [
+      "bun",
+      ".cdmt-lite/missions/active/spl-parse-conversion/verification/source-parse-oracle.ts"
+    ],
+    "env": {},
+    "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+    "startedAt": "2026-10-24T05:24:21.379610+00:00",
+    "elapsedSeconds": 3.701,
+    "exitCode": 0,
+    "expectedSignal": "592 actual Java",
+    "signalPresent": true,
+    "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/parse-oracle.log",
+    "sha256": "2835b974a0d31502d665fcf12e9051f30b2348d292c9104446bd24a6d267b044"
+  },
+  {
+    "name": "full",
+    "command": [
+      "bun",
+      "test"
+    ],
+    "env": {},
+    "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+    "startedAt": "2026-10-24T05:24:25.080965+00:00",
+    "elapsedSeconds": 9.912,
+    "exitCode": 0,
+    "expectedSignal": "479 pass",
+    "signalPresent": true,
+    "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/full.log",
+    "sha256": "c5ea4a51ae5ab82b0652f48fb4b9f3cd4aa156f2f3c295aca2f3f3a61cae0374"
+  },
+  {
+    "name": "build",
+    "command": [
+      "bun",
+      "run",
+      "build"
+    ],
+    "env": {},
+    "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+    "startedAt": "2026-10-24T05:24:34.995681+00:00",
+    "elapsedSeconds": 12.497,
+    "exitCode": 0,
+    "expectedSignal": "depa-data-web-server build: Exited with code 0",
+    "signalPresent": true,
+    "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/build.log",
+    "sha256": "12fbe75096a545bfb257d4f22e90b1210181f876b1444ca0dce01eb34018bfa1"
+  },
+  {
+    "name": "e2e",
+    "command": [
+      "bun",
+      "run",
+      "test:e2e"
+    ],
+    "env": {
+      "SPL_E2E_FRONTEND_PORT": "4394",
+      "SPL_E2E_BACKEND_PORT": "4396"
+    },
+    "cwd": "/private/tmp/spl-parse-closeout-20261024/workspace",
+    "startedAt": "2026-10-24T05:24:47.493658+00:00",
+    "elapsedSeconds": 16.726,
+    "exitCode": 0,
+    "expectedSignal": "17 passed",
+    "signalPresent": true,
+    "log": "/private/tmp/spl-parse-closeout-20261024/fresh-checks/e2e.log",
+    "sha256": "7f74bad1398ac316e2b3b778ea7592ae471a9c169e8832421cc9cb2092351d9c"
+  }
+]

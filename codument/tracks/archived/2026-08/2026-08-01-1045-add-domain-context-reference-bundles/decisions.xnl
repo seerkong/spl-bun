@@ -1,0 +1,75 @@
+<decision #track.add_domain_context_reference_bundles.explicit_association_entities {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>How are association facts represented before public relation compilation is available?</?>
+  <answer { }
+  (
+    <raw-answer ?>Use ordinary entities with stable semantic resource refs and scalar endpoint ids.</?>
+    <decision-text ?>Reference bundles model association storage as explicit link entities; semantic association identity remains catalog-level and does not depend on the table name.</?>
+    <rationale ?>The public bridge rejects relation schemas, while explicit entities exercise real relational persistence without a private import.</?>
+    <evidence ?>Fresh G7 coding attractor check and runtime public model bridge.</?>
+  )
+  >
+)>
+
+<decision #track.add_domain_context_reference_bundles.composed_child_authority {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "high"
+}
+(
+  <question ?>Which catalog definitions make the non-CancelRepair composed roots mechanically admissible?</?>
+  <answer { }
+  (
+    <raw-answer ?>Register explicit child operations rather than hiding child work inside root handlers.</?>
+    <decision-text ?>The IT bundle registers ItAsset.ReturnOrderLine.MarkReinbounded for ReturnReinbound; the commerce bundle registers Commerce.Order.Query so OrderOverview can compose a BO query with an existing raw query.</?>
+    <rationale ?>Runtime invokeChild admits only cataloged definitions. Explicit children preserve the promised operation tree and keep BO work independently addressable.</?>
+    <evidence ?>P0 parent review of track design against the immutable catalog skeleton.</?>
+  )
+  >
+)>
+
+<decision #track.add_domain_context_reference_bundles.selector_resolution {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = false
+  confidence = "high"
+  reversibility = "medium"
+}
+(
+  <question ?>Where are all/filter/ids selectors resolved with the current equality-only RuntimeQuery?</?>
+  <answer { }
+  (
+    <raw-answer ?>Inside registered handlers using public reads and deterministic filtering.</?>
+    <decision-text ?>Selection remains mode=single; handlers interpret selector kind, issue supported equality reads where possible, and filter deterministic rows before public writes.</?>
+    <rationale ?>This preserves selection semantics without pretending the query adapter supports a richer predicate language.</?>
+    <evidence ?>RuntimeQuery public API and mission selection/batch decision.</?>
+  )
+  >
+)>
+
+<decision #track.add_domain_context_reference_bundles.server_startup_composition {
+  priority = "P0"
+  status = "accepted"
+  durable_candidate = true
+  confidence = "high"
+  reversibility = "high"
+}
+(
+  <question ?>How do reference bundles become available to the UI without changing createApp test semantics?</?>
+  <answer { }
+  (
+    <raw-answer ?>Compose them only in the real server startup path.</?>
+    <decision-text ?>The bundle package exports plain registration values; web-server import.meta.main passes them to createApp, while createApp defaults to an empty registration list.</?>
+    <rationale ?>Production gets useful contexts and tests retain explicit dependency injection with no hidden registry.</?>
+    <evidence ?>Promoted server registration decision and G7 coding attractor review.</?>
+  )
+  >
+)>

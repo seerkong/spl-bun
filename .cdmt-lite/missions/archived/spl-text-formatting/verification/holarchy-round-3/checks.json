@@ -1,0 +1,26 @@
+{
+  "codumentDiff": {
+    "sha256": "7032534669dade50089a0ef4c5bae37c3eab13698df928860f19cf50858b4049",
+    "pass": true
+  },
+  "codumentUntrackedList": {
+    "sha256": "1e608846408dc8e86d15528e4af39701929b13e328499b0d4863581ffbee1b0e",
+    "pass": true
+  },
+  "businessBaselineUnchanged": {
+    "sha256": "60f19579ae793131568fbd4a51b5e36ca43d81d957ae9dd1b8481ecae6fbf154",
+    "pass": true
+  },
+  "previousReceiptLogsIntact": {
+    "pass": true,
+    "evidenceClass": "prior_receipts_hash_rechecked",
+    "testsRerunThisRound": false
+  },
+  "harness": {
+    "activePreflightExitCode": 0,
+    "blockedPreflightExitCode": 1,
+    "onlyBlockedError": "preflight requires an active/ mission with Status: active",
+    "blockedStructureAssertionExitCode": 0,
+    "interpretation": "Execution gate expected to reject blocked state; no other structural errors; must rerun preflight after unblock."
+  }
+}

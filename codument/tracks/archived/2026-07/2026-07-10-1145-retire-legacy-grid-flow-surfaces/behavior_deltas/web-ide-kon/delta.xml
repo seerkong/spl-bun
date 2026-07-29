@@ -1,0 +1,89 @@
+<behavior-patch capability="web-ide-kon" version="1">
+  <upsert selector="behavior://web-flow-api/requirements/execute-kon-endpoint">
+    <requirement id="execute-kon-endpoint">
+      <statement>web-server SHALL provide POST /api/execute-kon for Kon scripts: requests contain {source: string, scope?: object}; successful responses contain {status:"ok", data?: QueryResultData, result?: unknown}, with table-shaped values normalized as data and other final values returned as result; failures contain {status:"error", error: string}. Each request SHALL execute independently against the configured demo data sources. The legacy POST /api/execute FlowCell product endpoint SHALL NOT be provided.</statement>
+      <suite id="endpoint" name="Kon execution endpoint">
+        <case id="kon-query-roundtrip">
+          <given>the server has initialized its demo data</given>
+          <when>POST /api/execute-kon executes a Kon spl_connect plus spl_query script</when>
+          <then>the response SHALL be status=ok with the expected data.columns and data.rows</then>
+        </case>
+        <case id="kon-error-shape">
+          <given>source references an unknown data source or has invalid syntax</given>
+          <when>POST /api/execute-kon is called</when>
+          <then>the response SHALL be {status:"error", error} with actionable detail</then>
+        </case>
+        <case id="legacy-endpoint-removed">
+          <given>a caller requests POST /api/execute</given>
+          <when>the web server receives the request</when>
+          <then>the server SHALL NOT expose a legacy FlowCell product endpoint</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://web-ide-kon/requirements/kon-ide-page">
+    <requirement id="kon-ide-page">
+      <statement>web-ide SHALL expose a Kon script editor at the default route / with a script text editor, demo selector and loader, Run Script action, status area, and result table. It SHALL POST to /api/execute-kon, render response data as columns and rows, and show an Error: prefixed readable message when execution fails. The product SHALL NOT expose the legacy FlowCell grid route.</statement>
+      <suite id="page" name="Kon IDE page">
+        <case id="run-script">
+          <given>the editor contains a valid Kon query script against demo data</given>
+          <when>the user runs the script</when>
+          <then>status SHALL become Done and the result table SHALL show non-empty rows</then>
+        </case>
+        <case id="error-status">
+          <given>the script references an unknown data source</given>
+          <when>the user runs it</when>
+          <then>the status SHALL show Error: with actionable detail</then>
+        </case>
+        <case id="legacy-route-removed">
+          <given>the web product routes</given>
+          <when>a user navigates to /grid-legacy</when>
+          <then>the application SHALL NOT expose the legacy grid IDE</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://web-ide-kon/requirements/kon-e2e">
+    <requirement id="kon-e2e">
+      <statement>web-ide SHALL provide a Kon-only Playwright E2E suite covering demo loading, query/file/multi-source execution, flow-control assertions, and error handling. The retired grid E2E suite SHALL NOT remain in the product test surface.</statement>
+      <suite id="e2e" name="Kon E2E">
+        <case id="full-suite-green">
+          <given>bun run test:e2e</given>
+          <when>the Kon E2E suite runs</when>
+          <then>all Kon E2E cases SHALL pass</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+
+  <upsert selector="behavior://web-ide-kon/requirements/kon-only-product-surface">
+    <requirement id="kon-only-product-surface">
+      <statement>系统 SHALL expose the web product surface as Kon script execution only, with legacy FlowCell grid routes, demos, and endpoint contracts removed from the product-facing web packages.</statement>
+      <suite id="legacy-retirement" name="legacy grid surface retirement">
+        <case id="default-route-remains-kon">
+          <given>用户打开 web-ide 默认路由</given>
+          <when>页面加载完成</when>
+          <then>系统 SHALL show the Kon script editor and Kon demo list</then>
+          <and>系统 SHALL NOT expose a /grid-legacy route</and>
+        </case>
+        <case id="execute-kon-remains">
+          <given>前端提交 Kon 脚本</given>
+          <when>请求 web-server execution API</when>
+          <then>系统 SHALL call POST /api/execute-kon and render returned table data</then>
+        </case>
+        <case id="legacy-execute-removed">
+          <given>调用方请求旧 POST /api/execute endpoint</given>
+          <when>web-server 接收请求</when>
+          <then>系统 SHALL NOT provide the legacy FlowCell endpoint as a product API</then>
+        </case>
+        <case id="engine-layer-preserved">
+          <given>仓库运行引擎层测试</given>
+          <when>执行 depa-data-spl-flow tests</when>
+          <then>系统 SHALL preserve spl-flow / FlowCell engine behavior</then>
+        </case>
+      </suite>
+    </requirement>
+  </upsert>
+</behavior-patch>

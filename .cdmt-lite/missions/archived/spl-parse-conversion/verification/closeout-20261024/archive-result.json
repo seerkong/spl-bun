@@ -1,0 +1,57 @@
+{
+  "archivedAt": "2026-10-24T05:28:25.160928+00:00",
+  "from": "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/active/spl-parse-conversion",
+  "to": "/Users/kongweixian/infra-dev/spl-bun/.cdmt-lite/missions/archived/spl-parse-conversion",
+  "status": "completed",
+  "completionCheck": "passed",
+  "originalRun": "/Users/kongweixian/work-repos/sparrow/sparrow-skill-apps/sparrow-holarchy/engineering/code-engineering/.ace/ace-rt-devops/workflow-runs/data/holarchy-0e32cd3d67d631730d42c305c551dfec1614",
+  "originalWorkflowHashesUnchanged": true,
+  "businessSha256": "e49dc10cd0a2b45ee4e3e690ddabca36abfc8a78aedb59cb1abeb0037f70cbd5",
+  "businessSourceUnchanged": true,
+  "allowedBookkeepingChanges": [
+    ".cdmt-lite/README.md",
+    ".cdmt-lite/missions/archived/spl-parse-conversion/MISSION.md",
+    ".cdmt-lite/missions/archived/spl-parse-conversion/evidence.md",
+    ".cdmt-lite/missions/archived/spl-parse-conversion/loop.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/acceptance-matrix.md",
+    ".depa-analysis/spl-compatibility-2026-10-23/manifest.md"
+  ],
+  "missionMoves": [
+    {
+      "before": ".cdmt-lite/missions/active/spl-parse-conversion/MISSION.md",
+      "after": ".cdmt-lite/missions/archived/spl-parse-conversion/MISSION.md",
+      "beforeSha256": "d591b1413a5d9adba0580929e93f16ab311380a1d44988672fe018d9de6a7086",
+      "afterSha256": "938fe7381e67c672d3a016f309d8c2fadbabe7b29642ef2f2234a025b751f2ed"
+    },
+    {
+      "before": ".cdmt-lite/missions/active/spl-parse-conversion/attractors/shared-semantics.md",
+      "after": ".cdmt-lite/missions/archived/spl-parse-conversion/attractors/shared-semantics.md",
+      "beforeSha256": "8e10cafc92c675332c18c054ab3e9f4702f3b39d1de4687fcf4eacfa536e0a54",
+      "afterSha256": "8e10cafc92c675332c18c054ab3e9f4702f3b39d1de4687fcf4eacfa536e0a54"
+    },
+    {
+      "before": ".cdmt-lite/missions/active/spl-parse-conversion/evidence.md",
+      "after": ".cdmt-lite/missions/archived/spl-parse-conversion/evidence.md",
+      "beforeSha256": "47885ecb7a579e153a8a69529e84b430066203ae8bbc9d49f7a09bb476b53e46",
+      "afterSha256": "c72c567ccef5c23e38048a3d2f2ee48f978c533355d83c59d212e9fb78ecc216"
+    },
+    {
+      "before": ".cdmt-lite/missions/active/spl-parse-conversion/loop.md",
+      "after": ".cdmt-lite/missions/archived/spl-parse-conversion/loop.md",
+      "beforeSha256": "1d82d94f3ca28c564b83e50c660e437f65e1256a3552fbd8fc08c26fc9a42f82",
+      "afterSha256": "29443354ec578a3a1a81825e0de94f436580ca3764320ce5ee7558c4c8b3fc26"
+    },
+    {
+      "before": ".cdmt-lite/missions/active/spl-parse-conversion/verification/source-parse-oracle.ts",
+      "after": ".cdmt-lite/missions/archived/spl-parse-conversion/verification/source-parse-oracle.ts",
+      "beforeSha256": "8ca059b5908f9070f6914f1910adf5273a992b09dcb0ca8acd385cf8322d19bf",
+      "afterSha256": "8ca059b5908f9070f6914f1910adf5273a992b09dcb0ca8acd385cf8322d19bf"
+    }
+  ],
+  "evidencePrefixPreserved": true,
+  "copiedEvidenceVerified": 30,
+  "originalVerificationFilesUnchanged": true,
+  "migrationWorkflowStarts": 0,
+  "migrationWorkflowResumes": 0,
+  "desktopMessagesSent": 0
+}

@@ -1,0 +1,87 @@
+<Track id="adopt-live-event-operations-reference-domain" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>Replace the legacy first reference context with a neutral Live Event Operations domain while preserving the complete executable feature matrix.</Goal>
+    <Description>Adopt event-operations-lifecycle as the first production reference bundle, migrate its model, operations, presets, handlers, probes, server tests and browser tests, and remove legacy-domain traces from current product truth.</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>auto</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-08-02T06:45:22Z</CreatedAt>
+    <UpdatedAt>2026-08-02T07:09:16Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input" name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input" name="current-behaviors" domain="codument" path="vfs://@/codument/behaviors/"/>
+    <MaterialBundle role="input" name="operation-contracts" domain="package" path="vfs://@/packages/domain-operation-contracts/"/>
+    <MaterialBundle role="input" name="domain-runtime" domain="package" path="vfs://@/packages/depa-orm-domain-runtime/"/>
+    <MaterialBundle role="output" name="reference-bundles" domain="package" path="vfs://@/packages/domain-context-bundles/"/>
+    <MaterialBundle role="output" name="server-tests" domain="package" path="vfs://@/packages/web-server/"/>
+    <MaterialBundle role="output" name="workbench-tests" domain="package" path="vfs://@/packages/web-ide/"/>
+  </Ports>
+
+  <TaskSpace id="space_adopt-live-event-operations-reference-domain" name="adopt-live-event-operations-reference-domain" version="1">
+    <Description>Freeze the EventOps matrix, replace the bundle implementation, migrate integration expectations, then prove parity and absence of current legacy-domain traces.</Description>
+    <SubNodes>
+      <TaskGroup id="P1" name="Live Event Operations bundle" status="DONE" order="0">
+        <Description>Replace the first bundle's complete model, catalog, presets, handlers, probes and package-level matrix tests without changing runtime contracts.</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 tasks are DONE</cdt:Criterion>
+          <cdt:Criterion>the exact 12-operation EventOps matrix and four-child CancelEvent tree execute through public runtime APIs</cdt:Criterion>
+          <cdt:Criterion>Commerce behavior and protected capsule state remain unchanged</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="Implement Live Event Operations bundle and matrix" status="DONE" order="0" priority="P0">
+            <Description>Rename the first reference bundle, model, semantic resources, seeds, definitions, presets, child refs, handlers and probes to the EventOps vocabulary. Rename package tests and assertions tests-first, preserving all owner/behavior/subject/invocation/effect, transaction, observation and failure semantics.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">event-operations-lifecycle exposes exactly 12 EventOps definitions with the frozen mapping in design.md</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC2" checked="true">CancelEvent invokes QueryAssociatedEvent, ValidateAttendeesNotified, MarkCanceled and ReleaseEventSlot in order, commits on success and rolls back on failure</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC3" checked="true">association, lifecycle, constraint, business-process and extension Action presets produce truthful relational observations</cdt:Criterion>
+              <cdt:Criterion id="T1.1-AC4" checked="true">domain-context-bundles tests/build pass and Commerce expectations are unchanged</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="Server and Workbench migration" status="DONE" order="1">
+        <Description>Migrate public catalog and browser acceptance to the new domain identity without weakening exact request or observation assertions.</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P2 tasks are DONE</cdt:Criterion>
+          <cdt:Criterion>server integration and Workbench E2E execute the new reference bundle</cdt:Criterion>
+          <cdt:Criterion>current production and test truth contains no retired reference-domain identifiers</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="Migrate server and browser acceptance" status="DONE" order="0" priority="P0">
+            <Description>Update server reference-context tests and Domain Workbench E2E to select event-operations-lifecycle, assert EventOps request/operation/model facts, execute success/failure/diagnostic flows, and keep Commerce plus Kon IDE coverage intact.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">production catalog exposes event-operations-lifecycle and commerce-operations, with no legacy first-bundle id</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC2" checked="true">Workbench preview and POST assertions use EventOps.CancellationCase.CancelEvent and its exact request facts</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC3" checked="true">failure diagnostics and visible child operation prefix remain covered in browser tests</cdt:Criterion>
+              <cdt:Criterion id="T2.1-AC4" checked="true">server tests and complete Chromium E2E pass without weakening existing assertions</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+
+      <TaskGroup id="P3" name="Parity and residue verification" status="DONE" order="2">
+        <Description>Prove full feature parity, public-boundary integrity and removal of the retired example from current non-archived truth.</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P3 tasks are DONE</cdt:Criterion>
+          <cdt:Criterion>focused package tests, root build and 21-case Chromium E2E pass</cdt:Criterion>
+          <cdt:Criterion>live source, tests and promoted behaviors contain only EventOps and Commerce reference identities</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T3.1" name="Verify matrix parity and clean current truth" status="DONE" order="0" priority="P0">
+            <Description>Run contract/runtime/bundle/server/IDE suites, root build, complete E2E, import guards, current-truth residue scans, XML/diff checks and capsule fingerprints. Update only track reports/status; do not rewrite historical archives.</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T3.1-AC1" checked="true">all focused mission-owned package tests and root build pass</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC2" checked="true">Chromium E2E passes 21/21 with the new reference domain</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC3" checked="true">non-archived product source/tests and promoted behavior target state have no retired domain identity or vocabulary</cdt:Criterion>
+              <cdt:Criterion id="T3.1-AC4" checked="true">packages/depa-orm-capsule remains byte-for-byte unchanged and outside test scope</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

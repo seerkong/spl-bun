@@ -1,0 +1,9 @@
+{
+  "track_id": "add-more-core-expression-demos-e2e",
+  "type": "feature",
+  "status": "completed",
+  "commit_mode": "auto",
+  "created_at": "2026-01-19T08:00:00Z",
+  "updated_at": "2026-01-23T05:45:06Z",
+  "description": "为新增的 expression 核心能力（序列/文件/游标操作、JSON转换、多数据源连接）添加 web-ide demo 展示，完善相关封装，并通过 playwright 进行端到端测试验证"
+}

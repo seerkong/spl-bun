@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>add-expression-core-ops</track_id>
+    <track_name>Expression Phase 1 核心能力（序列/文件/游标 + JSON/Parse + count/icount + spl-flow 数据源）</track_name>
+    <goal>补齐核心成员函数与转换/聚合缺口，并支持 spl-flow 多数据源连接与测试覆盖</goal>
+    <created_at>2026-01-18</created_at>
+    <status>completed</status>
+    <commit_mode>auto</commit_mode>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="需求映射与语义对齐">
+      <goal>明确 Java 语义与 TS 目标行为</goal>
+      <tasks>
+        <task id="T1.1" name="梳理 Java 语义与缺口清单">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <acceptance_criteria>
+            <criterion id="T1.1-AC1" checked="true">sequence member ops: select/sort/group/join/derive 的 Java 行为与参数形式已映射。</criterion>
+            <criterion id="T1.1-AC2" checked="true">file member ops: read/write/import/export 的 CSV/JSON 行为与参数形式已映射。</criterion>
+            <criterion id="T1.1-AC3" checked="true">cursor ops: fetch/skip 的 Java 行为与参数形式已映射。</criterion>
+            <criterion id="T1.1-AC4" checked="true">json/parse 语义与 options 行为已映射（含 json_parse/json_stringify 入口）。</criterion>
+            <criterion id="T1.1-AC5" checked="true">count/icount 的 Java 语义（含 null/空值处理）已映射。</criterion>
+            <criterion id="T1.1-AC6" checked="true">connect("sqlite", ...) 参数结构与返回句柄语义已定义。</criterion>
+          </acceptance_criteria>
+          <references>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/MemberFunction.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/sequence/Select.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/sequence/Sort.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/sequence/Group.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/sequence/Derive.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/sequence/JoinFK.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/dm/Sequence.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/file/Read.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/file/Write.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/file/Import.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/file/Export.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/cursor/Fetch.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/mfn/cursor/Skip.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/fn/convert/Json.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/fn/convert/Parse.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/fn/gather/Count.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/fn/gather/ICount.java</ref>
+            <ref>E:/infra-dev/src/esProc/src/main/java/com/scudata/expression/fn/Connect.java</ref>
+            <ref>doc/brainstorm/port-expression-engine/act_4/engine-feature-diff.md</ref>
+          </references>
+          <notes>
+            <note>select: param null/leaf/multi (ParamInfo2) → Sequence.select(Expression|Expression[]/vals). options: 1(first), z(reverse), b(binary search), o(in-place), t(empty result returns empty Table when dataStruct exists), 0(not found returns null), c(stop at first non-match), r(from first match to end), i(create index table) , m(multithread). With opt i: Table ensures index table; Sequence returns Table via derive("o") then creates index.</note>
+            <note>sort: supports A.sort(x), A.sort(xi:di,..), A.sort(...;loc). loc must be string. options: z(desc), o(in-place), 0(null last), u(unique/keep first of duplicates), n(use group_n). If no explicit order exprs, attempts record-field index optimization and chooses sort(exps, loc, opt, findex). When opt u, uses stable uniqueness by values (or by computed values for exps).</note>
+            <note>group: supports null, leaf exp, comma list, semicolon split for group exps vs aggregate exps, and ParamInfo2 name pairs. options include s(split aggregate expr into gather functions), o(adjacent compare), 1(first of group), u(no sort), h(sort then use @o), n(group id), i(boolean exp defines group breaks), p(return positions), t(empty returns empty Table if dataStruct), b(drop group fields in result. group(exps,names,calcExps,calcNames) returns Table; with opt b it omits group fields; with opt s it builds intermediate gathers and then derives final table with primary keys (#1..#k).</note>
+            <note>derive: supports A.derive(xi:Fi,…) and A.derive@x(xi:Fi,…;n). options: m(multithread), i(skip rows with null computed value), z(reverse compute), x(level=2 default), o(no record copy). If level>=2, flattens nested record fields to depth; otherwise adds computed fields or clones structure.</note>
+            <note>join: param structure parsed by MemberFunction.parseJoinParam: x:… keys, A:… source + optional data expressions, then z:F new fields; multiple joins via semicolon; option o uses first param as foreign-key name; options i/d for intersect/diff when no new fields. Returns cursor.fetch() after join/filter operations; supports cluster tables.</note>
+            <note>file ops: read(start|start:end) returns string/bytes via file.read. write(obj) writes with option; import uses file.cursor then fetch; returns Sequence or empty Table (if DataStruct exists) or null. export(A, xi:Fi…;s) supports Sequence or Cursor, optional header/group expression s, option a append and btx variants; replaces file via temp unless append.</note>
+            <note>cursor ops: fetch() / fetch(n) / fetch(;x) → cursor.fetch/peek (opt 0), fetchGroup when semicolon; opt x closes cursor; opt o returns derive(option). skip() / skip(n) / skip(;x/exprs) → cursor.skip/skipGroup; returns int or long based on count.</note>
+            <note>json: json(x) parses string via JSONUtil.parseJSON unless opt v (evaluate expression), returns JSON string for Sequence/BaseRecord, null passthrough. parse: if input not string, return as-is. options q (quoted substring), e (unicode unescape; strip quotes when wrapped), n (parse number in string), otherwise Variant.parse.</note>
+            <note>count: gather counts truthy values; count(x) if x Sequence returns seq.count(); else returns 1 or 0 based on truthy; count(x1,...) counts truthy params. icount: for seq, seq.icount(opt) with opt o (sorted), b(bitset), n(position). For gather: opt o sorted, b bitset, f spill to file when capacity provided; distinct count ignores null/false.</note>
+            <note>connect: connect() returns FileObject.createSimpleQuery(); connect(name) resolves EnvUtil db session factory by name; connect(driver,url) builds DBConfig and DBSessionFactory. Java accepts only string driver/url; no special sqlite keyword.</note>
+            <note>TS gaps (current): memberRegistry only has count/sum/avg/min/max/first/last + db/record/table helpers; no sequence/file/cursor member ops or json/parse/count/icount builtins; types include TYPE_FILE/TYPE_CURSOR/TYPE_SEQUENCE wrappers but no member funcs. connect(...) expects at least 1 arg in TS, uses name or driver+url string -> makeDbHandle.</note>
+          </notes>
+          <subtasks>
+            <subtask id="T1.1.1" name="映射 sequence member ops 语义与参数" status="DONE" />
+            <subtask id="T1.1.2" name="映射 file member ops (CSV/JSON) 语义与参数" status="DONE" />
+            <subtask id="T1.1.3" name="映射 cursor ops 语义与参数" status="DONE" />
+            <subtask id="T1.1.4" name="映射 json/parse 语义与 options" status="DONE" />
+            <subtask id="T1.1.5" name="映射 count/icount 语义" status="DONE" />
+            <subtask id="T1.1.6" name="定义 connect(sqlite, ...) 参数与返回句柄" status="DONE" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="Expression 引擎实现">
+      <goal>实现序列/文件/游标成员函数与转换/聚合</goal>
+      <tasks>
+        <task id="T2.1" name="实现序列成员函数 select/sort/group/join/derive">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.1.1" name="编写失败测试（sequence member ops）" status="DONE" />
+            <subtask id="T2.1.2" name="实现 member registry 映射与核心逻辑" status="DONE" />
+            <subtask id="T2.1.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/__tests__/expression.test.ts</file>
+            <file>packages/expression/src/memberRegistry.ts</file>
+          </changed-key-files>
+        </task>
+        <task id="T2.2" name="实现文件成员函数 read/write/import/export (CSV/JSON)">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.2.1" name="编写失败测试（file member ops）" status="DONE" />
+            <subtask id="T2.2.2" name="实现 file member ops 逻辑" status="DONE" />
+            <subtask id="T2.2.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/__tests__/expression.test.ts</file>
+            <file>packages/expression/src/memberRegistry.ts</file>
+          </changed-key-files>
+        </task>
+        <task id="T2.3" name="实现游标成员函数 fetch/skip">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.3.1" name="编写失败测试（cursor ops）" status="DONE" />
+            <subtask id="T2.3.2" name="实现 cursor ops 逻辑" status="DONE" />
+            <subtask id="T2.3.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/__tests__/expression.test.ts</file>
+            <file>packages/expression/src/memberRegistry.ts</file>
+          </changed-key-files>
+        </task>
+        <task id="T2.4" name="实现 json/parse 与 json_parse/json_stringify">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.4.1" name="编写失败测试（json/parse）" status="DONE" />
+            <subtask id="T2.4.2" name="实现转换函数与兼容入口" status="DONE" />
+            <subtask id="T2.4.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/__tests__/expression.test.ts</file>
+            <file>packages/expression/src/functions.ts</file>
+          </changed-key-files>
+        </task>
+        <task id="T2.5" name="实现 count/icount 聚合函数">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T2.5.1" name="编写失败测试（count/icount）" status="DONE" />
+            <subtask id="T2.5.2" name="实现 count/icount 逻辑" status="DONE" />
+            <subtask id="T2.5.3" name="运行测试并修复" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/expression/__tests__/expression.test.ts</file>
+            <file>packages/expression/src/functions.ts</file>
+          </changed-key-files>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="spl-flow 多数据源连接">
+      <goal>支持 SQLite/CSV/JSON 多数据源并保持兼容</goal>
+      <tasks>
+        <task id="T3.1" name="新增 datasource/connection 基础设施">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T3.1.1" name="创建 datasource types/factory/sqlite/csv/json" status="DONE" />
+            <subtask id="T3.1.2" name="创建 connection registry/handle" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/spl-flow/src/datasource/types.ts</file>
+            <file>packages/spl-flow/src/datasource/sqlite.ts</file>
+            <file>packages/spl-flow/src/datasource/csv.ts</file>
+            <file>packages/spl-flow/src/datasource/json.ts</file>
+            <file>packages/spl-flow/src/datasource/factory.ts</file>
+            <file>packages/spl-flow/src/connection/registry.ts</file>
+            <file>packages/spl-flow/src/connection/handle.ts</file>
+          </changed-key-files>
+        </task>
+        <task id="T3.2" name="FlowExecutionContext 支持 dataSourceConfigs">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T3.2.1" name="更新 context 接口与 scope 构建" status="DONE" />
+            <subtask id="T3.2.2" name="保持 connections/adapters 兼容" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/spl-flow/src/index.ts</file>
+          </changed-key-files>
+        </task>
+        <task id="T3.3" name="spl-flow 测试与示例">
+          <priority>P1</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T3.3.1" name="添加 datasource/connection 单元测试" status="DONE" />
+            <subtask id="T3.3.2" name="添加多数据源集成测试" status="DONE" />
+          </subtasks>
+          <changed-key-files>
+            <file>packages/spl-flow/__tests__/datasource/factory.test.ts</file>
+            <file>packages/spl-flow/__tests__/datasource/sqlite.test.ts</file>
+            <file>packages/spl-flow/__tests__/datasource/csv.test.ts</file>
+            <file>packages/spl-flow/__tests__/datasource/json.test.ts</file>
+            <file>packages/spl-flow/__tests__/datasource/connections.test.ts</file>
+          </changed-key-files>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P4" name="验证与差异跟踪">
+      <goal>通过测试与覆盖率，更新差异与缺口</goal>
+      <tasks>
+        <task id="T4.1" name="运行测试与覆盖率">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T4.1.1" name="运行 bun test 与覆盖率" status="DONE" />
+            <subtask id="T4.1.2" name="修复失败用例" status="DONE" />
+          </subtasks>
+          <notes>
+            <note>运行 `bun test`（71 tests）通过；仓库未配置覆盖率脚本。</note>
+          </notes>
+        </task>
+        <task id="T4.2" name="更新差异文档与缺口记录">
+          <priority>P0</priority>
+          <status>DONE</status>
+          <subtasks>
+            <subtask id="T4.2.1" name="生成 act_4 diff/summary（如需要）" status="DONE" />
+            <subtask id="T4.2.2" name="将新缺口追加到 plan.xml" status="DONE" />
+          </subtasks>
+          <confirm protocol="yield-human-confirm" when="after" status="DONE" />
+          <notes>
+            <note>act_4 差异文档已更新：新增序列/文件/游标成员函数与 json/parse、count/icount 覆盖；调整缺口统计。</note>
+            <note>新增缺口：解析器仍不支持分号/冒号参数语法（group/join 高级参数需后续扩展）。</note>
+          </notes>
+        </task>
+      </tasks>
+    </phase>
+  </phases>
+</plan>

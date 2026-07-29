@@ -1,0 +1,9 @@
+{
+  "track_id": "add-web-ide-flow-control-demos",
+  "type": "feature",
+  "status": "completed",
+  "commit_mode": "auto",
+  "created_at": "2026-01-23T19:29:52Z",
+  "updated_at": "2026-01-24T01:20:32Z",
+  "description": "Add Web-IDE demos that showcase the flow-control features implemented in impl-flow-control (if/for/break/continue/goto/func/return/result/end/try) so they can be experienced and run directly in the UI."
+}

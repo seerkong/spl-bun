@@ -1,0 +1,22 @@
+<Track id="add-web-ide-flow-control-demos" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>Add runnable Web-IDE flow-control demos and E2E smoke coverage.</Goal>
+    <Description>Legacy plan migration wrapper. The completed plan.xml and spec.md remain the detailed historical evidence.</Description>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-01-23T19:29:52Z</CreatedAt>
+    <UpdatedAt>2026-01-24T01:20:32Z</UpdatedAt>
+  </Metadata>
+  <TaskSpace id="space_add-web-ide-flow-control-demos" name="add-web-ide-flow-control-demos" version="1">
+    <Description>Preserve the completed legacy plan as an archived historical track.</Description>
+    <SubNodes>
+      <TaskGroup id="legacy-plan" name="Preserved legacy plan" status="DONE" order="0">
+        <SubNodes>
+          <Task id="legacy-plan-complete" name="Completed plan.xml evidence" status="DONE" order="0">
+            <Description>The original plan.xml records all completed implementation phases and tasks.</Description>
+          </Task>
+        </SubNodes>
+      </TaskGroup>
+    </SubNodes>
+  </TaskSpace>
+</Track>

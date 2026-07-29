@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plan>
+  <metadata>
+    <track_id>impl-flow-control</track_id>
+    <track_name>Implement SPL(Java) flow control in TypeScript (spl-flow)</track_name>
+    <goal>Add grid-based flow execution and SPL control-flow statements (if/for/break/continue/goto/func/return/result/end/try) to packages/spl-flow, aligning behavior with Java SPL while keeping Web-IDE's no-leading-'=' input style.</goal>
+    <created_at>2026-01-23T10:07:24Z</created_at>
+    <updated_at>2026-01-23T19:16:27Z</updated_at>
+    <status>completed</status>
+    <commit_mode>auto</commit_mode>
+    <execution_mode>sequential</execution_mode>
+  </metadata>
+
+  <phases>
+    <phase id="P1" name="Spec & Design Lock" status="DONE">
+      <description>Lock the exact SPL subset and the TypeScript compatibility rules.</description>
+      <tasks>
+        <task id="T1.1" name="Confirm supported statements + exclusions" priority="high" status="DONE" commit="b2b694e97">
+            <description>Confirm the exact statement set in-scope: if/elseif/else, for (n/range/sequence/while), break/continue, goto, func/return/result/end, try. Explicitly exclude fork/reduce/channel.</description>
+<changed-key-files>
+            <file>codument/tracks/impl-flow-control/spec.md</file>
+            <file>codument/tracks/impl-flow-control/design.md</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T1.1-AC1" checked="true">Spec explicitly lists in-scope statements and excludes fork/reduce/channel.</criterion>
+            <criterion id="T1.1-AC2" checked="true">Spec includes scenarios for each in-scope statement, including a decision to support #&lt;cellRef&gt; loop sequence syntax.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T1.1.1" name="Write spec scenarios for each statement" status="DONE" />
+            <subtask id="T1.1.2" name="Decide if '#A1' loop-seq syntax is in scope" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T1.2" name="Confirm grid + no-leading-'=' compatibility rules" priority="high" status="DONE" commit="46f6197db">
+            <description>Define how TS flow treats plain cells (default expression) and whether to accept Java-style '='/'&gt;' prefixes as optional compatibility.</description>
+<changed-key-files>
+            <file>codument/tracks/impl-flow-control/spec.md</file>
+            <file>codument/tracks/impl-flow-control/design.md</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T1.2-AC1" checked="true">Spec defines plain cell handling (default expression) and explicitly accepts leading '=' and '>' prefixes without requiring them.</criterion>
+            <criterion id="T1.2-AC2" checked="true">Spec defines comment cell skipping and includes compatibility scenarios.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P2" name="Flow Program Model" status="DONE">
+      <description>Introduce cell model + classification + grid index (no behavior changes yet).</description>
+      <tasks>
+        <task id="T2.1" name="Add cell classification + grid index" priority="high" status="DONE" commit="129893835">
+            <description>Build a normalized grid representation from FlowCell[] and classify cells as blank/comment/expression/command.</description>
+<changed-key-files>
+            <file>packages/spl-flow/src/flow/grid.ts</file>
+            <file>packages/spl-flow/__tests__/grid.test.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T2.1-AC1" checked="true">FlowGrid normalizes row/col into cellRef and can lookup by cellRef or (row,col).</criterion>
+            <criterion id="T2.1-AC2" checked="true">Cells are classified as blank/comment/expression/command with correct normalization (prefix stripping, else-if mapping, continue keyword).</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T2.1.1" name="Write failing tests for classification" status="DONE" />
+            <subtask id="T2.1.2" name="Implement classification + grid lookup" status="DONE" />
+            <subtask id="T2.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+        </task>
+
+        <task id="T2.2" name="Enforce TS dialect row constraints" priority="high" status="DONE" commit="8d41fb837">
+            <description>Enforce TypeScript dialect constraints:
+          - Only `//` starts a comment cell; single '/' is not a comment.
+          - A comment cell truncates the rest of the row (cells to its right are ignored).
+          - After truncation, at most one non-blank, non-comment cell may exist per row.</description>
+<changed-key-files>
+            <file>packages/spl-flow/src/flow/grid.ts</file>
+            <file>packages/spl-flow/__tests__/grid.test.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T2.2-AC1" checked="true">`//` is the only comment marker and truncates the row to the right.</criterion>
+            <criterion id="T2.2-AC2" checked="true">Evaluation fails with a clear error when multiple executable cells exist in the same row.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P3" name="Execution Engine Core" status="DONE">
+      <description>Port PgmCellSet-style navigation (cur position, setNext, block boundary, stack).</description>
+      <tasks>
+        <task id="T3.1" name="Implement getCodeBlockEndRow + setNext" priority="high" status="DONE" commit="ad868d43a">
+            <description>Implement indentation-scoped blocks and deterministic navigation across row/col while skipping blank/comment cells.</description>
+<changed-key-files>
+            <file>packages/spl-flow/src/flow/navigation.ts</file>
+            <file>packages/spl-flow/__tests__/navigation.test.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T3.1-AC1" checked="true">getCodeBlockEndRow closes blocks only on non-blank/non-comment cells at same-or-less indentation.</criterion>
+            <criterion id="T3.1-AC2" checked="true">setNext skips blank/comment cells and advances deterministically across row/col.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T3.1.1" name="Write failing tests for block boundary" status="DONE" />
+            <subtask id="T3.1.2" name="Implement block boundary + navigation" status="DONE" />
+            <subtask id="T3.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T3.2" name="Preserve backward-compatible sequential behavior" priority="high" status="DONE" commit="8c4c44b3c">
+            <description>Ensure flows without any command cells behave like the current implementation (same scope + lastQuery behavior).</description>
+<changed-key-files>
+            <file>packages/spl-flow/src/index.ts</file>
+            <file>packages/spl-flow/src/flow/grid.ts</file>
+            <file>packages/spl-flow/__tests__/compat.test.ts</file>
+            <file>packages/spl-flow/__tests__/grid.test.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T3.2-AC1" checked="true">Flows without command cells still evaluate sequentially and preserve scope + lastQuery behavior.</criterion>
+            <criterion id="T3.2-AC2" checked="true">Command parsing does not break expression calls like if(...); optional leading '='/'>' prefixes are accepted.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P4" name="If / ElseIf / Else" status="DONE">
+      <description>Implement conditional branching in the row-unique dialect (multi-row branches + indented blocks).</description>
+      <tasks>
+        <task id="T4.1" name="Implement if/elseif/else dispatch" priority="high" status="DONE" commit="9b20e5389">
+            <description>Add command parsing and execution for if/elseif/else, including branch search and skip rules.</description>
+<changed-key-files>
+            <file>packages/spl-flow/src/index.ts</file>
+            <file>packages/spl-flow/__tests__/if.test.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T4.1-AC1" checked="true">Multi-row if/elseif/else selects the first matching branch and skips the rest.</criterion>
+            <criterion id="T4.1-AC2" checked="true">Same-row if/else form is supported and non-taken branch cells are not evaluated (scope remains unset).</criterion>
+            <criterion id="T4.1-AC3" checked="true">Both 'elseif' and 'else if' forms are accepted.</criterion>
+          </acceptance_criteria>
+          <subtasks>
+            <subtask id="T4.1.1" name="Write failing tests for if-else chains" status="DONE" />
+            <subtask id="T4.1.2" name="Implement branch evaluation" status="DONE" />
+            <subtask id="T4.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+        </task>
+
+        <task id="T4.2" name="Align if/elseif/else to row-unique dialect" priority="high" status="DONE" commit="8d41fb837">
+            <description>Drop same-row if/else chains. Require one executable statement per row (excluding `//` comments) and use multi-row branches + indented blocks.</description>
+<changed-key-files>
+            <file>packages/spl-flow/src/index.ts</file>
+            <file>packages/spl-flow/__tests__/if.test.ts</file>
+          </changed-key-files>
+          <acceptance_criteria>
+            <criterion id="T4.2-AC1" checked="true">if/elseif/else works using multi-row, indented-block form only.</criterion>
+            <criterion id="T4.2-AC2" checked="true">Same-row branch forms are rejected by the row-unique validation.</criterion>
+          </acceptance_criteria>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P5" name="For / Break / Continue" status="DONE">
+      <description>Implement loop variants and loop-control statements.</description>
+      <tasks>
+        <task id="T5.1" name="Implement for loop variants" priority="high" status="DONE" commit="8d41fb837">
+            <description>Support for (infinite), for n, for start,end[,step], for sequenceExpr, for conditionExpr.</description>
+<subtasks>
+            <subtask id="T5.1.1" name="Write failing tests for each loop variant" status="DONE" />
+            <subtask id="T5.1.2" name="Implement loop frames + iteration" status="DONE" />
+            <subtask id="T5.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T5.2" name="Implement break/continue with optional target" priority="high" status="DONE" commit="8d41fb837">
+          <description>Support break/continue on nearest loop and break/continue targeting outer loop by cellRef.</description>
+</task>
+      </tasks>
+    </phase>
+
+    <phase id="P6" name="Goto" status="DONE">
+      <description>Implement goto with safety constraints.</description>
+      <tasks>
+        <task id="T6.1" name="Implement goto cellRef jump" priority="high" status="DONE" commit="7e58e04c7">
+            <description>Implement goto and enforce safety rules (no jump into deeper indentation / loop body).</description>
+<subtasks>
+            <subtask id="T6.1.1" name="Write failing tests for goto" status="DONE" />
+            <subtask id="T6.1.2" name="Implement goto + validation" status="DONE" />
+            <subtask id="T6.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P7" name="Subroutines + Result/End" status="DONE">
+      <description>Implement func (subroutines)/return/result/end; support func(masterCell, ...) invocation semantics.</description>
+      <tasks>
+        <task id="T7.1" name="Implement func subroutine invocation" priority="high" status="DONE" commit="7f3d29e75">
+            <description>Implement SPL subroutine semantics:
+          - A "func" command cell is a subroutine master cell; its body is the indented block.
+          - The subroutine body does not execute during normal top-level flow execution.
+          - Invoke as func(A1, x1, x2, ...) where A1 is a cellRef literal.
+          - On invocation, assign x1..xn into cells starting at A1 and moving right (A1,B1,C1,...), then execute the block until return or block end.
+          - If no return executes, return the last expression-cell value inside the subroutine block.</description>
+<subtasks>
+            <subtask id="T7.1.1" name="Write failing tests for func + return" status="DONE" />
+            <subtask id="T7.1.2" name="Implement func/return" status="DONE" />
+            <subtask id="T7.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+        </task>
+        <task id="T7.2" name="Implement result/end flow termination" priority="high" status="DONE" commit="7e58e04c7">
+          <description>Implement result to terminate flow with a value; implement end to terminate with optional error message.</description>
+</task>
+      </tasks>
+    </phase>
+
+    <phase id="P8" name="Try" status="DONE">
+      <description>Implement SPL-style try blocks with error capture semantics.</description>
+      <tasks>
+        <task id="T8.1" name="Implement try block + error capture" priority="high" status="DONE" commit="7f3d29e75">
+            <description>Capture errors thrown within try block execution, store message into the try cell, and continue after the block.</description>
+<subtasks>
+            <subtask id="T8.1.1" name="Write failing tests for try" status="DONE" />
+            <subtask id="T8.1.2" name="Implement try handling" status="DONE" />
+            <subtask id="T8.1.3" name="Run tests and fix" status="DONE" />
+          </subtasks>
+        </task>
+      </tasks>
+    </phase>
+
+    <phase id="P9" name="Validation" status="DONE">
+      <description>Run tests/coverage and codument validation.</description>
+      <tasks>
+        <task id="T9.1" name="Run bun unit tests" priority="high" status="DONE" />
+        <task id="T9.2" name="Run bun test --coverage" priority="high" status="DONE" />
+        <task id="T9.3" name="Run codument validate --strict" priority="high" status="DONE" />
+      </tasks>
+    </phase>
+  </phases>
+</plan>

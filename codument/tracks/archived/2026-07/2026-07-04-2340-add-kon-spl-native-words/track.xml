@@ -1,0 +1,85 @@
+<Track id="add-kon-spl-native-words" version="1" xmlns:cdt="urn:codument:v1">
+  <Metadata>
+    <Status>completed</Status>
+    <Goal>kon-spl-dsl 新增高频数据运算原生 word（derive/select/groups/sort/join/top）</Goal>
+    <Description>把 SPL 的 «; : » 结构映射为 Kon Conf 键 + map 配对，消除字符串透传的 :alias 与内层 scope 限制；模式经 Conf 键表达，不接受 #opt/@ 糖。</Description>
+    <QuestionMode>decision-tree</QuestionMode>
+    <QuestionSeverity>light</QuestionSeverity>
+    <CommitMode>manual</CommitMode>
+    <CreatedAt>2026-07-04T19:45:00Z</CreatedAt>
+    <UpdatedAt>2026-07-04T20:40:00Z</UpdatedAt>
+  </Metadata>
+
+  <Ports scope="track">
+    <MaterialBundle role="input"  name="behavior-deltas" domain="behavior" path="vfs://./behavior_deltas/"/>
+    <MaterialBundle role="input"  name="kunun-repo" domain="external" path="vfs://kunun.ts/"/>
+    <MaterialBundle role="output" name="behavior" domain="codument" path="vfs://@/codument/behaviors/"/>
+  </Ports>
+
+  <TaskSpace id="space_add-kon-spl-native-words" name="add-kon-spl-native-words" version="1">
+    <Description>原生数据运算 word 实现</Description>
+    <SubNodes>
+
+      <TaskGroup id="P1" name="核心三词：derive/select/groups" status="DONE" order="0">
+        <Description>公共 in 解析 + #opt 拒绝 + 三个最高优先级 word</Description>
+        <cdt:Gate>
+          <cdt:Criterion>P1 任务全 DONE 且 bun test packages/kon-spl-dsl 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T1.1" name="公共约定与 spl_derive/spl_select" status="DONE" order="0" priority="P0">
+            <Description>in 键解析（变量名/DataSet 值）、原生 word 拒绝 #opt/@ 糖（报错提示）、spl_derive（cols map + with/env scope，行字段优先）、spl_select（where 谓词）。TDD：先写 behavior case in-resolution/opt-rejected/derive-with-scope/select-where 的测试。</Description>
+            <SubNodes>
+              <Task id="T1.1.1" name="编写测试" status="DONE" order="0"/>
+              <Task id="T1.1.2" name="实现" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.1-AC1" checked="true">native-words-common 与 native-derive-select 全部 case 测试通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T1.2" name="spl_groups" status="DONE" order="1" priority="P0">
+            <Description>keys + agg map → DataSet 聚合（实测 aggregate/aggregateWithGather 能力选路径）；keys 空 = 全表聚合。TDD 先测。</Description>
+            <SubNodes>
+              <Task id="T1.2.1" name="编写测试" status="DONE" order="0"/>
+              <Task id="T1.2.2" name="实现" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T1.2-AC1" checked="true">native-groups 全部 case 测试通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+      <TaskGroup id="P2" name="sort/join/top 与收尾" status="DONE" order="1">
+        <Description>三个次优 word + 文档示例 + 全量回归</Description>
+        <cdt:Gate>
+          <cdt:Criterion>示例更新且全仓 bun test 通过</cdt:Criterion>
+        </cdt:Gate>
+        <SubNodes>
+          <Task id="T2.1" name="spl_sort/spl_join/spl_top" status="DONE" order="0" priority="P0">
+            <Description>多键排序（by 项支持字符串或 {col, desc}）、join（left/right/type/on/leftOn/rightOn/rightPrefix → DataSet.join spec）、top（n+by+desc）。TDD 先测（behavior native-sort-join-top）。</Description>
+            <SubNodes>
+              <Task id="T2.1.1" name="编写测试" status="DONE" order="0"/>
+              <Task id="T2.1.2" name="实现" status="DONE" order="1"/>
+            </SubNodes>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.1-AC1" checked="true">native-sort-join-top 全部 case 测试通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+          <Task id="T2.2" name="README/示例更新与全量回归" status="DONE" order="1" priority="P1">
+            <Description>README 语法表加 6 词；examples/basic.kon 中字符串拼接写法改用原生 word（保留一处透传示范并注释对照）；e2e 相应更新仍与网格脚本 parity；全仓 bun test。</Description>
+            <cdt:Acceptance>
+              <cdt:Criterion id="T2.2-AC1" checked="true">e2e parity 仍通过；全仓 bun test 通过</cdt:Criterion>
+            </cdt:Acceptance>
+          </Task>
+        </SubNodes>
+        <Hooks>
+          <Hook on="phase:after"><cdt:AttractorCheck use="coding"/></Hook>
+        </Hooks>
+      </TaskGroup>
+
+    </SubNodes>
+  </TaskSpace>
+</Track>

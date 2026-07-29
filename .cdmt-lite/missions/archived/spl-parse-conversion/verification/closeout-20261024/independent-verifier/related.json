@@ -1,0 +1,20 @@
+[
+  {
+    "name": "related",
+    "command": [
+      "bun",
+      "test",
+      "packages/expression",
+      "packages/core",
+      "packages/kon-spl-dsl",
+      "packages/spl-flow",
+      "packages/report-logic"
+    ],
+    "cwd": "/Users/kongweixian/infra-dev/spl-bun",
+    "start": "2026-10-24T04:57:01.542980+00:00",
+    "end": "2026-10-24T04:57:02.186297+00:00",
+    "exitCode": 0,
+    "log": "/private/tmp/spl-verify-6e8ee200-7d3a-4beb-ab52-eb1119e80630/related.log",
+    "logSha256": "25231b73ad11035b109b59fb03114d8408afbe701f77f436c9ef6ca169ee3aa3"
+  }
+]

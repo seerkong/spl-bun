@@ -1,0 +1,63 @@
+<decisions #add-domain-workbench-ui {
+  version = "1"
+}
+(
+  <decision #track.add_domain_workbench_ui.active_creation {
+    priority = "P0"
+    status = "accepted"
+    durable_candidate = false
+  }
+  (
+    <question ?>Should the G8 workbench UI track wait in pending or become active immediately?</?>
+    <answer {
+      selected = "active"
+    }
+    (
+      <raw-answer ?>User requested autonomous mission progress; mission G8-T1 is ACTIVE.</?>
+      <decision-text ?>Create `add-domain-workbench-ui` directly under `tracks/active` with `QuestionSeverity=auto`.</?>
+      <rationale ?>G8 is already the next ready mission node, and no user preference question is blocking implementation.</?>
+      <evidence ?>`mission.xml` G8-T1 ACTIVE; conversation instruction to continue the mission autonomously.</?>
+    )
+    >
+  )
+  >
+  <decision #track.add_domain_workbench_ui.request_body_authority {
+    priority = "P0"
+    status = "accepted"
+    durable_candidate = true
+  }
+  (
+    <question ?>What is the source of truth for the execute request in the UI?</?>
+    <answer {
+      selected = "editor-json"
+    }
+    (
+      <raw-answer ?>Mission HTTP contract states Preview JSON is the POST body.</?>
+      <decision-text ?>The request JSON editor text is the submitted body authority; derived UI state must not reconstruct hidden request models.</?>
+      <rationale ?>This prevents drift between preset preview, user edits, and server execution.</?>
+      <evidence ?>`design/http-contract.md` exact request requirement and G7 exact-preset verification.</?>
+    )
+    >
+  )
+  >
+  <decision #track.add_domain_workbench_ui.contract_owner {
+    priority = "P0"
+    status = "accepted"
+    durable_candidate = false
+  }
+  (
+    <question ?>Where should the frontend import Domain Operation DTO and parser authority from?</?>
+    <answer {
+      selected = "domain-operation-contracts"
+    }
+    (
+      <raw-answer ?>Fresh planning review flagged that web-ide currently lacks the contract package dependency and web-shared must not become the domain DTO owner.</?>
+      <decision-text ?>`packages/web-ide` should depend on `depa-data-domain-operation-contracts` for Domain Operation DTO/parser types while `depa-data-web-shared` remains a route and existing Kon shared package.</?>
+      <rationale ?>This preserves the already frozen contract package ownership boundary and avoids a second frontend DTO model.</?>
+      <evidence ?>`design/http-contract.md` capsule ownership and G8 planning AttractorCheck.</?>
+    )
+    >
+  )
+  >
+)
+>

@@ -1,0 +1,21 @@
+{
+  "name": "depa-data-kon-spl-dsl",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "bun run clean && bun x tsc -p tsconfig.build.json",
+    "typecheck": "bun x tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "depa-data-core": "workspace:*",
+    "depa-data-expression": "workspace:*",
+    "depa-data-spl-flow": "workspace:*",
+    "depa-data-sqlite-adapter": "workspace:*",
+    "kunun": "1.0.4"
+  }
+}
