@@ -1,0 +1,72 @@
+{
+  "reports": {
+    "05": {
+      "sheets": [
+        "sheet1"
+      ],
+      "nonEmptyDisplayCells": 178,
+      "sizeTextMergeDifferences": 0
+    },
+    "11": {
+      "sheets": [
+        "指标"
+      ],
+      "nonEmptyDisplayCells": 0,
+      "sizeTextMergeDifferences": 0
+    },
+    "13": {
+      "sheets": [
+        "Sheet1"
+      ],
+      "nonEmptyDisplayCells": 19,
+      "sizeTextMergeDifferences": 0
+    },
+    "14": {
+      "sheets": [
+        "Sheet1"
+      ],
+      "nonEmptyDisplayCells": 19,
+      "sizeTextMergeDifferences": 0
+    },
+    "15": {
+      "sheets": [
+        "sheet1"
+      ],
+      "nonEmptyDisplayCells": 216,
+      "sizeTextMergeDifferences": 0
+    },
+    "16": {
+      "sheets": [
+        "sheet1"
+      ],
+      "nonEmptyDisplayCells": 75,
+      "sizeTextMergeDifferences": 0
+    },
+    "17": {
+      "sheets": [
+        "苹果",
+        "香蕉"
+      ],
+      "nonEmptyDisplayCells": 26,
+      "sizeTextMergeDifferences": 0
+    }
+  },
+  "decodedXlsxImages": [
+    [
+      "Code 128",
+      "aaaaaaaaaa"
+    ],
+    [
+      "QR Code",
+      "aaaaaaaaaa"
+    ],
+    [
+      "Code 128",
+      "123459V"
+    ],
+    [
+      "QR Code",
+      "abcdefg"
+    ]
+  ]
+}

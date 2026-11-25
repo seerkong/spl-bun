@@ -15,6 +15,7 @@ test("inplace reuses three original slots and inserts only excess, preserving un
     expect(Array.from({length:n},(_,i)=>at(report,1,i+1))).toEqual(Array.from({length:n},(_,i)=>i+1));
     expect(at(report,1,n===4?5:4)).toBe("TAIL");
     expect([at(report,0,1),at(report,0,2),at(report,0,3)]).toEqual(["B","C","D"]);
+    expect(report.sheets[0].merges.some(m => m.start.row === 0 && m.start.col < 3 && m.end.col > m.start.col)).toBe(false);
   }
 });
 test("same-parent sibling sequences share growth; fixed cells extend only when configured",()=>{

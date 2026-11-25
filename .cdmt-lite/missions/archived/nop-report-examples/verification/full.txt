@@ -1,0 +1,690 @@
+bun test v1.3.14 (0d9b296a)
+
+tests/source-only-scope.test.ts:
+(pass) source-only workspace scope > retains the source/data packages and physically omits extracted package owners [0.81ms]
+(pass) source-only workspace scope > remaining workspace manifests have no dependency on extracted package identities [27.44ms]
+(pass) source-only workspace scope > shared Web API owns only data, Kon and Excel report routes [1.64ms]
+
+packages/kon-spl-dsl/__tests__/knot-reader.test.ts:
+(pass) readWordCall > conf-and-name：#orders 落 name，:{} 落 conf，KnWord 值归一为字符串 [12.62ms]
+(pass) readWordCall > next-chain-merge：Attr 导致 Conf 分裂到 Next，合并后 expr 与 attr a 都可取 [0.28ms]
+(pass) readWordCall > 选项归一：#opt = m（Metadata 值为 KnWord）→ options='m' [0.38ms]
+(pass) readWordCall > 选项归一：#opt = "m"（Metadata 值为字符串）→ options='m' [0.31ms]
+(pass) readWordCall > 选项归一：@a @b 按出现序拼接 → options='ab' [0.25ms]
+(pass) readWordCall > 选项归一：重复 Attr 省值键去重 @a @a → options='a'（锁定现行为，P1 遗留观察） [0.15ms]
+(pass) readWordCall > 优先级：#opt = m 与 @a 同现 → Metadata 优先，options='m' [0.18ms]
+(pass) readWordCall > 无 name：name 为 undefined [0.12ms]
+(pass) readWordCall > body：:[...] 归入 body 数组 [0.15ms]
+
+packages/kon-spl-dsl/__tests__/e2e.test.ts:
+(pass) kon-spl-dsl e2e 一致性 > kon-grid-parity：examples/basic.kon 与等价网格脚本最终 DataSet 一致 [20.27ms]
+(pass) kon-spl-dsl e2e 一致性 > groups 断言：示例脚本的 spl_groups #byRegion 与手工计算对照 [4.36ms]
+(pass) kon-spl-dsl e2e 一致性 > csv 对照：kon-spl-dsl 本地 csv 数据源与网格 T() 读同一文件 rows 一致 [4.34ms]
+
+packages/kon-spl-dsl/__tests__/smoke.test.ts:
+(pass) kon-spl-dsl smoke > registerPrefixKeyword 探针 word 可在 Kon 源码中求值 [0.46ms]
+
+packages/kon-spl-dsl/__tests__/tables.test.ts:
+(pass) uploaded tables are named DataSets per run, with empty schema and caller values intact [2.13ms]
+
+packages/kon-spl-dsl/__tests__/parse-parity.test.ts:
+(pass) Kon parse shares default scalar, JSON, exact values, options and diagnostics [2.58ms]
+(pass) Kon nonfinite parse tokens retain numeric types and n controls through the shared evaluator [4.38ms]
+(pass) Kon shared expressions group by row and parse spaced percentages [4.04ms]
+
+packages/kon-spl-dsl/__tests__/query-semantics.test.ts:
+(pass) Kon native aggregate counts, compound AST and empty schema match core rules [1.85ms]
+(pass) legacy and Kon file SQL preserve the same types, later columns, quoted fields and empty headers [34.17ms]
+(pass) synchronous Kon rejects cursor operations before consuming caller-owned position [1.32ms]
+(pass) Kon derives exact amounts from text and keeps exact sums through the query stages [0.99ms]
+(pass) Kon date options and grouped calendar expressions use the shared source rules [0.93ms]
+(pass) Kon alias row expressions bind env/with and nested cursor calls reject before reading while lazy branches remain inert [1.33ms]
+(pass) expression table results feed native grouping without losing decimal instances [0.95ms]
+(pass) Kon formatting composes with exact row values and source conversion functions [1.08ms]
+(pass) Kon shares exact underflow signs and rejects invalid formatting on string/null values [0.74ms]
+(pass) Kon delegates null character and floating formatting without changing input scope [0.53ms]
+
+packages/kon-spl-dsl/__tests__/run.test.ts:
+(pass) runSplKon / toQueryResult > run-basic：spl_eval #v → value=42 且 bindings.v=42 [0.71ms]
+(pass) runSplKon / toQueryResult > bindings 快照：(var x ...) 绑定同样被采集 [0.26ms]
+(pass) runSplKon / toQueryResult > config.scope 对 spl_eval 可见 [0.14ms]
+(pass) runSplKon / toQueryResult > run-with-datasource：dataSources 注册 sqlite → spl_query → toQueryResult 与直查一致 [2.41ms]
+(pass) runSplKon / toQueryResult > fresh-per-call：前次调用定义的变量在下次调用不可见（报未定义错误） [0.61ms]
+(pass) runSplKon / toQueryResult > fresh-per-call：数据源注册表不跨调用共享 [1.64ms]
+(pass) runSplKon / toQueryResult > source-size-limit：超过 maxSourceBytes 抛含大小限制说明的错误 [0.09ms]
+(pass) runSplKon / toQueryResult > source-size-limit：默认限制 65536 字节，未超限正常执行 [0.19ms]
+(pass) runSplKon / toQueryResult > toQueryResult：DataSet → {columns, rows}（columns 取 schema 列名序） [0.03ms]
+(pass) runSplKon / toQueryResult > toQueryResult：{schema, rows} duck 形态（DataSet 形态）同样归一 [0.02ms]
+(pass) runSplKon / toQueryResult > toQueryResult：已是 {columns, rows} 原样返回 [0.07ms]
+(pass) runSplKon / toQueryResult > toQueryResult：标量 / 数组 / null 返回 null [0.02ms]
+
+packages/kon-spl-dsl/__tests__/context.test.ts:
+(pass) createSplContext > 默认值：workspaceRoot=process.cwd()，scope={}，注册表为空 [0.05ms]
+(pass) createSplContext > 显式配置：workspaceRoot 与 scope 透传 [0.02ms]
+(pass) resolveWorkspacePath > 相对路径基于 root 解析 [0.03ms]
+(pass) resolveWorkspacePath > root 内绝对路径原样通过 [0.02ms]
+(pass) resolveWorkspacePath > workspace-escape：../ 越界抛错 [0.04ms]
+(pass) resolveWorkspacePath > workspace-escape：root 外绝对路径抛错 [0.03ms]
+(pass) resolveWorkspacePath > workspace-escape：前缀相似但不同目录（root + '-evil'）抛错 [0.02ms]
+(pass) sqlite 数据源 > 注册/打开 → query 返回 DataSet 且内容正确；注册表可查 [0.56ms]
+(pass) sqlite 数据源 > query 支持参数绑定 [0.11ms]
+(pass) sqlite 数据源 > execute 执行 DML 返回 changes [8.94ms]
+(pass) sqlite 数据源 > sqlite 路径越界 → 抛路径越界错误（behavior case workspace-escape） [0.08ms]
+(pass) csv 数据源 > query()（无 sql）全量读取为 DataSet，数值字段归一为 number [0.60ms]
+(pass) csv 数据源 > query(sql) 经临时内存 sqlite 查询 [0.36ms]
+(pass) csv 数据源 > csv 路径越界 → 抛错 [0.04ms]
+(pass) json 数据源 > query()（无 sql）全量读取为 DataSet [0.66ms]
+(pass) json 数据源 > query(sql) 经临时内存 sqlite 查询 [0.31ms]
+(pass) 数据源 close > close 幂等：重复调用不抛错，close 后注册表仍保留条目（由调用方管理） [1.10ms]
+(pass) 数据源 close > 同名重复注册 → 抛错（避免句柄悬挂） [1.39ms]
+
+packages/kon-spl-dsl/__tests__/words.test.ts:
+(pass) EnableSplDsl words > register-words：五个 word 注册成功 [0.26ms]
+(pass) EnableSplDsl words > sqlite-roundtrip：spl_connect + spl_query 结果与直接查询一致 [3.24ms]
+(pass) EnableSplDsl words > conn 字符串名形态：conn = "db" 经 ctx.dataSources 注册表解析 [1.41ms]
+(pass) EnableSplDsl words > conn 变量引用形态：注册表无此名时回退 Kon env 绑定的句柄 [1.08ms]
+(pass) EnableSplDsl words > spl_connect 返回句柄且注册进 ctx.dataSources [0.90ms]
+(pass) EnableSplDsl words > spl_connect 缺名字（无 #name 且 Conf 无 name）报错 [0.27ms]
+(pass) EnableSplDsl words > spl_execute：DML 返回 changes，且写入对后续查询可见 [1.38ms]
+(pass) EnableSplDsl words > scope-merge：Kon 变量 orders（DataSet）+ Conf.with 的 rate → 含新列的 DataSet [4.64ms]
+(pass) EnableSplDsl words > scope-merge 优先级：ctx.scope < Kon env 变量 < Conf.with [0.53ms]
+(pass) EnableSplDsl words > metadata-opt：#opt = y → 实际执行 age@y(start, end) [0.34ms]
+(pass) EnableSplDsl words > attr-sugar：@y 省值糖 → 实际执行 age@y(start, end) [0.17ms]
+(pass) EnableSplDsl words > conflict-error：表达式内已写 @y 又声明 #opt = m → 冲突报错 [0.22ms]
+(pass) EnableSplDsl words > 幂等：表达式内已写 @y 且声明 #opt = y → 原样执行 [0.17ms]
+(pass) EnableSplDsl words > named-result-binding：#name 后结果在当前 env 定义，后续表达式可引用 [4.25ms]
+(pass) EnableSplDsl words > named-result-binding：不带 #name 时仅返回值，可被 (var x (...)) 接住 [1.41ms]
+(pass) EnableSplDsl words > 未知 conn 名报错 [0.29ms]
+(pass) EnableSplDsl words > sqlite 查询缺 sql 报错 [7.18ms]
+(pass) EnableSplDsl words > spl_execute 缺 sql 报错 [1.85ms]
+(pass) EnableSplDsl words > spl_eval 缺 expr 报错 [0.28ms]
+(pass) EnableSplDsl words > 文件数据源不支持 execute → spl_execute 报错 [1.73ms]
+
+packages/kon-spl-dsl/__tests__/options.test.ts:
+(pass) applyOptions > 顶层函数调用：interval(start, end) + m → interval@m(start, end) [0.10ms]
+(pass) applyOptions > 顶层成员调用：A.pos(2) + a → A.pos@a(2) [0.05ms]
+(pass) applyOptions > 多字符选项串整体注入：f(x) + ab → f@ab(x) [0.05ms]
+(pass) applyOptions > 改写结果可被 depa-data-expression 编译且 option 正确 [0.07ms]
+(pass) applyOptions > alias 参数能被静态解析与注入选项，运行时仍验证支持的选项 [0.05ms]
+(pass) applyOptions > 冲突：interval@y(...) 又声明 m → 抛含冲突说明的错误 [0.13ms]
+(pass) applyOptions > 幂等：已含相同选项时原样返回 [0.03ms]
+(pass) applyOptions > 空选项：原样返回 [0.02ms]
+(pass) applyOptions > 最外层非调用（纯字面量表达式）带选项 → 抛错并引导在表达式串内写 @opt [0.09ms]
+(pass) applyOptions > 复杂 object 的成员调用：(a+b).f(x) + m → (a+b).f@m(x) [0.09ms]
+(pass) applyOptions > 参数含括号字符串不干扰定位：f("a(b") + m → f@m("a(b") [0.03ms]
+
+packages/kon-spl-dsl/__tests__/table-operators.test.ts:
+(pass) Kon pivot/unpivot are real table transformations and preserve total42 [2.37ms]
+(pass) Kon exposes all six joins with the same finite multiset cardinalities [1.84ms]
+(pass) Kon table structure, grouped blocks, dimensions and index lookup use public adapters [2.26ms]
+
+packages/kon-spl-dsl/__tests__/window.test.ts:
+(pass) native window maps partition/order/outputs, named results and expression scope [2.16ms]
+(pass) core orderBy shape, ties, empty table schema and invocation isolation [1.00ms]
+(pass) window diagnoses missing columns, unsupported outputs and duplicate aliases [1.35ms]
+(pass) Kon exposes relative row and frame declarations and keeps null/decimal policies through table adapters [2.02ms]
+
+packages/kon-spl-dsl/__tests__/native-words.test.ts:
+(pass) native words: spl_derive / spl_select > in-resolution：in = orders 按名解析 Kon env 绑定的 DataSet，#big 绑定过滤结果 [1.53ms]
+(pass) native words: spl_derive / spl_select > in-resolution：Kon env 无该名时回退 ctx.scope [0.26ms]
+(pass) native words: spl_derive / spl_select > in-resolution 优先级：Kon env 同名绑定覆盖 ctx.scope [0.71ms]
+(pass) native words: spl_derive / spl_select > in-resolution：值本身是 DataSet 时直接使用（程序化分支） [0.12ms]
+(pass) native words: spl_derive / spl_select > in-resolution：解析失败报错含名字 [0.22ms]
+(pass) native words: spl_derive / spl_select > in-resolution：缺 in 报错 [0.14ms]
+(pass) native words: spl_derive / spl_select > opt-rejected：spl_select 带 #opt = z 报错并提示 Conf 键 / spl_eval [0.56ms]
+(pass) native words: spl_derive / spl_select > opt-rejected：spl_derive 带 @z 糖同样报错 [0.55ms]
+(pass) native words: spl_derive / spl_select > derive-with-scope：cols 表达式直接引用 with 变量 rate（无需字符串拼接） [0.68ms]
+(pass) native words: spl_derive / spl_select > derive-with-scope：cols 表达式引用 Kon env 变量（var 定义） [0.54ms]
+(pass) native words: spl_derive / spl_select > derive-with-scope：行字段优先于 with/env 同名变量（行遮蔽） [0.58ms]
+(pass) native words: spl_derive / spl_select > spl_derive 缺 cols 报错 [0.58ms]
+(pass) native words: spl_derive / spl_select > select-where：derive 结果续接 select，仅保留 gross > 150 的行 [0.97ms]
+(pass) native words: spl_derive / spl_select > select-where：where 谓词引用 with/env 变量 [0.84ms]
+(pass) native words: spl_derive / spl_select > spl_select 缺 where 报错 [0.50ms]
+(pass) native words: spl_derive / spl_select > register：spl_derive / spl_select 已注册为 prefix keyword [0.05ms]
+(pass) native words: spl_groups > groups-basic：keys=[region] + agg map，每组 total/cnt 正确且 #byRegion 绑定 [0.63ms]
+(pass) native words: spl_groups > groups-whole-table：keys = [] → 单行全表聚合 [0.24ms]
+(pass) native words: spl_groups > groups-whole-table：keys 缺省 → 单行全表聚合 [0.16ms]
+(pass) native words: spl_groups > agg 内层表达式引用 with 变量：sum(amount*rate) [0.28ms]
+(pass) native words: spl_groups > agg 内层表达式引用 Kon env 变量，且行字段遮蔽同名外层变量 [0.24ms]
+(pass) native words: spl_groups > 缺 in 报错 [0.14ms]
+(pass) native words: spl_groups > 缺 agg 报错 [0.14ms]
+(pass) native words: spl_groups > 未知聚合函数报错（含函数名与支持面） [0.18ms]
+(pass) native words: spl_groups > agg 值不是「聚合函数(表达式)」形态时报错 [0.15ms]
+(pass) native words: spl_groups > opt-rejected：spl_groups 带 #opt = z 报错并提示 Conf 键 / spl_eval [0.16ms]
+(pass) native words: spl_groups > register：spl_groups 已注册为 prefix keyword [0.03ms]
+(pass) native words: spl_sort / spl_join / spl_top > sort-multi-key：by = [{col = amount desc = true} "id"] → amount 降序、并列按 id 升序 [0.73ms]
+(pass) native words: spl_sort / spl_join / spl_top > sort：单键字符串简写 by = "amount"（升序，锁定） [0.16ms]
+(pass) native words: spl_sort / spl_join / spl_top > sort：不就地修改输入 DataSet [0.12ms]
+(pass) native words: spl_sort / spl_join / spl_top > opt-rejected（P1 待办①）：spl_sort 带 #opt = z 报错并提示 Conf 键 / spl_eval [0.16ms]
+(pass) native words: spl_sort / spl_join / spl_top > spl_sort 缺 by 报错 [0.11ms]
+(pass) native words: spl_sort / spl_join / spl_top > spl_sort by 项是 map 但缺 col 报错 [0.16ms]
+(pass) native words: spl_sort / spl_join / spl_top > join-left：type = "left" on = [dept]，未匹配行右列为空值 [0.22ms]
+(pass) native words: spl_sort / spl_join / spl_top > join inner：type 缺省为 inner，未匹配行被丢弃 [0.17ms]
+(pass) native words: spl_sort / spl_join / spl_top > join：leftOn/rightOn 异名键 [0.23ms]
+(pass) native words: spl_sort / spl_join / spl_top > join：rightPrefix 处理右表同名列 [0.22ms]
+(pass) native words: spl_sort / spl_join / spl_top > spl_join 缺 on（且无 leftOn/rightOn）报错 [0.15ms]
+(pass) native words: spl_sort / spl_join / spl_top > spl_join 只给 leftOn 不给 rightOn 报错 [0.16ms]
+(pass) native words: spl_sort / spl_join / spl_top > spl_join type 非法值报错 [0.17ms]
+(pass) native words: spl_sort / spl_join / spl_top > spl_join 缺 left/right 报错 [0.12ms]
+(pass) native words: spl_sort / spl_join / spl_top > top-n：n = 2 by = "amount" desc = true → amount 最大的 2 行 [0.19ms]
+(pass) native words: spl_sort / spl_join / spl_top > top：desc 缺省 = false（升序，取最小的 n 行，对齐 SPL A.top 缺省语义，锁定） [0.13ms]
+(pass) native words: spl_sort / spl_join / spl_top > top：n 超过行数 → 返回全部行（锁定） [0.13ms]
+(pass) native words: spl_sort / spl_join / spl_top > top：n <= 0 或非正数报错（锁定：n 必须为正数） [0.24ms]
+(pass) native words: spl_sort / spl_join / spl_top > spl_top 缺 by 报错 [0.12ms]
+(pass) native words: spl_sort / spl_join / spl_top > opt-rejected：spl_top 带 @z 糖报错 [0.17ms]
+(pass) native words: spl_sort / spl_join / spl_top > register：spl_sort / spl_join / spl_top 已注册为 prefix keyword [0.05ms]
+
+packages/kon-spl-dsl/__tests__/sort-parity.test.ts:
+(pass) Kon expression and native sorting share exact, stable row semantics and schema diagnostics [1.60ms]
+
+packages/kon-spl-dsl/__tests__/flow-word.test.ts:
+(pass) spl_flow word > register-words：五个 spl_* word 全部注册（含 spl_flow） [0.13ms]
+(pass) spl_flow word > 纯表达式网格：r = 42（无 result 命令/查询时取最后表达式值） [0.63ms]
+(pass) spl_flow word > 与 evaluateFlowSync 返回结构一致（同 cells 直接跑 evaluateFlowSync 对照） [0.44ms]
+(pass) spl_flow word > cells map 值归一：col 用裸标识符（KnWord）时取 .Value [0.20ms]
+(pass) spl_flow word > #name 绑定：r 在当前 env 定义，后续 spl_eval 可引用 [0.28ms]
+(pass) spl_flow word > FlowExecutionContext 派生：ctx.dataSources 的 sqlite 数据源在网格中可查（含 result 命令优先） [1.39ms]
+(pass) spl_flow word > scope 透传：ctx.scope 变量在网格表达式中可见 [0.20ms]
+(pass) spl_flow word > 错误路径：cells 缺失/格式错报错；单元格求值失败报错 [0.42ms]
+
+packages/core/__tests__/window-values.test.ts:
+(pass) window exact/null aggregates, relative values and inclusive ROWS frames stay partition-local [0.58ms]
+(pass) window binds sparse fields, rejects unsupported frames and preserves complete empty schema [0.57ms]
+(pass) window long totals and multiple output aliases do not demote or read previous output values [0.11ms]
+(pass) empty frames and offsets outside the partition do not evaluate unused expressions [0.15ms]
+
+packages/core/__tests__/semantic-regressions.test.ts:
+(pass) grouping preserves composite keys, types, dates and first encounter order [0.98ms]
+(pass) join keys cannot collide through delimiters, coercion or implicit case folding [0.20ms]
+(pass) join columns use declared schema across sparse rows and reject prefix collisions [0.10ms]
+(pass) sum(a) and avg(b) have independent accumulators, including scoped expressions [0.20ms]
+(pass) partition types remain distinct and date peers receive equal ranks [0.17ms]
+
+packages/core/__tests__/engine.test.ts:
+(pass) Engine execution > executes steps sequentially with dependencies [0.35ms]
+(pass) Engine execution > fails when dependency missing [0.19ms]
+
+packages/core/__tests__/exact-numeric.test.ts:
+(pass) core exact gathers, derived expressions, pivot and joins preserve numeric authority [1.70ms]
+
+packages/core/__tests__/query-semantics.test.ts:
+(pass) all aggregate entry points share absent numeric values and Variant counts [0.67ms]
+(pass) derive has sequential visibility; schema binding distinguishes unknown and sparse fields [0.80ms]
+
+packages/core/__tests__/joinWindow.test.ts:
+(pass) DataSet join > inner join matches keys [0.11ms]
+(pass) DataSet join > left join fills nulls and disambiguates [0.08ms]
+(pass) DataSet join > left join adds prefixed columns when names collide [0.08ms]
+(pass) DataSet join > left join keeps schema columns with undefined when no match [0.12ms]
+(pass) Window functions > row_number and running sums per partition [0.31ms]
+(pass) Window functions > rank and dense_rank with ordering [0.22ms]
+(pass) Window functions > dense_rank handles ties [0.15ms]
+(pass) Window functions > window without order throws [0.06ms]
+(pass) Join and window steps > engine runs join and window steps [0.27ms]
+
+packages/core/__tests__/dataset.test.ts:
+(pass) DataSet operations > project filters columns [0.13ms]
+(pass) DataSet operations > filter narrows rows [0.04ms]
+(pass) DataSet operations > aggregate groups and computes [0.34ms]
+(pass) DataSet operations > aggregateWithGather runs gather lifecycle [0.12ms]
+(pass) DataSet operations > runGather supports regather/finish style aggregation [0.04ms]
+(pass) DataSet operations > unsupported operations are rejected [0.05ms]
+
+packages/core/__tests__/table-operators.test.ts:
+(pass) pivot and unpivot preserve sums, schema, encounter order and explicit duplicate/null policies [0.63ms]
+(pass) pivot typed categories require distinct aliases; empty input has declared columns [0.18ms]
+(pass) six joins share stable cardinalities across core and member; right/full retain orphan schema [0.57ms]
+(pass) join type equality, empty inputs, sparse fields, Date keys and collisions remain exact [0.36ms]
+(pass) table rename/alter and typed read-only indexes produce independent structural values [0.40ms]
+(pass) adjacent grouping, source groupc block columns and groupi nested dimensions have distinct semantics [0.55ms]
+
+packages/core/__tests__/expressionIntegration.test.ts:
+(pass) expression-driven dataset operations > filterExpr filters rows using expression strings [0.18ms]
+(pass) expression-driven dataset operations > withComputedColumns adds derived values [0.09ms]
+(pass) expression-driven dataset operations > join supports expression keys for matching [0.20ms]
+(pass) expression-driven dataset operations > window running sums can use expressions [0.13ms]
+(pass) expression-driven engine steps > compute and filter steps evaluate expressions with context scope [0.21ms]
+
+packages/web-ide/__tests__/production-import-boundary.test.ts:
+(pass) web-ide production boundary > uses only package-local files and declared public package roots [39.05ms]
+(pass) web-ide production boundary > declares only the Kon IDE's public UI and shared-contract dependencies [0.04ms]
+
+packages/report-logic/__tests__/formulas.test.ts:
+(pass) report formula selects template instances in group, absolute, relative and reverse contexts [29.27ms]
+(pass) two-dimensional layer paths intersect identities, including relative +0 and empty paths [1.29ms]
+(pass) forward dependencies calculate once and cycles/cardinality have source and output locations [2.52ms]
+(pass) native Excel coordinates, forward references, lazy IF and unsupported state [3.98ms]
+(pass) Nop aggregate family preserves number-only/null/empty semantics and conditional matching [1.67ms]
+(pass) rank, proportion and cumulative aggregates use instance identity and explicit parent ranges [4.50ms]
+(pass) financial source fixture keeps previous period/year, local/global rank and cumulative values [7.57ms]
+(pass) report-mode native formulas export selected output coordinates, including global filters [2.03ms]
+(pass) global IF filtering exposes read-only parent expansion values and lazy macros [0.81ms]
+(pass) cellSet value indices, scalar truth, empty aggregates and macros follow report semantics [0.84ms]
+(pass) normalized source Q01/Q02/Q03/Q05 fixtures retain their exact numerical oracles [2.93ms]
+
+packages/report-logic/__tests__/sheets.test.ts:
+(pass) dynamic sheets isolate loop scope, row fields, formula caches and source identity [10.22ms]
+(pass) workbook and sheet nested loops, test before loop, names and limits are deterministic [2.83ms]
+(pass) renamed native sheet qualifiers use matching instance and preserve literal text [1.19ms]
+
+packages/report-logic/__tests__/groups.test.ts:
+(pass) parent groups and two-axis templates > nested encounter-order groups retain duplicate records and stretch region labels [1.28ms]
+(pass) parent groups and two-axis templates > cross table intersects record IDs, keeps duplicate matches, and never falls back on empty [0.78ms]
+(pass) parent groups and two-axis templates > different dataset names do not collide and A0 breaks inherited context [0.52ms]
+(pass) parent groups and two-axis templates > explicit right-side parent and multirow record paragraphs [0.62ms]
+(pass) parent groups and two-axis templates > rejects missing, single-axis and joint cycles with location [1.02ms]
+(pass) parent groups and two-axis templates > typed group values remain distinct and min/max bounds are explicit [0.57ms]
+(pass) parent groups and two-axis templates > sheet-local group caches cannot reuse another sheet's record membership [0.45ms]
+(pass) parent groups and two-axis templates > nested column groups stretch headers, while footer formulas stay in their product column [1.36ms]
+
+packages/report-logic/__tests__/members.test.ts:
+(pass) relative layers follow retained sibling identity after physical deletion [4.30ms]
+(pass) report aggregates iterate one level, rank ignores numeric strings, and empty proportion is null [0.74ms]
+(pass) cell-set chains expose readonly cell views, transformations, ranges, roots and dynamic report APIs [2.10ms]
+(pass) column child sets follow the column parent domain and export member selection to actual addresses [0.85ms]
+(pass) member and dynamic APIs reject arbitrary host calls, readonly mutations and recursive strings [0.95ms]
+(pass) member sum preserves MathHelper coercion separately from strict report SUM; proportion rejects booleans [1.09ms]
+(pass) SPL methods remain available inside report arithmetic through the explicit evaluator [0.20ms]
+(pass) report exports materialize type/lazy semantics while representable numeric formulas retain references [0.63ms]
+(pass) report container literals and self-referencing postprocessing preserve raw dependency order [0.91ms]
+(pass) parameter expansion owns its current records even with an unrelated sole dataset [0.34ms]
+
+packages/report-logic/__tests__/references.test.ts:
+(pass) reference tokens preserve strings, mixed absolutes, structured and external references [1.23ms]
+(pass) in-place cell provenance projects ranges beyond unchanged global slot origins [0.97ms]
+(pass) cross-sheet formulas use target geometry and matching loop instances [1.10ms]
+(pass) single-cell arrays copy independently and multi-cell arrays reject overlapping output ranges [2.16ms]
+
+packages/report-logic/__tests__/layout.test.ts:
+(pass) inplace reuses three original slots and inserts only excess, preserving unrelated headers [6.17ms]
+(pass) same-parent sibling sequences share growth; fixed cells extend only when configured [1.04ms]
+(pass) row parent in middle of a three-row body duplicates the whole body and preserves parent identity [0.43ms]
+(pass) each row expands its own document columns; later fixed columns align globally [0.82ms]
+(pass) column-local row expansion is symmetric [0.71ms]
+(pass) alternating row-column-row dependencies retain each parent domain [1.10ms]
+
+packages/report-logic/__tests__/processing.test.ts:
+(pass) physical row deletion recalculates formulas over retained instances while hidden rows stay physical [2.56ms]
+(pass) multi-line config, local styles and separate raw/display/export values preserve types and input palette [1.05ms]
+(pass) field-only child expansion accepts array, scalar, null and static expand markers without merging duplicates [0.51ms]
+(pass) pure cell patches are applied before dependents and reject unknown mutation fields [1.24ms]
+(pass) explicit dictionaries format labels with raw fallback; formula export is an independent policy [0.82ms]
+(pass) row and column style projections survive deletion with row precedence [1.73ms]
+(pass) filters see final labels and raw fallback; style formatting runs only when read [1.57ms]
+
+packages/report-logic/__tests__/report.test.ts:
+(pass) Excel report row semantics > renders parameter, rows, static footer, copies merges/heights without changing inputs [2.13ms]
+(pass) Excel report row semantics > empty data clears dynamic cells; keepExpandEmpty=false removes only its band [0.81ms]
+(pass) Excel report row semantics > copies native formulas independently of report expressions [0.80ms]
+(pass) Excel report row semantics > bounds expansion and gives source location for invalid expression/annotation [0.59ms]
+(pass) Excel report row semantics > evaluator cannot change caller records and a bad static formula stays separate [0.27ms]
+
+packages/web-server/__tests__/report-workbench.test.ts:
+[Server] Created new demo.db at :memory:
+[Server] Initialized database from demo-init.sql
+(pass) table/report HTTP workbench > report worker provides the explicit barcode port and returns current PNG media [241.08ms]
+(pass) table/report HTTP workbench > dynamic sheets and report formulas render through the real worker and HTTP contract [233.26ms]
+(pass) table/report HTTP workbench > CSV upload -> named Kon table -> template bytes -> HTML + XLSX download [582.56ms]
+(pass) table/report HTTP workbench > rejects missing/broken input and does not retain a previous request's dataset [243.18ms]
+(pass) table/report HTTP workbench > HTTP loop timeout leaves health and the next computation usable [811.81ms]
+
+packages/web-server/__tests__/execute-kon.test.ts:
+[Server] Created new demo.db at /private/tmp/spl-nop-verify.MDQr64/packages/web-server/data/out/demo.execute-kon-test.db
+[Server] Initialized database from demo-init.sql
+(pass) POST /api/execute-kon > kon-query-roundtrip：预注册 demo 数据源 spl_query 返回确定性 data [234.31ms]
+(pass) POST /api/execute-kon > kon-query-roundtrip：spl_connect + spl_query（相对路径连测试库）与预注册 demo 一致 [551.03ms]
+(pass) POST /api/execute-kon > csv/json 预注册数据源可经 spl_query 访问 [863.90ms]
+(pass) POST /api/execute-kon > 非表格最终值放 result（data 缺席）；scope 对 spl_eval 可见 [752.67ms]
+(pass) POST /api/execute-kon > kon-error-shape：未知数据源 → {status:'error', error 含数据源名} [365.23ms]
+(pass) POST /api/execute-kon > kon-error-shape：语法错误 → {status:'error', error 非空} [378.96ms]
+(pass) POST /api/execute-kon > kon-error-shape：源码超 64KB → error 含限制说明 [355.98ms]
+(pass) POST /api/execute-kon > kon-error-shape：source 缺失或非字符串 → {status:'error'} [0.77ms]
+(pass) POST /api/execute-kon > 每请求独立：前一请求的绑定/数据源注册不泄漏到下一请求 [877.00ms]
+
+packages/web-server/__tests__/production-import-boundary.test.ts:
+(pass) web-server production boundary > uses only declared package roots and package-local relative imports [43.08ms]
+(pass) web-server production boundary > declares only data/report runtime dependencies and real typecheck/build scripts [0.08ms]
+
+packages/web-server/__tests__/execution-limits.test.ts:
+(pass) isolated execution > terminates a running Kon flow loop, releases its slot, then computes normally [726.13ms]
+(pass) isolated execution > cancellation terminates the worker; concurrency capacity is explicit [302.46ms]
+(pass) worker serializes exact long/decimal query cells as lossless text [283.35ms]
+
+packages/composer/__tests__/composer.integration.test.ts:
+(pass) composer runtime integration (runtime设计模式, no implicit DI) > runs pipeline with sqlite load, join, compute, window, filter [14.54ms]
+
+packages/sqlite-adapter/__tests__/sqliteAdapter.test.ts:
+(pass) SQLite adapter > executes parameterized query [13.01ms]
+(pass) SQLite adapter > integration via engine step [15.02ms]
+(pass) SQLite adapter > join and window with adapter-fed datasets [12.05ms]
+
+packages/sqlite-adapter/__tests__/cursor.test.ts:
+(pass) real SQLite cursors use independent statement positions and close before fetch, EOF, error and abort [9.69ms]
+
+packages/spl-flow/__tests__/table-input.test.ts:
+(pass) table input > CSV quotes, escaped quotes, multiline fields, BOM and identifier strings [6.55ms]
+(pass) table input > JSON unions later columns instead of dropping their values [0.07ms]
+(pass) table input > XLSX sheet selection, typed numbers and empty header-only data [7.98ms]
+
+packages/spl-flow/__tests__/navigation.test.ts:
+(pass) spl-flow navigation > getCodeBlockEndRow ignores blank/comment cells in outer columns [0.27ms]
+(pass) spl-flow navigation > getCodeBlockEndRow ends before sibling branch at same indentation [0.11ms]
+(pass) spl-flow navigation > setNext skips blank/comment cells and advances row-major [0.12ms]
+
+packages/spl-flow/__tests__/result-end.test.ts:
+(pass) spl-flow result/end > result terminates flow execution early and returns a value [0.99ms]
+(pass) spl-flow result/end > end terminates flow with an error message [0.47ms]
+(pass) spl-flow result/end > end (no message) terminates flow without throwing [0.15ms]
+
+packages/spl-flow/__tests__/for.test.ts:
+(pass) spl-flow for/break/continue > for n iterates 1..n [1.63ms]
+(pass) spl-flow for/break/continue > for start,end,step iterates an integer range [0.52ms]
+(pass) spl-flow for/break/continue > for start,end defaults step to 1 [0.91ms]
+(pass) spl-flow for/break/continue > for sequenceExpr iterates the current element [0.55ms]
+(pass) spl-flow for/break/continue > for conditionExpr is a while-loop and #<cellRef> exposes iteration number [0.53ms]
+(pass) spl-flow for/break/continue > for (no args) loops until break [1.26ms]
+(pass) spl-flow for/break/continue > continue skips to next iteration [0.47ms]
+(pass) spl-flow for/break/continue > break <cellRef> exits an outer loop [1.18ms]
+(pass) spl-flow for/break/continue > continue <cellRef> continues an outer loop [1.40ms]
+
+packages/spl-flow/__tests__/dsl.test.ts:
+(pass) spl-flow evaluation > evaluates expressions and stores results by cell ref [2.69ms]
+(pass) spl-flow evaluation > uses db handles for query member calls [0.49ms]
+(pass) spl-flow evaluation > flags unknown connection in scope lookup [0.17ms]
+(pass) spl-flow evaluation > uses dataSourceConfigs for query member calls [0.58ms]
+(pass) spl-flow evaluation > execute-only expressions do not assign to scope [0.22ms]
+(pass) spl-flow evaluation > execute-only expressions update lastQuery [0.19ms]
+(pass) Flow uses shared exact formatting and reports protocol errors before null/string shortcuts [0.55ms]
+(pass) Flow shares null character and floating precision, uppercase and validation semantics [0.26ms]
+
+packages/spl-flow/__tests__/sync.test.ts:
+(pass) evaluateFlowSync grid parity > sqlite 查询 + derive/select 网格：cells 状态与最终 result 两路一致 [13.40ms]
+(pass) evaluateFlowSync grid parity > 纯表达式网格（=1+1 / =A1*20+2）：两路一致，末格 42 [0.40ms]
+(pass) evaluateFlowSync grid parity > 控制流（if/for/continue/result）：两路一致 [0.66ms]
+(pass) evaluateFlowSync grid parity > 真异步 adapter（返回 Promise）：evaluateFlowSync 抛错并提示改用 evaluateFlow [0.55ms]
+
+packages/spl-flow/__tests__/excel.test.ts:
+(pass) spl-flow T() Excel import/export > imports .xlsx and .xls [38.12ms]
+(pass) spl-flow T() Excel import/export > supports sheet selection by name [7.40ms]
+(pass) spl-flow T() Excel import/export > exports to a named sheet and re-imports from that sheet [6.08ms]
+(pass) spl-flow T() Excel import/export > supports @b no-header import [4.49ms]
+(pass) spl-flow T() Excel import/export > rejects the old options-object Excel T() form [2.88ms]
+(pass) spl-flow T() Excel import/export > exports and re-imports .xlsx and .xls [15.86ms]
+(pass) spl-flow T() Excel import/export > rejects paths escaping workspace root (relative and absolute) [1.61ms]
+
+packages/spl-flow/__tests__/parse-parity.test.ts:
+(pass) Flow parse preserves source option priority, exact values and errors through the shared builtin [9.20ms]
+(pass) Flow nonfinite parse tokens keep numeric types and source option precedence [3.22ms]
+(pass) Flow preserves grouped members and finite percentages through shared expressions [1.23ms]
+
+packages/spl-flow/__tests__/resource-file.test.ts:
+(pass) real file import/export/write are typed, atomic and bound to workspace including symlinks [33.09ms]
+(pass) flow-owned connections and real SQL cursors close on result/error; injected handles retain ownership [11.59ms]
+(pass) async flow owns CSV cursors and unused lazy branches open no file resources [14.56ms]
+(pass) flow cancellation interrupts real SQL consumption and cleanup continues after another release fails [14.27ms]
+(pass) exact values export through CSV/JSON and lossless JSON import preserves numeric tokens [5.25ms]
+(pass) projected file export binds fields per row before replacing the target [11.74ms]
+
+packages/spl-flow/__tests__/cursor-sortx.test.ts:
+(pass) sortx orders multiple runs by projected keys, preserving equal-key input order [8.22ms]
+(pass) sortx cleans its disk spool on early close, cancellation and invalid data [13.68ms]
+
+packages/spl-flow/__tests__/try.test.ts:
+(pass) spl-flow try > try captures an error and continues [4.57ms]
+(pass) spl-flow try > try succeeds and stores null [0.15ms]
+
+packages/spl-flow/__tests__/func.test.ts:
+(pass) spl-flow func/return > simple subroutine call returns a value [0.73ms]
+(pass) spl-flow func/return > func bodies do not execute during top-level flow execution [0.15ms]
+(pass) spl-flow func/return > subroutine without explicit return returns last expression value [0.25ms]
+
+packages/spl-flow/__tests__/dsl.test.js:
+(pass) spl-flow evaluation > evaluates expressions and stores results by cell ref [2.85ms]
+(pass) spl-flow evaluation > uses db handles for query member calls [0.67ms]
+(pass) spl-flow evaluation > flags unknown connection in scope lookup [0.38ms]
+
+packages/spl-flow/__tests__/sort-parity.test.ts:
+(pass) Flow sorting uses the shared row AST and rejects unknown options and fields [1.36ms]
+
+packages/spl-flow/__tests__/if.test.ts:
+(pass) spl-flow if/elseif/else > multi-row if/elseif/else selects the right branch [2.54ms]
+(pass) spl-flow if/elseif/else > rejects same-row if/else form in row-unique dialect [0.66ms]
+(pass) spl-flow if/elseif/else > supports 'elseif' keyword without a space [0.26ms]
+
+packages/spl-flow/__tests__/goto.test.ts:
+(pass) spl-flow goto > goto jumps to a target cell [0.38ms]
+(pass) spl-flow goto > goto into deeper indentation is rejected [0.22ms]
+
+packages/spl-flow/__tests__/grid.test.ts:
+(pass) spl-flow grid model > colToIndex/indexToCol roundtrip [0.06ms]
+(pass) spl-flow grid model > normalizes cell refs and classifies cell kinds [4.21ms]
+(pass) spl-flow grid model > comment cells truncate the remainder of the row [0.33ms]
+(pass) spl-flow grid model > rejects multiple executable cells in the same row [0.23ms]
+(pass) spl-flow grid model > rejects 'next' with a clear hint [0.11ms]
+(pass) spl-flow grid model > grid lookup supports row/col addressing [0.13ms]
+
+packages/spl-flow/__tests__/compat.test.ts:
+(pass) spl-flow compatibility > accepts leading '=' and '>' prefixes [0.71ms]
+(pass) spl-flow compatibility > treats if(...) as expression, not a statement command [0.33ms]
+(pass) spl-flow compatibility > skips comment cells without setting scope [0.37ms]
+(pass) spl-flow compatibility > single '/' is not a comment [0.33ms]
+(pass) spl-flow compatibility > comment cells truncate the remainder of the row [0.36ms]
+
+packages/expression/__tests__/dispatch.test.ts:
+(pass) evaluator dispatch (options and arg groups) > passes @ options as last argument [0.23ms]
+(pass) evaluator dispatch (options and arg groups) > normalizes @ options to lowercase [0.04ms]
+(pass) evaluator dispatch (options and arg groups) > passes argGroups when semicolon groups are present [0.05ms]
+(pass) evaluator dispatch (options and arg groups) > passes argGroups before option [0.04ms]
+
+packages/expression/__tests__/calendar-options.test.ts:
+(pass) elapse and dateadd preserve month end, e clamps original day, and both leave inputs intact [0.73ms]
+(pass) interval supports boundaries, compound units, reverse ranges, week markers and fractional units [0.58ms]
+(pass) DST calendar shift, fixed source buckets and elapsed days are separate contracts [68.92ms]
+
+packages/expression/__tests__/sort-semantics.test.ts:
+(pass) sort binds row expressions, outer scope and multi-key directions without changing input [1.35ms]
+(pass) sort@u hierarchically groups key prefixes in encounter order and retains duplicate records [0.69ms]
+(pass) sort keys project once, numeric keys stay exact and nulls follow source direction/0 rules [2.31ms]
+(pass) sort validates schema, protocols, key types and order overloads even on empty inputs [0.99ms]
+
+packages/expression/__tests__/spl-parity.test.ts:
+(pass) SPL Variant truth and count retain zero/empty string while excluding false/null [0.50ms]
+(pass) logical operators and builtin conditional calls evaluate only the selected AST branch [1.08ms]
+(pass) SPL concatenation preserves sequence order and duplicates independently of set operators [0.27ms]
+(pass) source multiset pairing is stable across duplicate counts, Date keys and named sequence folds [0.77ms]
+(pass) numeric and calendar compatibility boundaries are explicit and reproducible [64.71ms]
+
+packages/expression/__tests__/types.test.ts:
+(pass) typed expression evaluation > returns sequence type for arrays [0.24ms]
+(pass) typed expression evaluation > returns table type for objects [0.04ms]
+(pass) typed expression evaluation > typed wrappers yield explicit types [0.07ms]
+
+packages/expression/__tests__/expression.test.js:
+(pass) expression parser and evaluator > respects operator precedence and parentheses [0.16ms]
+(pass) expression parser and evaluator > logical operators and null semantics [0.07ms]
+(pass) expression parser and evaluator > functions basic set [0.31ms]
+(pass) expression parser and evaluator > datetime helpers [0.19ms]
+(pass) expression parser and evaluator > compiled expression reuse [0.04ms]
+
+packages/expression/__tests__/group-expression.test.ts:
+(pass) group evaluates row keys once, preserves members, and sorts composite keys [1.68ms]
+(pass) existing computed aggregate specs retain the empty-table count [0.20ms]
+
+packages/expression/__tests__/like.test.ts:
+(pass) like() > standard wildcards '*' and '?' [0.33ms]
+(pass) like() > escapes wildcard characters [0.10ms]
+(pass) like() > SQL wildcards with option 's' [0.07ms]
+(pass) like() > option 'c' makes matching case-insensitive (non-SQL) [0.04ms]
+(pass) like() > option 'c' ignored when combined with 's' [0.02ms]
+(pass) like() > SQL wildcard escaping [0.05ms]
+(pass) like() > null inputs return false [0.03ms]
+
+packages/expression/__tests__/mathPhase2.test.ts:
+(pass) math phase-2 builtins > exp() computes e^x [0.08ms]
+(pass) math phase-2 builtins > ln() is natural logarithm [0.04ms]
+(pass) math phase-2 builtins > sign() returns -1/0/1 [0.08ms]
+(pass) math phase-2 builtins > sign(null) returns null [0.02ms]
+(pass) math phase-2 builtins > gcd() and lcm() accept arrays and variadic numbers [0.26ms]
+(pass) math phase-2 builtins > lcm() returns 0 when any input is <= 0 (Java parity) [0.05ms]
+(pass) math phase-2 builtins > gcd() returns 0 when any input is < 0 (Java parity) [0.04ms]
+
+packages/expression/__tests__/paramParser.test.ts:
+(pass) param parser > parses nested separators [0.06ms]
+(pass) param parser > evaluates leaf expressions [0.12ms]
+(pass) macro replacement > replaces ${} with expression result [0.16ms]
+(pass) macro replacement > replaces $(name) with macro value [0.04ms]
+
+packages/expression/__tests__/member-context.test.ts:
+(pass) member row AST binds outer scope, sparse columns and sequential aliases without changing inputs [0.74ms]
+(pass) caller function/member registries survive row compilation and quoted expression adapters [0.17ms]
+(pass) ordered @m operations consume multiplicities and recursive conj rejects cycles [0.67ms]
+(pass) async cursor member expressions share explicit scope and do not materialize upstream [0.93ms]
+(pass) new builtin overloads never silently discard option/group arguments [0.12ms]
+
+packages/expression/__tests__/parse-conversion.test.ts:
+(pass) parse defaults convert scalar text, scientific/long numbers and data-only JSON [0.58ms]
+(pass) parse q/e/n follows source quote scan, escaping and option priority [0.19ms]
+(pass) parse recognizes source nonfinite tokens without changing option priority or overflow policy [0.85ms]
+(pass) parse uses validated default calendar patterns and preserves non-string input authority [0.18ms]
+(pass) parse rejects malformed protocols before shortcuts, resources and escapes; overrides and lazy calls retain their contract [1.96ms]
+(pass) finite percentages allow Java trim before the sign only in the percentage branch [0.25ms]
+
+packages/expression/__tests__/formatting.test.ts:
+(pass) Java format strings bind indexed/reused arguments, exact numeric values and date components [0.85ms]
+(pass) string/number patterns retain exact values, grouped digits, negative subpatterns and null/fallback [0.71ms]
+(pass) invalid or unsupported format protocols fail and explicit replacements keep their own contracts [0.20ms]
+(pass) source numeric text conversion includes trim, percent and hexadecimal forms [0.09ms]
+(pass) exact Decimal signs survive Number underflow in Formatter and numeric subpatterns [0.30ms]
+(pass) protocol validation precedes string and null shortcuts while valid null and overrides remain usable [0.18ms]
+(pass) null character formats keep Java casing, padding and argument reuse while rejecting illegal protocols [0.20ms]
+(pass) null floating conversions apply precision and uppercase before padding and ignore numeric sign/zero fill [0.44ms]
+
+packages/expression/__tests__/registry.test.ts:
+(pass) function registry builder > extends builtins [0.31ms]
+
+packages/expression/__tests__/datePhase2.test.ts:
+(pass) date phase-2 builtins > age() default uses month/day adjustment [0.29ms]
+(pass) date phase-2 builtins > age() option 'y' ignores month/day [0.15ms]
+(pass) date phase-2 builtins > age() option 'm' adjusts by month only [0.16ms]
+(pass) date phase-2 builtins > workday() shifts across weekends [0.52ms]
+(pass) date phase-2 builtins > workday() supports negative shifts [0.14ms]
+(pass) date phase-2 builtins > workday() treats weekday offDays as holidays [0.11ms]
+(pass) date phase-2 builtins > workday() treats weekend offDays as adjusted workdays [0.09ms]
+(pass) date phase-2 builtins > workdays() returns list of workdays (inclusive) [0.33ms]
+(pass) date phase-2 builtins > workdays(...,'n') returns count [0.18ms]
+(pass) date phase-2 builtins > workdays() option 'x' excludes the end date [2.00ms]
+(pass) date phase-2 builtins > workdays() applies offDays holiday + weekend override [0.24ms]
+
+packages/expression/__tests__/regex.test.ts:
+(pass) regex() > builtin and member forms are equivalent [0.41ms]
+(pass) regex() > no capture groups returns original string on match [0.09ms]
+(pass) regex() > one capture group returns list of captured values [0.04ms]
+(pass) regex() > multiple capture groups return list of tuples [0.11ms]
+(pass) regex() > replacement first vs all [0.07ms]
+(pass) regex() > parse extracted groups with option 'p' [0.08ms]
+(pass) regex() > option 'w' enforces whole-string match [0.07ms]
+(pass) regex() > option 'c' makes matching case-insensitive [0.13ms]
+(pass) regex() > replacement honors option 'c' and 'a' [0.03ms]
+
+packages/expression/__tests__/cursor.test.ts:
+(pass) production cursor advances, serializes commands, stays lazy and terminates exactly once [0.79ms]
+(pass) cursor transforms consume only demand and materialization is explicitly bounded [0.72ms]
+(pass) cooperative pending reads close on abort and timeout without returning late values [21.97ms]
+(pass) row cursor select/derive/project remain lazy, preserve schema and require bounded materialization [1.82ms]
+(pass) cursor cleanup failure is terminal and preserves the triggering error [0.30ms]
+
+packages/expression/__tests__/callSyntax.test.ts:
+(pass) call syntax extensions (SPL parity) > parses function @ variants [0.07ms]
+(pass) call syntax extensions (SPL parity) > parses member @ variants [0.06ms]
+(pass) call syntax extensions (SPL parity) > parses semicolon argument groups in function calls [0.07ms]
+
+packages/expression/__tests__/expression.test.ts:
+(pass) expression parser and evaluator > respects operator precedence and parentheses [0.10ms]
+(pass) expression parser and evaluator > logical operators and null semantics [0.08ms]
+(pass) expression parser and evaluator > assignment, member access, and set operators [0.65ms]
+(pass) expression parser and evaluator > control flow functions [0.09ms]
+(pass) expression parser and evaluator > control flow param variants [0.16ms]
+(pass) expression parser and evaluator > math helpers [0.13ms]
+(pass) expression parser and evaluator > functions basic set [0.50ms]
+(pass) expression parser and evaluator > datetime helpers [0.27ms]
+(pass) expression parser and evaluator > compiled expression reuse [0.04ms]
+(pass) expression parser and evaluator > db member functions via typed handle [0.40ms]
+(pass) expression parser and evaluator > connect builtins return db handles [0.14ms]
+(pass) expression parser and evaluator > file member functions [0.22ms]
+(pass) expression parser and evaluator > cursor member functions [0.14ms]
+(pass) expression parser and evaluator > sequence fetch and skip [0.13ms]
+(pass) expression parser and evaluator > json and parse conversions [0.23ms]
+(pass) expression parser and evaluator > count and icount aggregations [0.13ms]
+(pass) expression parser and evaluator > sequence member functions [0.76ms]
+(pass) expression parser and evaluator > record/table member functions [1.30ms]
+
+packages/expression/__tests__/scalar-parity.test.ts:
+(pass) Variant null units, typed addition, connection division and Date arithmetic [0.55ms]
+(pass) long literals, conversion, overflow, decimal promotion and Java scale16 rounding are exact [1.03ms]
+(pass) exact aggregate state and typed keys do not demote decimal or long to Number [0.28ms]
+(pass) signed long minimum and unsafe JSON scientific tokens retain their exact source values [0.58ms]
+(pass) arithmetic promotes safe integer operands before an unsafe result loses precision [0.08ms]
+
+packages/report-xlsx-support/__tests__/barcode.test.ts:
+(pass) bounded barcode adapter emits distinct full-size QR and Code128 PNGs [87.09ms]
+(pass) QRCODE process, qr options and explicit cell image patches use the injected port and serialize [46.75ms]
+
+packages/report-xlsx-support/__tests__/sheets.test.ts:
+(pass) source-17 equivalent sheets preserve independent dynamic columns and XLSX relationships/styles [49.53ms]
+(pass) empty loop retains cover, duplicate names deconflict, executable config is located and rejected [41.88ms]
+
+packages/report-xlsx-support/__tests__/references.test.ts:
+(pass) shared masters/followers become independent formulas; array boundaries survive actual XLSX [29.66ms]
+(pass) loop sheets relocate validation/CF/links/names/printing while rich text, freeze and protection stay intact [25.66ms]
+(pass) tables get independent parts, names, ids and structured references for every loop sheet [10.45ms]
+(pass) unknown extensions are precisely located for affected layouts; unsafe URL schemes remain inert [17.21ms]
+
+packages/report-xlsx-support/__tests__/nop-examples.test.ts:
+(pass) nop-report demo 05 [78.72ms]
+(pass) nop-report demo 11 [56.80ms]
+(pass) nop-report demo 13 [24.31ms]
+(pass) nop-report demo 14 [26.30ms]
+(pass) nop-report demo 15 [64.30ms]
+(pass) nop-report demo 16 [40.20ms]
+(pass) nop-report demo 17 [41.49ms]
+
+packages/report-xlsx-support/__tests__/charts.test.ts:
+(pass) dynamic native charts get independent parts, title/axis bindings, projected ranges and accurate caches [20.11ms]
+
+packages/report-xlsx-support/__tests__/workbook.test.ts:
+(pass) XLSX template projection > real bytes preserve styles/theme, merges, row dimensions and typed values; safe HTML [11.14ms]
+(pass) XLSX template projection > relocates autoFilter and rejects invalid ZIP input [6.83ms]
+(pass) XLSX template projection > two-axis layout exports values, dynamic headers, column widths and stretched labels [11.08ms]
+(pass) formula values survive XLSX reopening and match formatted HTML, including unknown/error/string caches [13.06ms]
+(pass) named style samples, display/export roles, visibility and numeric styles survive real XLSX [17.52ms]
+(pass) in-place reservations and physical deletion survive XLSX serialization without changing neighbors [12.38ms]
+(pass) blank style cells copy continuous borders without inventing values [11.97ms]
+(pass) row and column default styles reach actual cells and empty HTML cells without changing values [9.33ms]
+(pass) display-based row filters keep matching Excel records and relocate the total [9.64ms]
+
+packages/report-xlsx-support/__tests__/media.test.ts:
+(pass) two sheets by two records produce four independent image anchors, byte replacements and matching HTML [35.48ms]
+
+packages/spl-flow/__tests__/datasource/json.test.ts:
+(pass) JsonDataSource > queries json data [7.55ms]
+(pass) JsonDataSource > stringifies nested json objects [2.31ms]
+
+packages/spl-flow/__tests__/datasource/csv.test.ts:
+(pass) CsvDataSource > queries csv data with header [6.03ms]
+
+packages/spl-flow/__tests__/datasource/connections.test.ts:
+(pass) Flow dataSourceConfigs > exposes data sources in scope [10.94ms]
+
+packages/spl-flow/__tests__/datasource/cursor.test.ts:
+(pass) CSV stream preserves import types and quoted newlines; failure/break/early-close release once [29.03ms]
+
+packages/spl-flow/__tests__/datasource/sqlite.test.ts:
+(pass) SqliteDataSource > queries sqlite database [8.33ms]
+
+packages/spl-flow/__tests__/datasource/factory.test.ts:
+(pass) DataSourceFactory > creates sqlite/csv/json sources [13.59ms]
+
+ 496 pass
+ 0 fail
+ 2195 expect() calls
+Ran 496 tests across 92 files. [94.25s]

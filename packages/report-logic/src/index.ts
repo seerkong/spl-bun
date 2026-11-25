@@ -5,3 +5,4 @@ export { createReferenceProjection, copyFormula, mapFormulaReferences, reference
 export type { ReferenceProjection, ReferenceToken } from "./references";
 export { FormulaCellSet } from "./formula-expression";
 export type { FormulaCellView } from "./formula-expression";
+export { drawingSize } from "./media";

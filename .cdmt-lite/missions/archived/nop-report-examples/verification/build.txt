@@ -1,0 +1,24 @@
+$ bun run --filter depa-data-expression build && bun run --filter depa-data-core build && bun run --filter depa-data-sqlite-adapter build && bun run --filter depa-data-spl-flow build && bun run --filter depa-data-test-utils build && bun run --filter depa-data-kon-spl-dsl build && bun run --filter depa-data-report-contract build && bun run --filter depa-data-report-logic build && bun run --filter depa-data-report-xlsx-support build && bun run --filter depa-data-web-shared build && bun run --filter depa-data-composer build && bun run --filter depa-data-web-ide build && bun run --filter depa-data-web-server build
+depa-data-expression build: Exited with code 0
+depa-data-core build: Exited with code 0
+depa-data-sqlite-adapter build: Exited with code 0
+depa-data-spl-flow build: Exited with code 0
+depa-data-test-utils build: Exited with code 0
+depa-data-kon-spl-dsl build: $ rm -rf dist
+depa-data-kon-spl-dsl build: Exited with code 0
+depa-data-report-contract build: Exited with code 0
+depa-data-report-logic build: Exited with code 0
+depa-data-report-xlsx-support build: Exited with code 0
+depa-data-web-shared build: Exited with code 0
+depa-data-composer build: Exited with code 0
+depa-data-web-ide build: vite v6.4.3 building for production...
+depa-data-web-ide build: transforming...
+depa-data-web-ide build: ✓ 41 modules transformed.
+depa-data-web-ide build: rendering chunks...
+depa-data-web-ide build: computing gzip size...
+depa-data-web-ide build: dist/index.html                   0.53 kB │ gzip:  0.33 kB
+depa-data-web-ide build: dist/assets/index-BMh3CUJs.css    6.20 kB │ gzip:  1.75 kB
+depa-data-web-ide build: dist/assets/index-p7XzW-DT.js   170.36 kB │ gzip: 58.83 kB
+depa-data-web-ide build: ✓ built in 388ms
+depa-data-web-ide build: Exited with code 0
+depa-data-web-server build: Exited with code 0

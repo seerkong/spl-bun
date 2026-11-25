@@ -1,0 +1,277 @@
+bun test v1.3.14 (0d9b296a)
+
+packages/report-xlsx-support/__tests__/nop-examples.test.ts:
+44 |         if (rows > 1 || cols > 1) table.spans[address] = [rows, cols];
+45 |         td.onEndTag(() => { if (value.trim()) table.values[address] = value.trim(); });
+46 |       },
+47 |       text(chunk) {value += chunk.text;},
+48 |     }).transform(new Response(reportToHtml(report))).text();
+49 |     expect(tables).toEqual(expected);
+                        ^
+error: expect(received).toEqual(expected)
+
+@@ -89,28 +89,28 @@
+        "A29": "4、排名",
+        "A3": "2002",
+        "A30": "如该表中在每一年内各月销售额排名及所有年中各月销售额排名",
+        "A31": "5、累计",
+        "A32": "如该表中同一年内每个月的销售额依次累计及所有年所有月的销售额累计",
+-       "B10": "8月份",
+-       "B11": "9月份",
+-       "B12": "10月份",
+-       "B13": "11月份",
+-       "B14": "12月份",
+-       "B15": "1月份",
+-       "B16": "2月份",
+-       "B17": "3月份",
+-       "B18": "4月份",
+-       "B19": "5月份",
++       "B10": "8",
++       "B11": "9",
++       "B12": "10",
++       "B13": "11",
++       "B14": "12",
++       "B15": "1",
++       "B16": "2",
++       "B17": "3",
++       "B18": "4",
++       "B19": "5",
+        "B2": "月份",
+-       "B3": "1月份",
+-       "B4": "2月份",
+-       "B5": "3月份",
+-       "B6": "4月份",
+-       "B7": "5月份",
+-       "B8": "6月份",
+-       "B9": "7月份",
++       "B3": "1",
++       "B4": "2",
++       "B5": "3",
++       "B6": "4",
++       "B7": "5",
++       "B8": "6",
++       "B9": "7",
+        "C10": "400",
+        "C11": "100",
+        "C12": "200",
+        "C13": "300",
+        "C14": "400",
+
+- Expected  - 17
++ Received  + 17
+
+      at <anonymous> (/Users/kongweixian/infra-dev/spl-bun/packages/report-xlsx-support/__tests__/nop-examples.test.ts:49:20)
+(fail) nop-report demo 05 [50.56ms]
+44 |                     if (!data)
+45 |                         continue;
+46 |                     add(sheet, { id: `${model.id}:${instance.cell.row}:${instance.cell.col}`, sourceId: model.id, name: model.name, description: model.description, data, anchor: shiftAnchor(model.anchor, instance.cell.row - origin.row, instance.cell.col - origin.col) });
+47 |                 }
+48 |                 catch (error) {
+49 |                     throw new Error(`${sheet.name}!${instance.source.address} image ${model.id}: ${error instanceof Error ? error.message : String(error)}`);
+                                   ^
+error: 指标!A1 image xl/drawings/drawing1.xml#xdr:twoCellAnchor:0: Unknown function 'QRCODE_IMAGE'
+      at renderImages (/Users/kongweixian/infra-dev/spl-bun/packages/report-logic/src/media.ts:49:31)
+      at renderReport (/Users/kongweixian/infra-dev/spl-bun/packages/report-logic/src/render.ts:118:5)
+      at <anonymous> (/Users/kongweixian/infra-dev/spl-bun/packages/report-xlsx-support/__tests__/nop-examples.test.ts:22:20)
+(fail) nop-report demo 11 [27.74ms]
+(pass) nop-report demo 13 [11.13ms]
+44 |         if (rows > 1 || cols > 1) table.spans[address] = [rows, cols];
+45 |         td.onEndTag(() => { if (value.trim()) table.values[address] = value.trim(); });
+46 |       },
+47 |       text(chunk) {value += chunk.text;},
+48 |     }).transform(new Response(reportToHtml(report))).text();
+49 |     expect(tables).toEqual(expected);
+                        ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "size": [
+-       3,
++       2,
+        9,
+      ],
+-     "spans": {
+-       "A2": [
+-         2,
+-         1,
+-       ],
+-       "B2": [
+-         2,
+-         1,
+-       ],
+-       "C2": [
+-         2,
+-         1,
+-       ],
+-       "D2": [
+-         2,
+-         1,
+-       ],
+-       "E2": [
+-         2,
+-         1,
+-       ],
+-       "F2": [
+-         2,
+-         1,
+-       ],
+-       "H2": [
+-         2,
+-         1,
+-       ],
+-       "I2": [
+-         2,
+-         1,
+-       ],
+-     },
++     "spans": {},
+      "values": {
+        "A1": "序号",
+        "A2": "1",
+        "B1": "设备编码",
+        "B2": "1234",
+        "C1": "设备名称",
+        "C2": "test1",
+        "D1": "场景",
+        "D2": "2",
+        "E1": "一级分类",
+        "E2": "1234",
+        "F1": "二级分类",
+        "F2": "5678",
+        "G1": "应急预案",
+-       "G2": "123",
+-       "G3": "456",
+        "H1": "描述",
+        "H2": "a",
+        "I1": "管控措施",
+        "I2": "b",
+      },
+    },
+  ]
+
+- Expected  - 37
++ Received  + 2
+
+      at <anonymous> (/Users/kongweixian/infra-dev/spl-bun/packages/report-xlsx-support/__tests__/nop-examples.test.ts:49:20)
+(fail) nop-report demo 14 [11.34ms]
+44 |         if (rows > 1 || cols > 1) table.spans[address] = [rows, cols];
+45 |         td.onEndTag(() => { if (value.trim()) table.values[address] = value.trim(); });
+46 |       },
+47 |       text(chunk) {value += chunk.text;},
+48 |     }).transform(new Response(reportToHtml(report))).text();
+49 |     expect(tables).toEqual(expected);
+                        ^
+error: expect(received).toEqual(expected)
+
+@@ -8,35 +8,35 @@
+        "A23": [
+          2,
+          1,
+        ],
+        "A3": [
+-         20,
++         18,
+          1,
+        ],
+        "B13": [
+-         10,
++         8,
+          1,
+        ],
+        "B3": [
+-         10,
++         8,
+          1,
+        ],
+        "C13": [
+-         5,
++         3,
+          1,
+        ],
+        "C18": [
+-         5,
++         3,
+          1,
+        ],
+        "C3": [
+-         5,
++         3,
+          1,
+        ],
+        "C8": [
+-         5,
++         3,
+          1,
+        ],
+        "D1": [
+          1,
+          9,
+
+- Expected  - 7
++ Received  + 7
+
+      at <anonymous> (/Users/kongweixian/infra-dev/spl-bun/packages/report-xlsx-support/__tests__/nop-examples.test.ts:49:20)
+(fail) nop-report demo 15 [20.22ms]
+44 |         if (rows > 1 || cols > 1) table.spans[address] = [rows, cols];
+45 |         td.onEndTag(() => { if (value.trim()) table.values[address] = value.trim(); });
+46 |       },
+47 |       text(chunk) {value += chunk.text;},
+48 |     }).transform(new Response(reportToHtml(report))).text();
+49 |     expect(tables).toEqual(expected);
+                        ^
+error: expect(received).toEqual(expected)
+
+@@ -31,22 +31,11 @@
+        ],
+        "B3": [
+          2,
+          1,
+        ],
+-       "D1": [
+-         1,
+-         5,
+-       ],
+-       "J10": [
+-         2,
+-         1,
+-       ],
+-       "J3": [
+-         2,
+-         1,
+-       ],
+      },
+      "values": {
+        "A10": "华北",
+        "A12": "合计",
+        "A2": "地区",
+@@ -104,17 +93,17 @@
+        "H6": "156",
+        "H7": "945",
+        "H9": "牛肉干",
+        "I10": "3784",
+        "I11": "2570",
+-       "I12": "3870",
+        "I2": "小计",
+        "I3": "747",
+        "I4": "1122",
+        "I5": "1425",
+        "I6": "576",
+-       "I7": "3870",
+        "I9": "小计",
+        "J10": "6354",
+        "J12": "3870",
+        "J2": "合计",
+        "J3": "1869",
+
+- Expected  - 14
++ Received  + 0
+
+      at <anonymous> (/Users/kongweixian/infra-dev/spl-bun/packages/report-xlsx-support/__tests__/nop-examples.test.ts:49:20)
+(fail) nop-report demo 16 [17.86ms]
+(pass) nop-report demo 17 [12.25ms]
+
+ 2 pass
+ 5 fail
+ 17 expect() calls
+Ran 7 tests across 1 file. [335.00ms]

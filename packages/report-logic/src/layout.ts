@@ -1,3 +1,4 @@
+import { cellAddress } from "./coordinates";
 import type { CompiledCell, CompiledSheet, ReportExpressionRuntime } from "depa-data-report-contract";
 import { expandItems } from "./axis";
 import type { ExpansionItem, ScopeRuntime } from "./scope";
@@ -14,6 +15,7 @@ export interface LayoutCell {
     item?: ExpansionItem;
     expanded: boolean;
     removed?: boolean;
+    implicit?: boolean;
 }
 interface Slot {
     origin: number;
@@ -85,11 +87,34 @@ export function layoutSheet(runtime: ReportExpressionRuntime, context: ScopeRunt
     const cells: LayoutCell[] = [];
     const byAddress = new Map<string, LayoutCell>();
     const covered = (cell: CompiledCell) => sheet.merges.some(m => (cell.row !== m.start.row || cell.col !== m.start.col) && cell.row >= m.start.row && cell.row <= m.end.row && cell.col >= m.start.col && cell.col <= m.end.col);
+    // A sparse worksheet may omit the blank label above a column expansion
+    // (or to the left of a row expansion). It still owns the stretched blank.
+    const sources = [...sheet.cells];
+    const occupied = new Set(sources.map(cell => cell.address));
+    const leadingRows = new Map<number, number>(), leadingCols = new Map<number, number>();
     for (const source of sheet.cells) {
+        if (source.config.expandType === "c")
+            leadingRows.set(source.col, Math.min(leadingRows.get(source.col) ?? source.row, source.row));
+        if (source.config.expandType === "r")
+            leadingCols.set(source.row, Math.min(leadingCols.get(source.row) ?? source.col, source.col));
+    }
+    function addBlank(row: number, col: number): void {
+        const address = cellAddress({row, col});
+        if (!occupied.has(address)) {
+            occupied.add(address);
+            sources.push({row, col, address, config: {}, rowChain: [], colChain: []});
+        }
+    }
+    for (const [col, count] of leadingRows)
+        for (let row = 0; row < count; row++) addBlank(row, col);
+    for (const [row, count] of leadingCols)
+        for (let col = 0; col < count; col++) addBlank(row, col);
+    const authored = new Set(sheet.cells);
+    for (const source of sources) {
         if (covered(source))
             continue;
         const merge = sheet.merges.find(m => m.start.row === source.row && m.start.col === source.col);
-        const cell: LayoutCell = { id: ++sequence, source, row: source.row, col: source.col, rowSpan: merge ? merge.end.row - source.row + 1 : 1, colSpan: merge ? merge.end.col - source.col + 1 : 1, expanded: false };
+        const cell: LayoutCell = { id: ++sequence, source, implicit: !authored.has(source), row: source.row, col: source.col, rowSpan: merge ? merge.end.row - source.row + 1 : 1, colSpan: merge ? merge.end.col - source.col + 1 : 1, expanded: false };
         cells.push(cell);
         byAddress.set(source.address, cell);
     }
@@ -142,12 +167,25 @@ export function layoutSheet(runtime: ReportExpressionRuntime, context: ScopeRunt
             if (extend === false)
                 continue;
             const ancestor = isDescendant(owner, other, axis);
-            const independent = !other.source.config.expandType && !expandableParent(other, axis);
+            const parent = expandableParent(other, axis);
+            const independent = other.source.config.expandType !== axis && (!parent || isDescendant(owner, parent, axis));
             const oldStart = position(other, axis), oldEnd = oldStart + span(other, axis) - 1;
             if ((ancestor || independent) && oldStart <= end && oldEnd >= start) {
                 const occupied = [...copies].some(child => child !== owner && (axis === "r" ? child.col === other.col : child.row === other.row));
-                if (!occupied)
-                    setSpan(other, axis, Math.max(span(other, axis), end + growth - oldStart + 1));
+                if (!occupied) {
+                    let last = end + growth;
+                    // Reserved template slots can contain real neighbors in other lanes.
+                    // Stop before their values instead of hiding them under a merge.
+                    if ((owner.source.config.expandInplaceCount ?? 0) > 1) {
+                        for (const next of cells) {
+                            if (next.removed || next === other) continue;
+                            const sameLane = axis === "r" ? next.col === other.col : next.row === other.row;
+                            const nextStart = position(next, axis);
+                            if (sameLane && nextStart > oldEnd) last = Math.min(last, nextStart - 1);
+                        }
+                    }
+                    setSpan(other, axis, Math.max(span(other, axis), last - oldStart + 1));
+                }
             }
         }
     }
@@ -193,7 +231,6 @@ export function layoutSheet(runtime: ReportExpressionRuntime, context: ScopeRunt
         }
         const bind = (cell: LayoutCell, index: number) => { cell.item = { ...items[index], index, anchor: owner.source.address, uid: `${axis}${cell.id}` }; cell.expanded = true; };
         bind(owner, 0);
-        let inserted = 0;
         const reserved = owner.source.config.expandInplaceCount ?? 0;
         for (let itemIndex = 1; itemIndex < items.length; itemIndex++) {
             const destination = start + width * itemIndex;
@@ -203,7 +240,6 @@ export function layoutSheet(runtime: ReportExpressionRuntime, context: ScopeRunt
                 const reuse = slots[target]?.generator && expandableParent(slots[target].generator!, axis) === expandableParent(owner, axis);
                 if (!canReserve && !reuse) {
                     insert(axis, target, slots[start + offset]?.origin ?? (axis === "r" ? owner.source.row : owner.source.col), owner, copies);
-                    inserted++;
                 }
                 else
                     while (slots.length <= target) {
@@ -230,7 +266,7 @@ export function layoutSheet(runtime: ReportExpressionRuntime, context: ScopeRunt
                     pending.push(clone);
             }
         }
-        extendNeighbors(owner, copies, axis, start, finish, inserted);
+        extendNeighbors(owner, copies, axis, start, finish, width * (items.length - 1));
     }
     // Empty-region removal is deferred until all dependency-scheduled expansions.
     const keepRows = rows.map((slot, index) => ({ slot, index })).filter(({ slot }) => !(slot as Slot & {

@@ -70,7 +70,9 @@ export function scopeFor(runtime: ScopeRuntime, rows: readonly ExpansionItem[], 
   return {
     ...datasets, ...runtime.input.params, ...runtime.sheetObject, ...(item && typeof item === "object" ? item : {}),
     records, item, datasets, params: runtime.input.params ?? {}, index: own?.index ?? row?.index ?? col?.index ?? 0,
-    cell: { ev: own?.value ?? row?.value ?? col?.value, rp: rowParent ? { ev: rowParent.value, index: rowParent.index } : undefined,
+    cell: { expandIndex: own?.index ?? 0, rr: rows.length ? { ev: rows[0].value, index: rows[0].index } : undefined,
+      cr: cols.length ? { ev: cols[0].value, index: cols[0].index } : undefined,
+      ev: own?.value ?? row?.value ?? col?.value, rp: rowParent ? { ev: rowParent.value, index: rowParent.index } : undefined,
       cp: colParent ? { ev: colParent.value, index: colParent.index } : undefined },
     sheet: runtime.sheetInfo,
   };

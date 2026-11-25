@@ -80,3 +80,5 @@ Excel中新增名为 `原表名-XptSheetModel` 的两列表，A列配置名、B�
 公共输入是XLSX字节或 `compileReport(ReportTemplate)` 规范化值；不直接解释原始 `.xpt.xml` 的XDSL/VFS继承与Java脚本。规范化对象可以由Kon流程或应用构造，使用相同的布局、表达式、媒体与输出语义。完整来源对账见 [验收矩阵](../../.depa-analysis/report-parity-2026-10-22/acceptance-matrix.md)。
 
 实现依据为本地 nop-report 的批注编译、父格/记录展开与 renderer 分离语义；独立 TypeScript 实现，没有复制 Java 源码或上游工作簿。详细来源与未移植范围见 [取证报告](../../.depa-analysis/porting-2026-10-22/inventory/nop-report.md)。
+
+七份上游复杂工作簿、运行数据、对照依据和本地生成命令见[可运行的 nop-report 案例](../../fixtures/nop-report/README.md)。

@@ -1,0 +1,37 @@
+{
+  "datasets": {},
+  "params": {
+    "entity": [
+      {
+        "id": 1,
+        "deviceCode": 1234,
+        "deviceName": "test1",
+        "scene": "2",
+        "firstCategory": {
+          "name": "1234"
+        },
+        "secondCategory": {
+          "name": "5678"
+        },
+        "description": "a",
+        "controlMeasures": "b",
+        "deviceEmergencyDetails": [
+          {
+            "document": {
+              "fileRecord": {
+                "fileName": "123"
+              }
+            }
+          },
+          {
+            "document": {
+              "fileRecord": {
+                "fileName": "456"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -16,7 +16,7 @@ export function reportLimits(config: RenderLimits) {
         throw new Error("Report limits exceed Excel dimensions");
     return limits;
 }
-function valueFor(runtime: ReportExpressionRuntime, cell: CompiledCell, scope: ReportScope, rows: ExpansionItem[], cols: ExpansionItem[], context: ScopeRuntime): unknown {
+function valueFor(runtime: ReportExpressionRuntime, cell: CompiledCell, scope: ReportScope, rows: ExpansionItem[], cols: ExpansionItem[], context: ScopeRuntime, evaluateText: (expression: string) => unknown): unknown {
     if ([...rows, ...cols].some(item => item.empty) && (cell.expression !== undefined || cell.textTemplate !== undefined || cell.fieldBinding || cell.config.expandType))
         return undefined;
     if (cell.expression !== undefined)
@@ -35,7 +35,7 @@ function valueFor(runtime: ReportExpressionRuntime, cell: CompiledCell, scope: R
             return own.value;
     }
     if (cell.textTemplate !== undefined)
-        return cell.textTemplate.replace(/\$\{([^{}]+)\}/g, (_, expression: string) => String(runtime.evaluate(expression, scope) ?? ""));
+        return cell.textTemplate.replace(/\$\{([^{}]+)\}/g, (_, expression: string) => String(evaluateText(expression) ?? ""));
     return cell.value;
 }
 export function renderReport(runtime: ReportExpressionRuntime, input: ReportInput & {
@@ -60,15 +60,16 @@ export function renderReport(runtime: ReportExpressionRuntime, input: ReportInpu
             const metadata = new Map<LayoutCell, FormulaInstance>();
             contexts.set(output,context);
             for (const node of layout.cells) {
+                if (node.rowSpan > 1 || node.colSpan > 1)
+                    merges.push({ start: { row: node.row, col: node.col }, end: { row: node.row + node.rowSpan - 1, col: node.col + node.colSpan - 1 } });
+                if (node.implicit) continue;
                 const source = node.source, rows = layoutBindings(node, "r"), cols = layoutBindings(node, "c"), scope = scopeFor(context, rows, cols, source);
                 let formula = source.formula;
                 const cell: RenderedCell = { row: node.row, col: node.col, origin: source.address, styleId: source.styleId, numberFormat: source.numberFormat, css: source.css, formula, formulaMode: source.formulaMode };
                 cells.push(cell);
-                const instance: FormulaInstance = { cell, source, sheet: output, scope, rows, cols, base: () => valueFor(runtime, source, scope, rows, cols, context) };
+                const instance: FormulaInstance = { cell, source, sheet: output, scope, rows, cols, base: evaluateText => valueFor(runtime, source, scope, rows, cols, context, evaluateText) };
                 metadata.set(node, instance);
                 instances.push(instance);
-                if (node.rowSpan > 1 || node.colSpan > 1)
-                    merges.push({ start: { row: node.row, col: node.col }, end: { row: node.row + node.rowSpan - 1, col: node.col + node.colSpan - 1 } });
             }
             for (const [node, instance] of metadata) {
                 instance.rowParent = node.rowParent ? metadata.get(node.rowParent) : undefined;

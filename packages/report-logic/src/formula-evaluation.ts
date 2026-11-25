@@ -1,7 +1,7 @@
 import type { CompiledCell, RenderedCell, RenderedReport, RenderedSheet, ReportExpressionRuntime, ReportScope, ReportConfig, ReportStyle } from "depa-data-report-contract";
 import type { ExpansionItem } from "./scope";
 import { cellAddress, parseAddress } from "./coordinates";
-import { evaluateFormulaNode, FormulaCellSet, isReportFormula, parseFormula, scalar, UnsupportedFormula, type FormulaCellView, type FormulaEnvironment, type FormulaReference } from "./formula-expression";
+import { evaluateFormulaNode, FormulaCellSet, isReportFormula, parseFormula, scalar, UnsupportedFormula, type FormulaNode, type FormulaCellView, type FormulaEnvironment, type FormulaReference } from "./formula-expression";
 import { formulaFunctions } from "./formula-functions";
 import { exportReportFormula } from "./formula-export";
 import { formulaMaterializationReason } from "./formula-export-policy";
@@ -14,7 +14,7 @@ export interface FormulaInstance {
   scope: ReportScope;
   rows: readonly ExpansionItem[];
   cols: readonly ExpansionItem[];
-  base(): unknown;
+  base(evaluateText: (source: string) => unknown): unknown;
   rowParent?: FormulaInstance;
   colParent?: FormulaInstance;
 }
@@ -30,6 +30,22 @@ export function evaluateReportCells(runtime: ReportExpressionRuntime, report: Re
   const named = new Map<RenderedSheet, Map<string, FormulaInstance[]>>();
   const physical = new Map<RenderedSheet, Map<string, FormulaInstance>>();
   const astCache = new Map<string, ReturnType<typeof parseFormula>>();
+  const formatAdditions = new Map<string, FormulaNode | undefined>();
+  function displayAddition(source: string): FormulaNode | undefined {
+    if (!source.includes("+")) return undefined;
+    if (!formatAdditions.has(source)) {
+      // A report display expression can concatenate a number and a label.
+      // Leave SPL-specific syntax and calls with their original evaluator.
+      let node: FormulaNode | undefined;
+      try { node = parseFormula(source); } catch { /* SPL may accept different syntax. */ }
+      function additive(term: FormulaNode): boolean {
+        return term.type === "literal" || term.type === "variable" ||
+          (term.type === "binary" && term.op === "+" && additive(term.left) && additive(term.right));
+      }
+      formatAdditions.set(source, node?.type === "binary" && node.op === "+" && /["']/.test(source) && additive(node) ? node : undefined);
+    }
+    return formatAdditions.get(source);
+  }
   const label = (instance: FormulaInstance) => `${instance.sheet.name}!${cellAddress(instance.cell)}[${instance.source.address}]`;
   const byId = new Map(instances.map(instance => [label(instance), instance]));
   for (const sheet of report.sheets) { named.set(sheet, new Map()); physical.set(sheet, new Map()); }
@@ -277,12 +293,18 @@ export function evaluateReportCells(runtime: ReportExpressionRuntime, report: Re
           if(reason){cell.formula=undefined;cell.formulaDiagnostic=reason;}
           else cell.formula=exportReportFormula(ast,env,instance.sheet.name);
         }
-      } else cell.value = instance.base();
+      } else cell.value = instance.base(expression => {
+        if (!isReportFormula(expression)) return runtime.evaluate(expression, instance.scope);
+        let ast = astCache.get(expression);
+        if (!ast) { ast = parseFormula(expression); astCache.set(expression, ast); }
+        return scalar(evaluateFormulaNode(ast, environment(instance, "report", instance.scope), formulaFunctions));
+      });
       state.set(instance,"processing");
       applyCellProcessing({source,cell,...processing,formatValue:runtime.formatValue,renderBarcode:runtime.renderBarcode,barcodeSize:barcodeSize(instance),dictionaries:(instance.scope.params as {dicts?:Readonly<Record<string,Readonly<Record<string,unknown>>>>})?.dicts,evaluate(expression){
         const scope:ReportScope={...instance.scope,value:cell.value,cell:{...instance.scope.cell as Record<string,unknown>,value:cell.value,formattedValue:cell.displayValue}};
-        if(!isReportFormula(expression))return runtime.evaluate(expression,scope);
-        let ast=astCache.get(expression);
+        let ast = expression === source.config.formatExpr ? displayAddition(expression) : undefined;
+        if (!ast && !isReportFormula(expression)) return runtime.evaluate(expression,scope);
+        ast ??= astCache.get(expression);
         if(!ast){ast=parseFormula(expression);astCache.set(expression,ast);}
         return scalar(evaluateFormulaNode(ast,environment(instance,"report",scope),formulaFunctions));
       }});

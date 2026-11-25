@@ -1,0 +1,27 @@
+$ playwright test
+
+Running 17 tests using 2 workers
+
+(node:60286) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:60285) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 [chromium] › packages/web-ide/__tests__/e2e/kon-demo-coverage.e2e.ts:10:1 › kon demo list retains legacy demos and adds the native window surface (183ms)
+  ✓   3 [chromium] › packages/web-ide/__tests__/e2e/kon-error-handling.e2e.ts:9:1 › kon shows error for invalid script (509ms)
+  ✓   1 [chromium] › packages/web-ide/__tests__/e2e/kon-basic.e2e.ts:18:1 › kon ide: loads demo list and runs a demo script (run-script case) (724ms)
+  ✓   5 [chromium] › packages/web-ide/__tests__/e2e/kon-basic.e2e.ts:36:1 › kon ide: unknown datasource shows Error: status (error-status case) (237ms)
+  ✓   4 [chromium] › packages/web-ide/__tests__/e2e/kon-execution.e2e.ts:4:1 › native window demo computes independent running metrics in the Web IDE (509ms)
+  ✓   7 [chromium] › packages/web-ide/__tests__/e2e/kon-execution.e2e.ts:23:1 › kon runs sequence demos and returns rows (668ms)
+  ✓   8 [chromium] › packages/web-ide/__tests__/e2e/kon-execution.e2e.ts:38:1 › kon runs file demos and returns rows (913ms)
+  ✓   9 [chromium] › packages/web-ide/__tests__/e2e/kon-execution.e2e.ts:55:1 › kon runs SQL pagination and expression demos (1.2s)
+  ✓  10 [chromium] › packages/web-ide/__tests__/e2e/kon-execution.e2e.ts:83:1 › uploaded data uses pivot/unpivot and compound aggregates in the real Web query path (1.2s)
+  ✓   6 [chromium] › packages/web-ide/__tests__/e2e/kon-flow-control.e2e.ts:9:1 › kon runs flow-control demos (5.7s)
+  ✓  12 [chromium] › packages/web-ide/__tests__/e2e/kon-multi-datasource.e2e.ts:9:1 › kon runs multi-source query demo (533ms)
+  ✓  11 [chromium] › packages/web-ide/__tests__/e2e/kon-execution.e2e.ts:102:1 › JSON exact identifiers, decimal calculations and source calendar options reach the web grid (2.3s)
+  ✓  13 [chromium] › packages/web-ide/__tests__/e2e/kon-multi-datasource.e2e.ts:19:1 › kon runs cross-datasource join demo (516ms)
+  ✓  14 [chromium] › packages/web-ide/__tests__/e2e/report-workbench.e2e.ts:6:1 › upload, compute, render, download and invalidate the report (1.0s)
+  ✓  15 [chromium] › packages/web-ide/__tests__/e2e/report-workbench.e2e.ts:34:1 › literal dotted columns survive preview and a narrow viewport does not overflow (282ms)
+  ✓  16 [chromium] › packages/web-ide/__tests__/e2e/report-workbench.e2e.ts:43:1 › editing while a request is pending prevents stale results from becoming current (269ms)
+  ✓  17 [chromium] › packages/web-ide/__tests__/e2e/report-workbench.e2e.ts:61:1 › dynamic sheets combine deletion, formula caches, display/export roles and decoded QR images (744ms)
+
+  17 passed (17.2s)

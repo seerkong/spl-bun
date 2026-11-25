@@ -1,0 +1,666 @@
+{
+  "datasets": {
+    "ds1": [
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房A",
+        "name": "药物A",
+        "residue": "10盒",
+        "unit": "8片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房A",
+        "name": "药物B",
+        "residue": "9盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房A",
+        "name": "药物C",
+        "residue": "10盒",
+        "unit": "8片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗病毒类",
+        "pharmacy": "药房A",
+        "name": "药物D",
+        "residue": "1盒",
+        "unit": "3片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗病毒类",
+        "pharmacy": "药房A",
+        "name": "药物E",
+        "residue": "15盒",
+        "unit": "1支/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房A",
+        "name": "药物F",
+        "residue": "11袋",
+        "unit": "10g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房A",
+        "name": "药物G",
+        "residue": "2盒",
+        "unit": "6片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房A",
+        "name": "药物H",
+        "residue": "43盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房A",
+        "name": "药物I",
+        "residue": "11盒",
+        "unit": "1片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房A",
+        "name": "药物J",
+        "residue": "9盒",
+        "unit": "10片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房A",
+        "name": "药物K",
+        "residue": "19袋",
+        "unit": "20g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房A",
+        "name": "药物L",
+        "residue": "12盒",
+        "unit": "1支/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房A",
+        "name": "药物M",
+        "residue": "1盒",
+        "unit": "10片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房A",
+        "name": "药物N",
+        "residue": "2盒",
+        "unit": "4片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "解热类",
+        "pharmacy": "药房A",
+        "name": "药物O",
+        "residue": "3袋",
+        "unit": "5g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "解热类",
+        "pharmacy": "药房A",
+        "name": "药物P",
+        "residue": "6盒",
+        "unit": "12粒/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房B",
+        "name": "药物A",
+        "residue": "10盒",
+        "unit": "8片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房B",
+        "name": "药物B",
+        "residue": "9盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房B",
+        "name": "药物C",
+        "residue": "10盒",
+        "unit": "8片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗病毒类",
+        "pharmacy": "药房B",
+        "name": "药物D",
+        "residue": "1盒",
+        "unit": "3片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗病毒类",
+        "pharmacy": "药房B",
+        "name": "药物E",
+        "residue": "15盒",
+        "unit": "1支/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房B",
+        "name": "药物F",
+        "residue": "11袋",
+        "unit": "10g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房B",
+        "name": "药物G",
+        "residue": "2盒",
+        "unit": "6片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房B",
+        "name": "药物H",
+        "residue": "43盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房B",
+        "name": "药物I",
+        "residue": "11盒",
+        "unit": "1片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房B",
+        "name": "药物J",
+        "residue": "9盒",
+        "unit": "10片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房B",
+        "name": "药物K",
+        "residue": "19袋",
+        "unit": "20g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房B",
+        "name": "药物L",
+        "residue": "12盒",
+        "unit": "1支/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房B",
+        "name": "药物M",
+        "residue": "1盒",
+        "unit": "10片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房B",
+        "name": "药物N",
+        "residue": "2盒",
+        "unit": "4片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "解热类",
+        "pharmacy": "药房B",
+        "name": "药物O",
+        "residue": "3袋",
+        "unit": "5g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "A院区",
+        "classify": "中药",
+        "subClassify": "解热类",
+        "pharmacy": "药房B",
+        "name": "药物P",
+        "residue": "6盒",
+        "unit": "12粒/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房C",
+        "name": "药物A",
+        "residue": "10盒",
+        "unit": "8片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房C",
+        "name": "药物B",
+        "residue": "9盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房C",
+        "name": "药物C",
+        "residue": "10盒",
+        "unit": "8片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗病毒类",
+        "pharmacy": "药房C",
+        "name": "药物D",
+        "residue": "1盒",
+        "unit": "3片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗病毒类",
+        "pharmacy": "药房C",
+        "name": "药物E",
+        "residue": "15盒",
+        "unit": "1支/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房C",
+        "name": "药物F",
+        "residue": "11袋",
+        "unit": "10g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房C",
+        "name": "药物G",
+        "residue": "2盒",
+        "unit": "6片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房C",
+        "name": "药物H",
+        "residue": "43盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房C",
+        "name": "药物I",
+        "residue": "11盒",
+        "unit": "1片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房C",
+        "name": "药物J",
+        "residue": "9盒",
+        "unit": "10片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房C",
+        "name": "药物K",
+        "residue": "19袋",
+        "unit": "20g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房C",
+        "name": "药物L",
+        "residue": "12盒",
+        "unit": "1支/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房C",
+        "name": "药物M",
+        "residue": "1盒",
+        "unit": "10片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房C",
+        "name": "药物N",
+        "residue": "2盒",
+        "unit": "4片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "解热类",
+        "pharmacy": "药房C",
+        "name": "药物O",
+        "residue": "3袋",
+        "unit": "5g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "解热类",
+        "pharmacy": "药房C",
+        "name": "药物P",
+        "residue": "6盒",
+        "unit": "12粒/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房D",
+        "name": "药物A",
+        "residue": "10盒",
+        "unit": "8片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房D",
+        "name": "药物B",
+        "residue": "9盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房D",
+        "name": "药物B",
+        "residue": "9盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗生素类",
+        "pharmacy": "药房D",
+        "name": "药物C",
+        "residue": "10盒",
+        "unit": "8片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "解热类",
+        "pharmacy": "药房D",
+        "name": "药物X",
+        "residue": "1盒",
+        "unit": "3片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "解热类",
+        "pharmacy": "药房D",
+        "name": "药物K",
+        "residue": "21盒",
+        "unit": "3片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗病毒类",
+        "pharmacy": "药房D",
+        "name": "药物E",
+        "residue": "15盒",
+        "unit": "1支/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房D",
+        "name": "药物F",
+        "residue": "11袋",
+        "unit": "10g/袋"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房D",
+        "name": "药物G",
+        "residue": "2盒",
+        "unit": "6片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房D",
+        "name": "药物H",
+        "residue": "43盒",
+        "unit": "2片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "西药",
+        "subClassify": "抗真菌类",
+        "pharmacy": "药房D",
+        "name": "药物I",
+        "residue": "11盒",
+        "unit": "1片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房D",
+        "name": "药物J",
+        "residue": "9盒",
+        "unit": "10片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房D",
+        "name": "药物K",
+        "residue": "19袋",
+        "unit": "20g/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房D",
+        "name": "药物L",
+        "residue": "12盒",
+        "unit": "11支/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房D",
+        "name": "药物M",
+        "residue": "1盒",
+        "unit": "10片/盒"
+      },
+      {
+        "hospital": "浙大妇院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "镇痛类",
+        "pharmacy": "药房D",
+        "name": "药物N",
+        "residue": "2盒",
+        "unit": "4片/盒"
+      },
+      {
+        "hospital": "浙二医院",
+        "courtyard": "B院区",
+        "classify": "中药",
+        "subClassify": "抗素类",
+        "pharmacy": "药房Z",
+        "name": "药物N",
+        "residue": "2盒",
+        "unit": "104片/盒"
+      },
+      {
+        "hospital": "浙二医院",
+        "courtyard": "G院区",
+        "classify": "西药",
+        "subClassify": "抗病毒类",
+        "pharmacy": "药房F",
+        "name": "药物Q",
+        "residue": "2盒",
+        "unit": "104片/盒"
+      }
+    ]
+  }
+}

@@ -1,3 +1,4 @@
+import { drawingSize } from "depa-data-report-logic";
 import * as XLSX from "xlsx";
 import type { RenderedReport } from "depa-data-report-contract";
 import { safeReportLink } from "./links";
@@ -19,15 +20,9 @@ export function reportToHtml(report: RenderedReport): string {
     const images=new Map<string,string[]>();
     for(const image of sheet.images??[]){
       validateImage(image.data,`${sheet.name} image ${image.name??image.id}`);
-      let width=image.anchor.widthEMU===undefined?100:image.anchor.widthEMU/9525,height=image.anchor.heightEMU===undefined?100:image.anchor.heightEMU/9525;
-      if(image.anchor.to){
-        width=((image.anchor.to.colOffsetEMU??0)-(image.anchor.from.colOffsetEMU??0))/9525;
-        height=((image.anchor.to.rowOffsetEMU??0)-(image.anchor.from.rowOffsetEMU??0))/9525;
-        for(let col=image.anchor.from.col;col<image.anchor.to.col;col++)width+=(sheet.colWidths?.[col]??8.43)*7+5;
-        for(let row=image.anchor.from.row;row<image.anchor.to.row;row++)height+=(sheet.rowHeights?.[row]??15)*4/3;
-      }
+      const {width, height} = drawingSize(image.anchor, sheet);
       const key=`${image.anchor.from.row},${image.anchor.from.col}`,values=images.get(key)??[];
-      values.push(`<img alt="${escapeHtml(image.name??image.description??"")}" src="data:${image.data.mimeType};base64,${Buffer.from(image.data.bytes).toString("base64")}" width="${Math.max(1,Math.round(width))}" height="${Math.max(1,Math.round(height))}">`);images.set(key,values);
+      values.push(`<img alt="${escapeHtml(image.name??image.description??"")}" src="data:${image.data.mimeType};base64,${Buffer.from(image.data.bytes).toString("base64")}" width="${width}" height="${height}">`);images.set(key,values);
     }
     const cells = new Map(sheet.cells.map((cell) => [`${cell.row},${cell.col}`, cell]));
     const covered = new Set<string>();
